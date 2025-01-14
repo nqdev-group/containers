@@ -1,0 +1,16 @@
+name: containers
+id: ari:cloud:compass:d080ee26-f21d-4730-84de-98c025104c05:component/e09ef9ad-8d69-4877-b0ee-7395c9ca13a3/0c634bc6-4abe-4944-9806-ca91344a89e4
+description: Nqdev container images
+configVersion: 1
+typeId: SERVICE
+fields:
+  tier: 4
+links:
+  - name: null
+    type: REPOSITORY
+    url: https://github.com/nqdev-group/containers
+relationships:
+  DEPENDS_ON: []
+labels:
+  - source:github
+customFields: null
