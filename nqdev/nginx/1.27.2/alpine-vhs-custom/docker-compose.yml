@@ -1,0 +1,74 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Nginx Proxy
+# -----------------------------------------
+# https://nginx.org/en/docs/
+# https://docs.nginx.com/nginx/admin-guide/
+# https://www.digitalocean.com/community/tools/nginx
+# -----------------------------------------
+# https://blog.nginx.org/blog/rate-limiting-nginx
+# http://nginx.org/en/docs/http/ngx_http_limit_req_module.html
+# http://nginx.org/en/docs/http/ngx_http_proxy_module.html
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# docker-compose up -d --build --force-recreate
+services:
+
+  nginx-server:
+    # image: nginx:stable-alpine3.20-perl
+    image: nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1
+    build:
+      context: ./ # Path to your application's Dockerfile
+      dockerfile: ./Dockerfile
+    container_name: nginx-server
+    restart: always
+    user: root
+    # network_mode: "host"
+    ports:
+      - 32768:80 # Cổng HTTP để Certbot xác thực
+      # - 443:443 # Cổng HTTPS cho Nginx sử dụng chứng chỉ SSL
+      - 18080:8080
+      - 32769:81
+      - 32770:82
+      - 32771:83
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+      NGINX_HTTP_PORT_NUMBER: 80
+      NGINX_HTTPS_PORT_NUMBER: 443
+      CRONTAB_ENABLE: true # enable crontab
+      # NGINX_EXPORTER_ENABLE: false # enable nginx-exporter
+      # NGINX_EXPORTER_PORT: 9113
+    volumes:
+      - ./data-etc/nginx/nginx.conf:/etc/nginx/nginx.conf:rw
+      - ./data-etc/nginx/conf.d/:/etc/nginx/conf.d:rw
+      # - ./data-etc/nginx/include/:/etc/nginx/include:rw
+      - ./data-etc/nginx/njs/:/etc/nginx/njs:rw
+      - ./data-etc/nginx/stream.d/:/etc/nginx/stream.d:rw
+      - ./data-log/nginx/:/var/log/nginx:rw
+      # - ./data-backups/nginx/:/var/backups/nginx_config:rw
+      # - ./data-share/GeoIP/:/usr/share/GeoIP:rw
+      - ./data-share/nginx/:/usr/share/nginx:rw
+    # depends_on:
+    #   - nginx-redis
+    extra_hosts:
+      - "esms-logstash-1:192.168.2.53"
+      - "esms-proxy-1:192.168.2.60"
+      - "esms-global-proxy-1:192.168.2.68"
+      - "esms-asterisk-1:192.168.2.74"
+      - "local-nqdev:127.0.0.1"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      - 1.1.1.1
+      - 1.0.0.1
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1g"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.80" # Giới hạn 80% CPU
+          memory: "3.2G" # Giới hạn 3.2GB RAM (80% của 4GB)
+        reservations:
+          cpus: "0.25" # Đảm bảo container có ít nhất 25% CPU
+          memory: "256M" # Đảm bảo container có ít nhất 256MB RAM
