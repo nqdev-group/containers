@@ -10,14 +10,10 @@ run-name: Build and Push Nginx Docker Image by @${{ github.actor }}
 on:
   workflow_dispatch: # Cho phép kích hoạt thủ công
     inputs:
-      tags:
-        description: 'Test scenario tags'
+      subversion:
+        description: 'SubVersion'
         required: false
         type: string
-      environment:
-        description: 'Environment to run tests against'
-        required: false
-        type: environment
 
 # Remove all permissions by default
 permissions: write-all
