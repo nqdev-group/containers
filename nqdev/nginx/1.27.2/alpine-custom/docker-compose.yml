@@ -45,10 +45,47 @@ services:
       - ./data-etc/nginx/stream.d/:/etc/nginx/stream.d:rw
       - ./data-log/nginx/:/var/log/nginx:rw
       # - ./data-backups/nginx/:/var/backups/nginx_config:rw
-      # - ./data-share/GeoIP/:/usr/share/GeoIP:rw
+      - ./data-share/GeoIP/:/usr/share/GeoIP:rw
       - ./data-share/nginx/:/usr/share/nginx:rw
-    # depends_on:
-    #   - nginx-redis
+    depends_on:
+      - nginx-redis
+    extra_hosts:
+      - "esms-logstash-1:192.168.2.53"
+      - "esms-proxy-1:192.168.2.60"
+      - "esms-global-proxy-1:192.168.2.68"
+      - "esms-asterisk-1:192.168.2.74"
+      - "local-nqdev:127.0.0.1"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      - 1.1.1.1
+      - 1.0.0.1
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1g"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.80" # Giới hạn 80% CPU
+          memory: "3.2G" # Giới hạn 3.2GB RAM (80% của 4GB)
+        reservations:
+          cpus: "0.25" # Đảm bảo container có ít nhất 25% CPU
+          memory: "256M" # Đảm bảo container có ít nhất 256MB RAM
+
+  nginx-redis:
+    image: redis:alpine3.18
+    container_name: nginx-redis
+    restart: always
+    # network_mode: "host"
+    ports:
+      - 6379:6379
+    expose:
+      - 6379
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+    # volumes:
+    #   - ./data-redis/modules:/usr/local/lib/redis/modules
     extra_hosts:
       - "esms-logstash-1:192.168.2.53"
       - "esms-proxy-1:192.168.2.60"

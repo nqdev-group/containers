@@ -1,6 +1,6 @@
 ARG NGINX_VERSION=1.27.2
-ARG NQDEV_NGINX_REVISION=custom-1.5.1
-ARG NQDEV_NGINX_TAG=${NGINX_VERSION}-alpine-custom-${NQDEV_NGINX_REVISION}
+ARG NQDEV_NGINX_REVISION=1.5.1
+ARG NQDEV_NGINX_TAG=${NGINX_VERSION}-alpine-vhs-custom-${NQDEV_NGINX_REVISION}
 
 # Sử dụng image nginx:1.27.2-alpine làm base image
 FROM nginx:1.27.2-alpine
@@ -84,7 +84,7 @@ RUN git clone https://github.com/openresty/headers-more-nginx-module.git /tmp/he
 #   && rm -rf /tmp/*
 
 # Tạo thư mục backup nếu chưa có
-RUN mkdir -p /var/tmp/nginx/cache \
+RUN mkdir -p /var/tmp/nginx/cache \ 
   && mkdir -p /var/backups/nginx_config
 
 # Copy file backup script vào container
