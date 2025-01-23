@@ -1,3 +1,5 @@
+[![[NGINX] Build and Push Docker Image](https://github.com/nqdev-group/containers/actions/workflows/nqdev-nginx-docker-publish.yml/badge.svg)](https://github.com/nqdev-group/containers/actions/workflows/nqdev-nginx-docker-publish.yml)
+
 # NGINX Enhanced Docker Image
 
 ![](https://raw.githubusercontent.com/docker-library/docs/01c12653951b2fe592c1f93a13b4e289ada0e3a1/nginx/logo.png)
