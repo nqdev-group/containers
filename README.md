@@ -1,12 +1,11 @@
 <p align="center">
-    <img width="400px" height=auto src="https://cdn-s3-000.quyit.id.vn/logo-nqdev.png" />
+    <img width=auto height=auto src="https://cdn-s3-000.quyit.id.vn/logo-nqdev.png" />
 </p>
 
 <p align="center">
     <a href="https://twitter.com/nqdev"><img src="https://badgen.net/badge/twitter/@nqdev/1DA1F2?icon&label" /></a>
     <a href="https://github.com/nqdev-group/containers"><img src="https://badgen.net/github/stars/nqdev-group/containers?icon=github" /></a>
     <a href="https://github.com/nqdev-group/containers"><img src="https://badgen.net/github/forks/nqdev-group/containers?icon=github" /></a>
-    <a href="https://github.com/nqdev-group/containers/actions/workflows/ci-pipeline.yml"><img src="https://github.com/nqdev-group/containers/actions/workflows/ci-pipeline.yml/badge.svg" /></a>
 </p>
 
 # The `Cẩm nang NQDEV` Containers Library
