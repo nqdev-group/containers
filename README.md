@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="400px" height=auto src="https://cdn-s3-000.quyit.id.vn/logo-nqdev.png" />
+    <img width=auto height=auto src="https://cdn-s3-000.quyit.id.vn/logo-nqdev.png" />
 </p>
 
 <p align="center">
