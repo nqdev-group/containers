@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="400px" height=auto src="https://bitnami.com/downloads/logos/bitnami-by-vmware.png" />
+    <img width="400px" height=auto src="https://cdn-s3-000.quyit.id.vn/logo-nqdev.png" />
 </p>
 
 <p align="center">
@@ -11,7 +11,7 @@
 
 # The `Cẩm nang NQDEV` Containers Library
 
-Popular applications, provided by [NQDEV](https://blogs.nhquydev.net/docker/docker-hub?utm_source=github&utm_medium=containers), containerized and ready to launch.
+Popular applications, provided by [Cẩm nang NQDEV](https://blogs.nhquydev.net/docker/docker-hub?utm_source=github&utm_medium=containers), containerized and ready to launch.
 
 ## Why use NQDEV Images?
 

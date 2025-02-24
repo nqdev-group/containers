@@ -4,14 +4,14 @@
 # https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-name: '[NGINX] Build and Push Docker Image'
+name: "[NGINX] Build and Push Docker Image"
 run-name: Build and Push Nginx Docker Image on ${{ github.event_name }} by @${{ github.actor }}
 
 on:
   workflow_dispatch: # Cho phép kích hoạt thủ công
     inputs:
       subversion:
-        description: 'SubVersion'
+        description: "SubVersion"
         required: false
         type: string
 
