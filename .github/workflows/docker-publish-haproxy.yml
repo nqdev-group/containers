@@ -30,7 +30,7 @@ jobs:
       - name: Define Prefix
         id: prefix
         run: |
-          echo "PREFIX=1.0" >> $GITHUB_ENV # Đặt giá trị prefix phiên bản
+          echo "PREFIX=3.1.5" >> $GITHUB_ENV # Đặt giá trị prefix phiên bản
 
       # 2. Checkout code từ repository
       - name: Checkout repository
@@ -42,7 +42,7 @@ jobs:
         run: |
           # Kiểm tra số build hiện tại từ GitHub Run Number
           BUILD_NUMBER=${{ github.run_number }}
-          echo "VERSION=${{ env.PREFIX }}.${BUILD_NUMBER}" >> $GITHUB_ENV
+          echo "VERSION=${{ env.PREFIX }}-r${BUILD_NUMBER}" >> $GITHUB_ENV
 
       # 4. Đăng nhập vào GitHub Container Registry
       - name: Log in to GitHub Container Registry
