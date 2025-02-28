@@ -10,9 +10,6 @@ RUN apk update && \
   apk add --no-cache \
   lua5.4 \
   lua5.4-dev \
-  gcc \
-  libc-dev \
-  make \
   openssl-dev \
   bash \
   curl \
@@ -31,14 +28,18 @@ RUN apk add --no-cache --virtual .build-deps gcc libc-dev make unzip tar && \
   apk del .build-deps
 
 # Cài đặt LuaSocket từ source
-RUN curl -L https://github.com/lunarmodules/luasocket/archive/refs/tags/v3.1.0.tar.gz | tar xz && \
+RUN apk add --no-cache --virtual .build-deps gcc libc-dev make unzip tar && \
+  curl -L https://github.com/lunarmodules/luasocket/archive/refs/tags/v3.1.0.tar.gz | tar xz && \
   cd luasocket-3.1.0 && luarocks make rockspecs/luasocket-3.1.0-1.rockspec && \
-  cd .. && rm -rf luasocket-3.1.0
+  cd .. && rm -rf luasocket-3.1.0 && \
+  apk del .build-deps
 
 # Cài đặt Redis Lua từ source
-RUN curl -L https://github.com/nrk/redis-lua/archive/refs/tags/v2.0.4.tar.gz | tar xz && \
+RUN apk add --no-cache --virtual .build-deps gcc libc-dev make unzip tar && \
+  curl -L https://github.com/nrk/redis-lua/archive/refs/tags/v2.0.4.tar.gz | tar xz && \
   cd redis-lua-2.0.4 && luarocks make rockspec/redis-lua-2.0.4-0.rockspec && \
-  cd .. && rm -rf redis-lua-2.0.4
+  cd .. && rm -rf redis-lua-2.0.4 && \
+  apk del .build-deps
 
 # Cập nhật PATH để LuaRocks có thể sử dụng
 RUN echo "export PATH=$PATH:/usr/local/bin" >> /etc/profile
