@@ -1,42 +1,56 @@
--- Cập nhật package.path để Lua tìm thấy redis.lua
--- package.path = package.path .. ";/usr/local/lib/lua/5.4/lua-isa/?.lua"
--- package.path = package.path .. ";/usr/local/lib/lua/5.4/lua-redis/?.lua"
+local redis = require "redis"  -- Sử dụng thư viện redis-lua
 
--- Sử dụng module redis
-local redis = require "redis"
+-- Lấy các giá trị biến môi trường từ Docker Compose
+local redis_host = os.getenv("REDIS_HOST") or "127.0.0.1"  -- Mặc định là localhost nếu không có giá trị
+local redis_port = tonumber(os.getenv("REDIS_PORT") or 6379)  -- Mặc định là 6379 nếu không có giá trị
+local redis_password = os.getenv("REDIS_PASSWORD")  -- Lấy mật khẩu từ biến môi trường REDIS_PASSWORD
 
--- Cấu hình giới hạn tốc độ (requests per second)
-local rate_limit = 10
-local rate_window = 10  -- Giới hạn thời gian (giây)
+-- Kết nối đến Redis
+local client = redis.connect({
+  host = redis_host,
+  port = redis_port
+})
 
--- Kết nối Redis (sử dụng Redis default port 6379)
-local redis_host = "192.168.2.53"
-local redis_port = 7788
-local redis_password = "OvgvI256QnCAYUgzlq"
-
--- Kết nối tới Redis
-local client = redis.connect(redis_host, redis_port)
-
--- Nếu Redis yêu cầu xác thực, thực hiện xác thực
+-- Nếu Redis yêu cầu mật khẩu, thực hiện xác thực
 if redis_password then
-  local success, err = client:auth(redis_password)
-  if not success then
-    print("Redis authentication failed: " .. err)
-    client:quit()
-    return  -- Dừng lại nếu xác thực thất bại
-  end
+    local ok, err = client:auth(redis_password)
+    if not ok then
+        core.debug("Xác thực Redis thất bại: " .. err)
+        return
+    end
 end
 
--- Gửi lệnh PING tới Redis để kiểm tra kết nối
-local success, err = client:ping()
-if not success then
-  print("Failed to connect to Redis: " .. err)
+-- Kiểm tra kết nối Redis
+local ok, err = client:ping()
+if not ok then
+    core.debug("Không thể kết nối Redis: " .. err)
+    return
+end
+
+-- Lấy IP của client từ request
+local client_ip = core.client_ip()
+
+-- Đặt tên key cho bộ đếm rate limit, sử dụng IP của client
+local key = "rate_limit:" .. client_ip
+local limit = 10  -- Giới hạn số yêu cầu trong 1 giây
+
+-- Lấy giá trị hiện tại của bộ đếm
+local current, err = client:get(key)
+
+if current == ngx.null then
+    -- Nếu chưa có bộ đếm, khởi tạo
+    client:set(key, 1)
+    client:expire(key, 1)  -- Đặt thời gian hết hạn của bộ đếm là 1 giây
 else
-  client:select(0)
-  client:set('usr:nrk', 0)
-  local value = client:get('usr:nrk')
-  print("Redis Response: " .. value)  -- Nếu thành công, in ra phản hồi "PONG"
+    current = tonumber(current)
+    if current >= limit then
+        -- Nếu vượt quá giới hạn, trả về lỗi 429 Too Many Requests
+        core.response.set_status(429)
+        core.response.set_body("Rate limit exceeded. Try again later.")
+        core.response.send()
+        return
+    else
+        -- Nếu chưa vượt quá, tăng bộ đếm
+        client:incr(key)
+    end
 end
-
--- Đóng kết nối Redis
-client:quit()

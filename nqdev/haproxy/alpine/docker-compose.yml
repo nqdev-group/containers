@@ -18,6 +18,9 @@ services:
       - "17001:7001"
     environment:
       - TZ=Asia/Ho_Chi_Minh
+      - REDIS_HOST=192.168.2.53
+      - REDIS_PORT=7788
+      - REDIS_PASSWORD=OvgvI256QnCAYUgzlq
     volumes:
       # - /etc/localtime:/etc/localtime:ro
       - ./haproxy:/usr/local/etc/haproxy:rw
