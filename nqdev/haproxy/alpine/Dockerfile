@@ -5,6 +5,11 @@ FROM haproxytech/haproxy-alpine:3.1.5
 # Thêm thông tin maintainer
 LABEL maintainer="QuyIT Platform <quynh@nhquydev.net>"
 
+# Bổ sung biến môi trường
+ENV REDIS_HOST='127.0.0.1'
+ENV REDIS_PORT=6379
+ENV REDIS_PASSWORD=''
+
 # Cài đặt các công cụ cần thiết, bao gồm Lua 5.4 và các thư viện liên quan
 RUN apk update && \
   apk add --no-cache \
