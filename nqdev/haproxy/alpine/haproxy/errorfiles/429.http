@@ -1,0 +1,13 @@
+HTTP/1.0 429 Too Many Requests
+Content-Type: text/html
+Retry-After: 60
+X-Ratelimit-Limit: <rate_limit>
+X-Ratelimit-Usage: <request_usage>
+X-Ratelimit-Remaining: <remaining>
+
+<html>
+  <body>
+    <h1>429 Too Many Requests</h1>
+    <p>You have sent too many requests in a short period of time. Please try again later.</p>
+  </body>
+</html>

@@ -6,7 +6,7 @@ ARG NQDEV_NGINX_TAG=${NGINX_VERSION}-alpine-vhs-custom-${NQDEV_NGINX_REVISION}
 FROM nginx:1.27.2-alpine
 
 # Thêm thông tin maintainer
-LABEL maintainer="VHS SMS Maintainers <vhs-sms@vihatgroup.com>"
+LABEL maintainer="QuyIT Platform <quynh@nhquydev.net>"
 
 ENV APP_VERSION="${NGINX_VERSION}"
 ENV CRONTAB_ENABLE=false
@@ -84,7 +84,7 @@ RUN git clone https://github.com/openresty/headers-more-nginx-module.git /tmp/he
 #   && rm -rf /tmp/*
 
 # Tạo thư mục backup nếu chưa có
-RUN mkdir -p /var/tmp/nginx/cache \ 
+RUN mkdir -p /var/tmp/nginx/cache \
   && mkdir -p /var/backups/nginx_config
 
 # Copy file backup script vào container

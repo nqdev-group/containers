@@ -1,0 +1,32 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# filename: ipclient-rates.map
+# ---------------------------------------------------------
+# Các giới hạn tốc độ yêu cầu theo địa chỉ IP
+# Định dạng: <địa chỉ IP> <giới hạn yêu cầu>
+# Giới hạn yêu cầu được tính bằng số lượng yêu cầu mỗi giây (req/sec)
+# Nếu giới hạn là -1, điều đó có nghĩa là không giới hạn yêu cầu từ địa chỉ IP đó.
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# Ví dụ:
+# 203.0.113.1 1000  # IP client 1 - cho phép 1000 yêu cầu mỗi giây
+# 203.0.113.2 50    # IP client 2 - cho phép 50 yêu cầu mỗi giây
+# 0.0.0.0/0 10 # các IP khác là 10 yêu cầu/giây
+# ---------------------------------------------------------
+
+# Whitelist
+# Danh sách Địa chỉ IP không có giới hạn yêu cầu
+127.0.0.1 -1
+103.29.26.0/24 -1
+# ---------------------------------------------------------
+
+# Danh sách Địa chỉ IP Công ty
+171.244.236.86 5
+113.161.36.174 5
+# ---------------------------------------------------------
+
+# Danh sách Địa chỉ IP giới hạn yêu cầu
+172.18.0.1 5
+# ---------------------------------------------------------
+
+
+# khong duoc viet cau hinh xuong duoi dong nay - se loi LF

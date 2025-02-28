@@ -23,11 +23,18 @@
     "cpus",
     "crontabs",
     "dcron",
+    "dontlognull",
+    "errno",
+    "fstat",
+    "gpoll",
+    "incrby",
     "luajit",
+    "luarocks",
     "objs",
     "pcre",
     "rpath",
-    "xzvf"
+    "xzvf",
+    "zxvf"
   ],
   // flagWords - list of words to be always considered incorrect
   // This is useful for offensive words and common spelling errors.

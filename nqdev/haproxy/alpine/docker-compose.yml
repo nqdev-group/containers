@@ -1,0 +1,36 @@
+# docker-compose.yml
+# git add .; if ($?) { git commit -m "modified docker-compose" ; git push ; }
+
+# cls ; docker-compose up -d --build --force-recreate
+services:
+  haproxy-server-custom:
+    container_name: haproxy-server-custom
+    image: nqdev/haproxy-alpine-custom:3.1.5-r1
+    build:
+      context: ./ # Path to your application's Dockerfile
+      dockerfile: ./Dockerfile
+    # restart: always
+    # user: root
+    # network_mode: "host"
+    ports:
+      - 11080:80 # Cổng HTTP để Certbot xác thực
+      # - 443:443 # Cổng HTTPS cho Nginx sử dụng chứng chỉ SSL
+      - "17001:7001"
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+    volumes:
+      # - /etc/localtime:/etc/localtime:ro
+      - ./haproxy:/usr/local/etc/haproxy:rw
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      - 1.1.1.1
+      - 1.0.0.1
+    deploy:
+      resources:
+        limits:
+          cpus: "0.80" # Giới hạn 80% CPU
+          memory: "3.2G" # Giới hạn 3.2GB RAM (80% của 4GB)
+        reservations:
+          cpus: "0.25" # Đảm bảo container có ít nhất 25% CPU
+          memory: "256M" # Đảm bảo container có ít nhất 256MB RAM
