@@ -33,6 +33,7 @@
     "objs",
     "pcre",
     "rpath",
+    "setex",
     "xzvf",
     "zxvf"
   ],
