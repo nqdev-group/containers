@@ -4,8 +4,8 @@
 # https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-name: "[NGINX] Build and Push Docker Image"
-run-name: Build and Push Nginx Docker Image on ${{ github.event_name }} by @${{ github.actor }}
+name: "GHCR Package HAProxy"
+run-name: Build and Push HAProxy Docker Image on ${{ github.event_name }} by @${{ github.actor }}
 
 on:
   workflow_dispatch: # Cho phép kích hoạt thủ công
@@ -30,7 +30,7 @@ jobs:
       - name: Define Prefix
         id: prefix
         run: |
-          echo "PREFIX=1.0" >> $GITHUB_ENV # Đặt giá trị prefix phiên bản
+          echo "PREFIX=3.1.5" >> $GITHUB_ENV # Đặt giá trị prefix phiên bản
 
       # 2. Checkout code từ repository
       - name: Checkout repository
@@ -42,7 +42,7 @@ jobs:
         run: |
           # Kiểm tra số build hiện tại từ GitHub Run Number
           BUILD_NUMBER=${{ github.run_number }}
-          echo "VERSION=${{ env.PREFIX }}.${BUILD_NUMBER}" >> $GITHUB_ENV
+          echo "VERSION=${{ env.PREFIX }}-r${BUILD_NUMBER}" >> $GITHUB_ENV
 
       # 4. Đăng nhập vào GitHub Container Registry
       - name: Log in to GitHub Container Registry
@@ -55,12 +55,12 @@ jobs:
       # 5. Xây dựng Docker image với file Dockerfile cụ thể
       - name: Build Docker Image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/nqdev-nginx-alpine-custom:${{ env.VERSION }} \
-                       -t ghcr.io/${{ github.repository_owner }}/nqdev-nginx-alpine-custom:latest \
-                       -f ./nqdev/nginx/1.27.2/alpine-custom/Dockerfile ./nqdev/nginx/1.27.2/alpine-custom
+          docker build -t ghcr.io/${{ github.repository_owner }}/haproxy-alpine-custom:${{ env.VERSION }} \
+                       -t ghcr.io/${{ github.repository_owner }}/haproxy-alpine-custom:latest \
+                       -f ./nqdev/haproxy/alpine/Dockerfile ./nqdev/haproxy/alpine
 
       # 6. Đẩy Docker image lên GitHub Container Registry
       - name: Push Docker Image
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/nqdev-nginx-alpine-custom:${{ env.VERSION }}
-          docker push ghcr.io/${{ github.repository_owner }}/nqdev-nginx-alpine-custom:latest
+          docker push ghcr.io/${{ github.repository_owner }}/haproxy-alpine-custom:${{ env.VERSION }}
+          docker push ghcr.io/${{ github.repository_owner }}/haproxy-alpine-custom:latest
