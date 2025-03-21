@@ -50,11 +50,15 @@ RUN apk add --no-cache --virtual .build-deps gcc libc-dev make unzip tar && \
 RUN echo "export PATH=$PATH:/usr/local/bin" >> /etc/profile
 
 # Tạo thư mục cấu hình của HAProxy
-RUN mkdir -p /nqdev/haproxy/lua
+RUN mkdir -p /nqdev/haproxy/lua && \
+  mkdir -p /nqdev/haproxy/map && \
+  mkdir -p /nqdev/haproxy/errorfiles
 
 # Sao chép cấu hình HAProxy và các file Lua vào container
 # COPY ./haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
 COPY lua /nqdev/haproxy/lua
+COPY map /nqdev/haproxy/map
+COPY errorfiles /nqdev/haproxy/errorfiles
 
 # Mở cổng cho HAProxy
 EXPOSE 80 443
