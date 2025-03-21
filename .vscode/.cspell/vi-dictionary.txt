@@ -58,6 +58,8 @@ kiểm
 kinh
 Lắng
 lệnh
+libc
+libcidr
 liệu
 lòng
 ngày
