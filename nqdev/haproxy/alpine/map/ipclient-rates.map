@@ -6,16 +6,19 @@
 # Gioi han yeu cau duoc tinh bang so luong yeu cau moi giay (req/sec)
 # Neu gioi han la -1, dieu do co nghia la khong gioi han yeu cau tu dia chi IP do.
 # ---------------------------------------------------------
-# Vi du:
-# 203.0.113.1 1000  # IP client 1 - cho phep 1000 yeu cau moi giay
+# Vi du: 4000 r/min
+# 203.0.113.1 4000  # IP client 1 - cho phep 4000 yeu cau moi giay
 # 203.0.113.2 -1    # IP client 2 - khong gioi han yeu cau moi giay
 # 0.0.0.0/0 10 # cac IP khac la 10 yeu cau/giay
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-172.18.0.1 5
+172.18.0.1 10
 127.0.0.1 -1
 
+113.161.36.174 4000
+171.244.236.86 4000
+
 103.29.26.0/24 -1
-0.0.0.0/0 10
+0.0.0.0/0 4000
 
 # khong duoc viet cau hinh xuong duoi dong nay - se loi LF

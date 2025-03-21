@@ -180,6 +180,9 @@ function rate_limit_check(client_ip, txn)
     -- Ghi log thông tin về việc vượt quá giới hạn
     -- core.Debug("Rate limit exceeded for client " .. client_ip .. " (" .. request_count .. "/" .. rate_limit .. ")")
 
+    -- Tăng số lượng yêu cầu (không cập nhật thời gian hết hạn)
+    client:incr(redis_key)
+
     -- Đóng kết nối Redis sau khi sử dụng xong (để giải phóng tài nguyên)
     client:quit()
 
@@ -215,10 +218,19 @@ function txn_rate_limit_check(txn)
   local client_ip = get_client_ip(txn) -- Lấy IP của client
 
   -- Kiểm tra giới hạn tỷ lệ (sử dụng hàm rate_limit_check)
-  local limit = rate_limit_check(client_ip, txn)  -- Hàm kiểm tra rate limit
+  local status, result = pcall(function()
+    return rate_limit_check(client_ip, txn) -- Hàm kiểm tra rate limit
+  end)
 
-  -- Trả về kết quả kiểm tra rate limit
-  return limit -- true (rate limit OK) hoặc false (rate limit exceeded)
+  if status then
+    -- Nếu không có lỗi, trả về kết quả của hàm rate_limit_check
+    return result -- true (rate limit OK) hoặc false (rate limit exceeded)
+  else
+    -- Nếu có lỗi, xử lý và trả về false hoặc giá trị mặc định
+    -- Bạn có thể ghi log lỗi hoặc thực hiện các hành động khác tại đây
+    -- print("Error occurred during rate limit check: " .. result)
+    return true  -- Hoặc bạn có thể xử lý lỗi theo cách khác
+  end
 end
 
 -- Summary: Hàm này sẽ được gọi khi HAProxy gặp các sự kiện như http-req (yêu cầu HTTP)
