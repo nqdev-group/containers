@@ -10,7 +10,7 @@
 services:
   haproxy-server-custom:
     container_name: haproxy-server-custom
-    image: nqdev/haproxy-alpine-custom:3.1.5-rc6
+    image: nqdev/haproxy-alpine-custom:3.1.5-rc7
     build:
       context: ./ # Path to your application's Dockerfile
       dockerfile: ./Dockerfile
@@ -18,14 +18,14 @@ services:
     # user: root
     # network_mode: "host"
     ports:
-      - 11080:80 # Cổng HTTP để Certbot xác thực
-      # - 443:443 # Cổng HTTPS cho Nginx sử dụng chứng chỉ SSL
+      - "80:80" # Cổng HTTP để Certbot xác thực
+      # - "443:443" # Cổng HTTPS cho Nginx sử dụng chứng chỉ SSL
       - "17001:7001"
     environment:
       - TZ=Asia/Ho_Chi_Minh
-      - REDIS_HOST=192.168.2.53
-      - REDIS_PORT=7788
-      - REDIS_PASSWORD=OvgvI256QnCAYUgzlq
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
       # - /etc/localtime:/etc/localtime:ro
       - ./haproxy:/usr/local/etc/haproxy:rw

@@ -56,17 +56,22 @@ end
 -- Params: Địa chỉ IP của client (IP address)
 -- Note: Hàm này sử dụng bảng rate_map để lưu trữ giới hạn tỷ lệ cho từng IP (key: IP, value: rate limit) từ file map (nếu có) hoặc cấu hình trực tiếp trong mã Lua này (nếu không có).
 function get_rate_limit_for_ip(ip)
-  local rate_limit = 10 -- Giới hạn mặc định là 10 nếu không tìm thấy IP trong bảng ánh xạ
+  local rate_limit = 10 -- Default rate limit if no match is found
 
-  -- Duyệt qua bảng ánh xạ rate_map để tìm giới hạn yêu cầu cho IP cụ thể (nếu có)
+  -- First, check if the IP exists directly in the rate_map
+  if rate_map[ip] then
+    return rate_map[ip] -- Return the rate limit if an exact match is found
+  end
+
+  -- If no exact match, check if the IP belongs to any CIDR range in the rate_map
   for range, limit in pairs(rate_map) do
-    if cidr_match(ip, range) then -- Kiểm tra xem IP có thuộc phạm vi CIDR không
-      return limit -- Nếu tìm thấy, trả về giới hạn yêu cầu
+    if cidr_match(ip, range) then -- Check if the IP is in the CIDR range
+      return limit -- Return the rate limit for the matching CIDR range
     end
   end
 
-  -- Nếu tìm thấy địa chỉ IP trong bảng ánh xạ, trả về giới hạn yêu cầu
-  return rate_map[ip] or rate_limit -- Nếu không tìm thấy, trả về giới hạn mặc định là 10
+  -- If no match found, return the default rate limit
+  return rate_limit
 end
 
 -- Summary: Hàm lấy địa chỉ IP của client từ biến giao dịch (txn)
@@ -115,8 +120,8 @@ function get_header_value(headers, header_name)
 end
 
 -- Summary: Hàm kiểm tra giới hạn tỷ lệ (rate limit) cho mỗi yêu cầu từ client IP cụ thể (client_ip) và biến giao dịch (txn)
--- Return: Hàm này trả về
---  + true (rate limit OK) nếu chưa vượt quá giới hạn tỷ lệ (rate limit) và tiếp tục xử lý yêu cầu,
+-- Return: Hàm này trả về 
+--  + true (rate limit OK) nếu chưa vượt quá giới hạn tỷ lệ (rate limit) và tiếp tục xử lý yêu cầu, 
 --  + false (rate limit exceeded) nếu đã vượt quá giới hạn tỷ lệ và từ chối yêu cầu
 -- Params:
 --  + client_ip: Địa chỉ IP của client (được sử dụng làm key để lưu trữ thông tin giới hạn tỷ lệ)
@@ -137,10 +142,6 @@ function rate_limit_check(client_ip, txn)
   -- Kiểm tra giới hạn yêu cầu cho địa chỉ IP
   local client_ip_rate_limit = get_rate_limit_for_ip(client_ip)  -- Lấy giới hạn yêu cầu cho IP
   print("client_ip_rate_limit: " .. client_ip_rate_limit .. ", client_ip: " .. client_ip)
-
-  for ip, limit in pairs(rate_map) do
-    print("rate_map -> ip: " .. ip .. ", limit: " .. limit)
-  end
 
   if rate_limit == -1 then
     -- Không giới hạn yêu cầu, cho phép tiếp tục
@@ -215,7 +216,7 @@ function txn_rate_limit_check(txn)
 
   -- Kiểm tra giới hạn tỷ lệ (sử dụng hàm rate_limit_check)
   local limit = rate_limit_check(client_ip, txn)  -- Hàm kiểm tra rate limit
-
+  
   -- Trả về kết quả kiểm tra rate limit
   return limit -- true (rate limit OK) hoặc false (rate limit exceeded)
 end
@@ -298,7 +299,7 @@ core.register_service("action_ratelimit_check_deny_429", "http", function(applet
   local scheme = applet.scheme or ""  -- Giao thức yêu cầu (http hoặc https)
   local port = applet.port or ""  -- Cổng yêu cầu (port)
   local client_ip = applet.peer or "unknown_ip" -- Địa chỉ IP của client (client IP) hoặc "unknown_ip" nếu không tìm thấy
-
+  
   local host = get_header_value(applet.headers, "host") -- Host của client (nếu có) hoặc "unknown" nếu không tìm thấy
   local content_type = get_header_value(applet.headers, "content-type") -- Loại nội dung (content type) của client (nếu có) hoặc "unknown" nếu không tìm thấy
   local user_agent = get_header_value(applet.headers, "user-agent") -- User-Agent của client (nếu có)
@@ -312,7 +313,7 @@ core.register_service("action_ratelimit_check_deny_429", "http", function(applet
 
   -- Ghi log thông tin về yêu cầu từ client (client request)
   print("host: " .. host .. ", content_type: " .. content_type .. ", user_agent: " .. user_agent .. ", accept: " .. accept .. ", accept_language: " .. accept_language .. ", accept_encoding: " .. accept_encoding .. ", accept_charset: " .. accept_charset .. ", connection: " .. connection .. ", referer: " .. referer .. ", cookie: " .. cookie)
-
+  
   -- Nội dung phản hồi
   local response
   if content_type == "application/json" then

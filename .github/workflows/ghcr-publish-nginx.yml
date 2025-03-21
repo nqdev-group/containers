@@ -20,6 +20,8 @@ permissions: write-all
 
 env:
   SERVER: production
+  PREFIX: "1.0"
+  VERSION: "1.0.${{ github.run_number }}"
 
 jobs:
   build-and-push:

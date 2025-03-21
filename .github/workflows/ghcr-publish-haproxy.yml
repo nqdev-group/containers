@@ -20,6 +20,8 @@ permissions: write-all
 
 env:
   SERVER: production
+  PREFIX: "3.1.5"
+  VERSION: "3.1.5-rc${{ github.run_number }}"
 
 jobs:
   build-and-push:
