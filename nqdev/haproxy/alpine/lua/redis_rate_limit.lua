@@ -120,8 +120,8 @@ function get_header_value(headers, header_name)
 end
 
 -- Summary: Hàm kiểm tra giới hạn tỷ lệ (rate limit) cho mỗi yêu cầu từ client IP cụ thể (client_ip) và biến giao dịch (txn)
--- Return: Hàm này trả về 
---  + true (rate limit OK) nếu chưa vượt quá giới hạn tỷ lệ (rate limit) và tiếp tục xử lý yêu cầu, 
+-- Return: Hàm này trả về
+--  + true (rate limit OK) nếu chưa vượt quá giới hạn tỷ lệ (rate limit) và tiếp tục xử lý yêu cầu,
 --  + false (rate limit exceeded) nếu đã vượt quá giới hạn tỷ lệ và từ chối yêu cầu
 -- Params:
 --  + client_ip: Địa chỉ IP của client (được sử dụng làm key để lưu trữ thông tin giới hạn tỷ lệ)
@@ -137,13 +137,13 @@ function rate_limit_check(client_ip, txn)
   local redis_key = "rate_limit_"..host..":" .. client_ip  -- Key Redis dùng để đếm yêu cầu
 
   -- Lấy bảng ánh xạ từ file map (nếu chưa có, nó sẽ tải một lần)
-  load_rate_limit_map("/usr/local/etc/haproxy/map/ipclient-rates.map")
+  load_rate_limit_map("/nqdev/haproxy/map/ipclient-rates.map")
 
   -- Kiểm tra giới hạn yêu cầu cho địa chỉ IP
   local client_ip_rate_limit = get_rate_limit_for_ip(client_ip)  -- Lấy giới hạn yêu cầu cho IP
-  print("client_ip_rate_limit: " .. client_ip_rate_limit .. ", client_ip: " .. client_ip)
+  -- print("client_ip_rate_limit: " .. client_ip_rate_limit .. ", client_ip: " .. client_ip)
 
-  if rate_limit == -1 then
+  if client_ip_rate_limit == -1 then
     -- Không giới hạn yêu cầu, cho phép tiếp tục
     return true
   end
@@ -216,7 +216,7 @@ function txn_rate_limit_check(txn)
 
   -- Kiểm tra giới hạn tỷ lệ (sử dụng hàm rate_limit_check)
   local limit = rate_limit_check(client_ip, txn)  -- Hàm kiểm tra rate limit
-  
+
   -- Trả về kết quả kiểm tra rate limit
   return limit -- true (rate limit OK) hoặc false (rate limit exceeded)
 end
@@ -271,6 +271,12 @@ core.register_action("action_ratelimit_res_check", { "http-res" }, function(txn)
   local request_timestamp = txn:get_var("txn.request_timestamp") or "unknown" -- Thời gian sử dụng
   local is_rate_limit_reject_req = txn:get_var("txn.is_rate_limit_reject_req") or "unknown" -- Yêu cầu bị từ chối vì vượt quá giới hạn tỷ lệ
 
+  -- Nếu giới hạn tỷ lệ là -1 hoặc không xác định, không cần thêm thông tin về giới hạn vào phản hồi
+  if rate_limit == "-1" or rate_limit == "unknown" then
+    -- Nếu không giới hạn yêu cầu, không cần thêm thông tin về giới hạn vào phản hồi
+    return
+  end
+
   local remaining = tonumber(rate_limit) - tonumber(request_usage)  -- Tính số yêu cầu còn lại
 
   -- Ghi log thông tin cho mục đích theo dõi
@@ -299,7 +305,7 @@ core.register_service("action_ratelimit_check_deny_429", "http", function(applet
   local scheme = applet.scheme or ""  -- Giao thức yêu cầu (http hoặc https)
   local port = applet.port or ""  -- Cổng yêu cầu (port)
   local client_ip = applet.peer or "unknown_ip" -- Địa chỉ IP của client (client IP) hoặc "unknown_ip" nếu không tìm thấy
-  
+
   local host = get_header_value(applet.headers, "host") -- Host của client (nếu có) hoặc "unknown" nếu không tìm thấy
   local content_type = get_header_value(applet.headers, "content-type") -- Loại nội dung (content type) của client (nếu có) hoặc "unknown" nếu không tìm thấy
   local user_agent = get_header_value(applet.headers, "user-agent") -- User-Agent của client (nếu có)
@@ -312,8 +318,8 @@ core.register_service("action_ratelimit_check_deny_429", "http", function(applet
   local cookie = get_header_value(applet.headers, "cookie") -- Cookie của client (nếu có)
 
   -- Ghi log thông tin về yêu cầu từ client (client request)
-  print("host: " .. host .. ", content_type: " .. content_type .. ", user_agent: " .. user_agent .. ", accept: " .. accept .. ", accept_language: " .. accept_language .. ", accept_encoding: " .. accept_encoding .. ", accept_charset: " .. accept_charset .. ", connection: " .. connection .. ", referer: " .. referer .. ", cookie: " .. cookie)
-  
+  -- print("host: " .. host .. ", content_type: " .. content_type .. ", user_agent: " .. user_agent .. ", accept: " .. accept .. ", accept_language: " .. accept_language .. ", accept_encoding: " .. accept_encoding .. ", accept_charset: " .. accept_charset .. ", connection: " .. connection .. ", referer: " .. referer .. ", cookie: " .. cookie)
+
   -- Nội dung phản hồi
   local response
   if content_type == "application/json" then
