@@ -1,11 +1,16 @@
-# docker-compose.yml
-# git add .; if ($?) { git commit -m "modified docker-compose" ; git push ; }
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# HAProxy - The Reliable, High Performance TCP/HTTP Load Balancer
+# -----------------------------------------
+# 3.1.5 -> https://docs.haproxy.org/3.1/intro.html
+# -----------------------------------------
+# START: docker-compose up -d --build --force-recreate
+# STOP: docker-compose down -v
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# cls ; docker-compose up -d --build --force-recreate
 services:
   haproxy-server-custom:
     container_name: haproxy-server-custom
-    image: nqdev/haproxy-alpine-custom:3.1.5-rc1
+    image: nqdev/haproxy-alpine-custom:3.1.5-rc6
     build:
       context: ./ # Path to your application's Dockerfile
       dockerfile: ./Dockerfile

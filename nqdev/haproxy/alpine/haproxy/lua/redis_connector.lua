@@ -1,5 +1,8 @@
 local redis = require "redis"  -- Sử dụng thư viện redis-lua
 
+-- Import the cidr_check.lua file
+dofile("/nqdev/haproxy/lua/cidr_check.lua")
+
 -- Lấy các giá trị biến môi trường từ Docker Compose
 local redis_host = os.getenv("REDIS_HOST") or "127.0.0.1"  -- Mặc định là localhost nếu không có giá trị
 local redis_port = tonumber(os.getenv("REDIS_PORT") or 6379)  -- Mặc định là 6379 nếu không có giá trị
@@ -65,3 +68,27 @@ end
 -- Xoá key để dọn dẹp
 -- client:del(key)
 -- print("Đã xoá key '" .. key .. "' khỏi Redis.")
+
+-- =============================================================================
+-- Example of using the cidr_match function from cidr_check.lua
+local ip = "192.168.1.100"
+local cidr = "192.168.1.0/24"
+
+if cidr_match(ip, cidr) then
+    print("cidr_match: " .. ip .. " is within the CIDR range " .. cidr)
+else
+    print("cidr_match: " .. ip .. " is NOT within the CIDR range " .. cidr)
+end
+
+ip = "192.168.2.100"
+if cidr_match(ip, cidr) then
+    print("cidr_match: " .. ip .. " is within the CIDR range " .. cidr)
+else
+    print("cidr_match: " .. ip .. " is NOT within the CIDR range " .. cidr)
+end
+
+if cidr_match("hjakhka", "aaaa") then
+    print("cidr_match: " .. 'hjakhka' .. " is within the CIDR range " .. 'aaaa')
+else
+    print("cidr_match: " .. 'hjakhka' .. " is NOT within the CIDR range " .. 'aaaa')
+end
