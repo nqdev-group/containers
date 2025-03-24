@@ -11,7 +11,7 @@ local redis_password = os.getenv("REDIS_PASSWORD")  -- Lấy mật khẩu từ b
 
 -- Giới hạn tỷ lệ (rate limit) và cửa sổ thời gian (rate window)
 -- Lưu ý: Bạn có thể cấu hình giới hạn tỷ lệ và cửa sổ thời gian trong mã Lua này hoặc thông qua biến môi trường
-local rate_window = 10  -- Giới hạn thời gian (giây)
+local rate_window = 60  -- Giới hạn thời gian (giây)
 local rate_map = {} -- Biến toàn cục rate_map. Bảng lưu trữ giới hạn tỷ lệ cho từng IP (key: IP, value: rate limit)
 
 -- Summary: Hàm tải bảng ánh xạ rate_map từ file map (nếu có)

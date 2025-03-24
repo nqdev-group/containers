@@ -10,7 +10,7 @@
 services:
   haproxy-server-custom:
     container_name: haproxy-server-custom
-    image: nqdev/haproxy-alpine-custom:3.1.5-rc7
+    image: nqdev/haproxy-alpine-custom:3.1.5-rc10
     build:
       context: ./ # Path to your application's Dockerfile
       dockerfile: ./Dockerfile
@@ -18,7 +18,7 @@ services:
     # user: root
     # network_mode: "host"
     ports:
-      - "80:80" # Cổng HTTP để Certbot xác thực
+      - "18080:80" # Cổng HTTP để Certbot xác thực
       # - "443:443" # Cổng HTTPS cho Nginx sử dụng chứng chỉ SSL
       - "17001:7001"
     environment:
