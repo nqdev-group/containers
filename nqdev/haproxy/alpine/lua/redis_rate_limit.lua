@@ -1,4 +1,4 @@
-local redis = require "redis"  -- Sử dụng thư viện redis-lua
+local redis = require "redis"  -- Sử dụng thư viện redis-lua (https://github.com/mah0x211/lua-redis)
 
 -- Import the cidr_check.lua file
 dofile("/nqdev/haproxy/lua/cidr_check.lua")
@@ -191,8 +191,8 @@ function rate_limit_check(client_ip, txn)
 
     -- Tăng số lượng yêu cầu (không cập nhật thời gian hết hạn)
     client:incr(redis_key)
-    -- client:incr("check_req:"..client_key)
-    -- client:incr("check_fail:"..client_key..":"..client_ip)
+    -- client:incr("check:"..client_key..":_req:"..client_ip)
+    -- client:incr("check:"..client_key..":_fail:"..client_ip)
 
     -- Đóng kết nối Redis sau khi sử dụng xong (để giải phóng tài nguyên)
     client:quit()
@@ -206,8 +206,8 @@ function rate_limit_check(client_ip, txn)
     -- Nếu chưa vượt quá giới hạn, tăng số lượng yêu cầu và thiết lập thời gian hết hạn (expire)
     client:incr(redis_key)
     client:expire(redis_key, rate_window)  -- Thiết lập thời gian hết hạn cho key
-    -- client:incr("check_req:"..client_key..":"..client_ip)
-    -- client:incr("check_pass:"..client_key..":"..client_ip)
+    -- client:incr("check:"..client_key..":_req:"..client_ip)
+    -- client:incr("check:"..client_key..":_pass:"..client_ip)
 
     -- Đóng kết nối Redis sau khi sử dụng xong (để giải phóng tài nguyên)
     client:quit()
