@@ -11,7 +11,7 @@
   3. cspell.config.js -> cspell.config.cjs
   4. cspell.config.json
   5. cspell.config.yaml -> cspell.config.yml -> cspell.yaml -> cspell.yml
-*/{
+*/ {
   "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
   // Version of the setting file.  Always 0.2
   "version": "0.2",
@@ -40,9 +40,7 @@
   // flagWords - list of words to be always considered incorrect
   // This is useful for offensive words and common spelling errors.
   // For example "hte" should be "the"
-  "flagWords": [
-    "hte"
-  ],
+  "flagWords": ["hte"],
   // ignoreWords - a list of words to be ignored (even if they are in the flagWords)
   "ignoreWords": [],
   // ignorePaths - a list of globs to specify which files are to be ignored.
@@ -55,9 +53,7 @@
     "node_modules/**"
   ],
   // Enable your dictionary by adding it to the list of `dictionaries`
-  "dictionaries": [
-    "vi-dictionary"
-  ],
+  "dictionaries": ["vi-dictionary", "code-dictionary"],
   // Tell CSpell about your dictionary
   "dictionaryDefinitions": [
     {
@@ -65,6 +61,14 @@
       "name": "vi-dictionary",
       // Path to the custom word file. Relative to this `cspell.json` file.
       "path": "./.cspell/vi-dictionary.txt",
+      // Some editor extensions will use `addWords` for adding words to your personal dictionary.
+      "addWords": true
+    },
+    {
+      // The name of the dictionary is used to look it up.
+      "name": "code-dictionary",
+      // Path to the custom word file. Relative to this `cspell.json` file.
+      "path": "./.cspell/code-dictionary.txt",
       // Some editor extensions will use `addWords` for adding words to your personal dictionary.
       "addWords": true
     }

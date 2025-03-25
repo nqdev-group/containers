@@ -135,6 +135,13 @@ function rate_limit_check(client_ip, txn)
   -- local client_ip = get_client_ip(txn) -- Lấy IP của client từ txn
   local host = txn.f:hdr("Host") or "unknown"  -- Lấy host từ biến giao dịch (txn)
   local redis_key = "rate_limit_"..host..":" .. client_ip  -- Key Redis dùng để đếm yêu cầu
+  -- local client_key = txn.f:hdr("x-client-key") or "unknown"  -- Lấy client key từ biến giao dịch (txn)
+
+  -- Kiểm tra nếu IP là "unknown" hoặc "unknown_ip" hoặc rỗng, không giới hạn yêu cầu, cho phép tiếp tục
+  if client_ip == "unknown" or client_ip == "unknown_ip" or client_ip == "" then
+    -- Không giới hạn yêu cầu, cho phép tiếp tục
+    return true
+  end
 
   -- Lấy bảng ánh xạ từ file map (nếu chưa có, nó sẽ tải một lần)
   load_rate_limit_map("/nqdev/haproxy/map/ipclient-rates.map")
@@ -174,6 +181,8 @@ function rate_limit_check(client_ip, txn)
   txn:set_var("txn.request_usage", request_count + 1)
   txn:set_var("txn.request_timestamp", current_time)
   txn:set_var("txn.request_remaining", request_remaining)
+  txn:set_var("txn.request_client_ip", client_ip)
+  -- txn:set_var("txn.request_client_key", client_key)
 
   -- Kiểm tra nếu đã vượt quá giới hạn
   if request_count >= client_ip_rate_limit then
@@ -182,6 +191,8 @@ function rate_limit_check(client_ip, txn)
 
     -- Tăng số lượng yêu cầu (không cập nhật thời gian hết hạn)
     client:incr(redis_key)
+    -- client:incr("check_req:"..client_key)
+    -- client:incr("check_fail:"..client_key..":"..client_ip)
 
     -- Đóng kết nối Redis sau khi sử dụng xong (để giải phóng tài nguyên)
     client:quit()
@@ -195,6 +206,8 @@ function rate_limit_check(client_ip, txn)
     -- Nếu chưa vượt quá giới hạn, tăng số lượng yêu cầu và thiết lập thời gian hết hạn (expire)
     client:incr(redis_key)
     client:expire(redis_key, rate_window)  -- Thiết lập thời gian hết hạn cho key
+    -- client:incr("check_req:"..client_key..":"..client_ip)
+    -- client:incr("check_pass:"..client_key..":"..client_ip)
 
     -- Đóng kết nối Redis sau khi sử dụng xong (để giải phóng tài nguyên)
     client:quit()
@@ -299,6 +312,8 @@ core.register_action("action_ratelimit_res_check", { "http-res" }, function(txn)
   txn.http:res_add_header("x-ratelimit-retry-after", rate_window)
   txn.http:res_add_header("x-ratelimit-usage", request_usage)
   txn.http:res_add_header("x-ratelimit-timestamp", request_timestamp)
+  -- txn.http:res_add_header("x-ratelimit-client_ip", txn:get_var("txn.request_client_ip") or "unknown")
+  -- txn.http:res_add_header("x-ratelimit-client_key", txn:get_var("txn.request_client_key") or "unknown")
 
   -- Thêm header `x-ratelimit-remaining` để thông báo số yêu cầu còn lại
   if is_rate_limit_reject_req == "true" then
