@@ -36,7 +36,7 @@ jobs:
 
       # 2. Checkout code từ repository
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # 3. Thiết lập số version tự động
       - name: Set Build Version
