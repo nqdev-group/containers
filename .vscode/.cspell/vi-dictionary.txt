@@ -83,6 +83,7 @@ phản
 phep
 phép
 phiên
+phỏng
 phút
 postgresdb
 quyền

@@ -1,0 +1,28 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Workflow syntax for GitHub Actions
+# ---------------------------------------------------
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+name: "GHCR Package PostgreSQL pgAgent"
+run-name: Build and Push PostgreSQL with pgAgent, pgsql-http Docker Image on ${{ github.event_name }} by @${{ github.actor }}
+
+on:
+  workflow_dispatch: # Cho phép kích hoạt thủ công
+    inputs:
+      subversion:
+        description: "SubVersion"
+        required: false
+        type: string
+
+# Remove all permissions by default
+permissions: write-all
+
+env:
+  SERVER: production
+  PREFIX: "3.1.5"
+  VERSION: "3.1.5-rc${{ github.run_number }}"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest

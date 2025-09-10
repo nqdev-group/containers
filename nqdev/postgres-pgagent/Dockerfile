@@ -36,17 +36,17 @@ ENV TIMEZONE=Asia/Ho_Chi_Minh
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
   tzdata \
+  dos2unix \
   postgresql-server-dev-17 \
   pgagent \
-  build-essential \
-  git \
   libcurl4-openssl-dev && \
   ln -snf /usr/share/zoneinfo/$TIMEZONE /etc/localtime && echo $TIMEZONE > /etc/timezone && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY --from=builder /pgsql-http/ /usr/local/pgsql-http/
-RUN cp /usr/local/pgsql-http/http.so /usr/lib/postgresql/17/lib/
+# COPY --from=builder /pgsql-http/ /usr/local/pgsql-http/
+# RUN cp /usr/local/pgsql-http/http.so /usr/lib/postgresql/17/lib/
+COPY --from=builder /pgsql-http/http.so /usr/lib/postgresql/17/lib/
 
 # Tạo các thư mục cần thiết
 RUN mkdir -p /nqdev/postgres/docker-entrypoint-initdb.d && \
@@ -58,15 +58,15 @@ VOLUME ["/nqdev/postgres/data", "/nqdev/postgres/logs"]
 
 # Sao chép các file khởi tạo và script vào container
 COPY scripts/ /nqdev/postgres/scripts/
-COPY docker-entrypoint-initdb.d/ /nqdev/postgres/docker-entrypoint-initdb.d/
+# COPY docker-entrypoint-initdb.d/ /nqdev/postgres/docker-entrypoint-initdb.d/
+COPY docker-entrypoint-initdb.d/ /docker-entrypoint-initdb.d/
 
-RUN chmod +x /nqdev/postgres/scripts/*.sh
-RUN chmod +x /nqdev/postgres/scripts/00-init-custom.sh && \
-  ln -s /nqdev/postgres/scripts/00-init-custom.sh /docker-entrypoint-initdb.d/00-init-custom.sh
+RUN chmod +x /nqdev/postgres/scripts/*.sh && \
+  dos2unix /nqdev/postgres/scripts/*.sh
 
 # Xác định tín hiệu dừng container
 STOPSIGNAL SIGQUIT
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+# ENTRYPOINT ["/nqdev/postgres/scripts/00-init-custom.sh"]
 
-CMD ["postgres"]
+# CMD ["postgres"]

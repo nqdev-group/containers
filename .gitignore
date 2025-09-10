@@ -41,6 +41,7 @@ quyit-app-1/u01/openvpn-1194-tcp/data/*
 
 # nqdev
 nqdev/pageindex/data/*
+nqdev/postgres-pgagent/data/*
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
