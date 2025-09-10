@@ -1,4 +1,4 @@
-local redis = require "redis"  -- Sử dụng thư viện redis-lua
+local redis = require "redis"  -- Sử dụng thư viện redis-lua (https://github.com/mah0x211/lua-redis)
 
 -- Import the cidr_check.lua file
 dofile("/nqdev/haproxy/lua/cidr_check.lua")
@@ -11,7 +11,7 @@ local redis_password = os.getenv("REDIS_PASSWORD")  -- Lấy mật khẩu từ b
 
 -- Giới hạn tỷ lệ (rate limit) và cửa sổ thời gian (rate window)
 -- Lưu ý: Bạn có thể cấu hình giới hạn tỷ lệ và cửa sổ thời gian trong mã Lua này hoặc thông qua biến môi trường
-local rate_window = 10  -- Giới hạn thời gian (giây)
+local rate_window = 60  -- Giới hạn thời gian (giây)
 local rate_map = {} -- Biến toàn cục rate_map. Bảng lưu trữ giới hạn tỷ lệ cho từng IP (key: IP, value: rate limit)
 
 -- Summary: Hàm tải bảng ánh xạ rate_map từ file map (nếu có)
@@ -135,6 +135,13 @@ function rate_limit_check(client_ip, txn)
   -- local client_ip = get_client_ip(txn) -- Lấy IP của client từ txn
   local host = txn.f:hdr("Host") or "unknown"  -- Lấy host từ biến giao dịch (txn)
   local redis_key = "rate_limit_"..host..":" .. client_ip  -- Key Redis dùng để đếm yêu cầu
+  -- local client_key = txn.f:hdr("x-client-key") or "unknown"  -- Lấy client key từ biến giao dịch (txn)
+
+  -- Kiểm tra nếu IP là "unknown" hoặc "unknown_ip" hoặc rỗng, không giới hạn yêu cầu, cho phép tiếp tục
+  if client_ip == "unknown" or client_ip == "unknown_ip" or client_ip == "" then
+    -- Không giới hạn yêu cầu, cho phép tiếp tục
+    return true
+  end
 
   -- Lấy bảng ánh xạ từ file map (nếu chưa có, nó sẽ tải một lần)
   load_rate_limit_map("/nqdev/haproxy/map/ipclient-rates.map")
@@ -169,11 +176,14 @@ function rate_limit_check(client_ip, txn)
   local request_remaining = tonumber(client_ip_rate_limit) - tonumber(request_count) -- Số lượng yêu cầu còn lại
 
   -- Lưu giá trị giới hạn và mức sử dụng vào biến giao dịch
+  txn:set_var("txn.rate_redis_key", redis_key)
   txn:set_var("txn.rate_limit", client_ip_rate_limit)
   txn:set_var("txn.rate_window", rate_window)
   txn:set_var("txn.request_usage", request_count + 1)
   txn:set_var("txn.request_timestamp", current_time)
   txn:set_var("txn.request_remaining", request_remaining)
+  txn:set_var("txn.request_client_ip", client_ip)
+  -- txn:set_var("txn.request_client_key", client_key)
 
   -- Kiểm tra nếu đã vượt quá giới hạn
   if request_count >= client_ip_rate_limit then
@@ -182,6 +192,8 @@ function rate_limit_check(client_ip, txn)
 
     -- Tăng số lượng yêu cầu (không cập nhật thời gian hết hạn)
     client:incr(redis_key)
+    -- client:incr("check:"..client_key..":_req:"..client_ip)
+    -- client:incr("check:"..client_key..":_fail:"..client_ip)
 
     -- Đóng kết nối Redis sau khi sử dụng xong (để giải phóng tài nguyên)
     client:quit()
@@ -195,6 +207,8 @@ function rate_limit_check(client_ip, txn)
     -- Nếu chưa vượt quá giới hạn, tăng số lượng yêu cầu và thiết lập thời gian hết hạn (expire)
     client:incr(redis_key)
     client:expire(redis_key, rate_window)  -- Thiết lập thời gian hết hạn cho key
+    -- client:incr("check:"..client_key..":_req:"..client_ip)
+    -- client:incr("check:"..client_key..":_pass:"..client_ip)
 
     -- Đóng kết nối Redis sau khi sử dụng xong (để giải phóng tài nguyên)
     client:quit()
@@ -299,6 +313,8 @@ core.register_action("action_ratelimit_res_check", { "http-res" }, function(txn)
   txn.http:res_add_header("x-ratelimit-retry-after", rate_window)
   txn.http:res_add_header("x-ratelimit-usage", request_usage)
   txn.http:res_add_header("x-ratelimit-timestamp", request_timestamp)
+  -- txn.http:res_add_header("x-ratelimit-client_ip", txn:get_var("txn.request_client_ip") or "unknown")
+  -- txn.http:res_add_header("x-ratelimit-client_key", txn:get_var("txn.request_client_key") or "unknown")
 
   -- Thêm header `x-ratelimit-remaining` để thông báo số yêu cầu còn lại
   if is_rate_limit_reject_req == "true" then
@@ -389,4 +405,57 @@ core.register_service("action_ratelimit_check_deny_429", "http", function(applet
   -- Bắt đầu phản hồi và gửi nội dung
   applet:start_response()
   applet:send(response)
+end)
+
+-- Summary: Hàm này sẽ được gọi khi HAProxy gặp các sự kiện như http-res (phản hồi HTTP)
+core.register_action("action_ratelimit_handle_redirect", {"http-res"}, function(txn)
+  -- Kiểm tra txn có hợp lệ không
+  if not txn then
+    -- Nếu txn không hợp lệ, trả về ngay
+    return
+  end
+
+  -- Lấy các biến rate limit từ txn đã lưu ở bước http-request
+  local redis_key = txn:get_var("txn.rate_redis_key") or "unknown"  -- Giới hạn tốc độ
+  local rate_limit = txn:get_var("txn.rate_limit") or "unknown"  -- Giới hạn tốc độ
+  local rate_window = txn:get_var("txn.rate_window") or "unknown"  -- Giới hạn tốc độ
+  local request_usage = txn:get_var("txn.request_usage") or "unknown"  -- Mức sử dụng
+  local request_timestamp = txn:get_var("txn.request_timestamp") or "unknown" -- Thời gian sử dụng
+  local is_rate_limit_reject_req = txn:get_var("txn.is_rate_limit_reject_req") or "unknown" -- Yêu cầu bị từ chối vì vượt quá giới hạn tỷ lệ
+
+  -- Nếu giới hạn tỷ lệ là -1 hoặc không xác định, không cần thêm thông tin về giới hạn vào phản hồi
+  if rate_limit == "-1" or rate_limit == "unknown" then
+    -- Nếu không giới hạn yêu cầu, không cần thêm thông tin về giới hạn vào phản hồi
+    return
+  end
+
+  -- Kết nối đến Redis
+  local client = redis.connect({
+      host = redis_host,
+      port = redis_port
+  })
+
+  -- Xác thực với Redis (nếu mật khẩu được yêu cầu)
+  if redis_password then
+    local ok, err = client:auth(redis_password)
+    if not ok then
+        -- Nếu xác thực Redis thất bại, trả về true (tiếp tục xử lý yêu cầu)
+        return true
+    end
+  end
+
+  -- Tiến hành pipeline Redis (cũng sử dụng pcall để bảo vệ)
+  local replies, pipe_err = pcall(function()
+    return client:pipeline(function(p)
+      p:incrby(redis_key, -1)
+    end)
+  end)
+
+  -- Đóng kết nối Redis sau khi sử dụng xong (để giải phóng tài nguyên)
+  local quit_ok, quit_err = pcall(function()
+    return client:quit()
+  end)
+
+  -- Thêm header vào response
+  -- txn.http:res_add_header("x-ratelimit-handle_redirect", 'true')
 end)

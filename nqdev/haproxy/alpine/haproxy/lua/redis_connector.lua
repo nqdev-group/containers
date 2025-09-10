@@ -87,8 +87,4 @@ else
     print("cidr_match: " .. ip .. " is NOT within the CIDR range " .. cidr)
 end
 
-if cidr_match("hjakhka", "aaaa") then
-    print("cidr_match: " .. 'hjakhka' .. " is within the CIDR range " .. 'aaaa')
-else
-    print("cidr_match: " .. 'hjakhka' .. " is NOT within the CIDR range " .. 'aaaa')
-end
+print("Lua script executed successfully!")

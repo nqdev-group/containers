@@ -8,6 +8,7 @@ bước
 cách
 chặn
 chạy
+chép
 chính
 chối
 chọn
@@ -15,6 +16,8 @@ chưa
 chứa
 Chứng
 chuyển
+Cổng
+cộng
 cũng
 dạng
 Đang
@@ -62,12 +65,15 @@ libc
 libcidr
 liệu
 lòng
+Minh
+muốn
 ngày
 nghe
 nghĩa
 nguồn
 ngưỡng
 nhat
+nhất
 nhau
 nhóm
 phải
@@ -77,7 +83,9 @@ phản
 phep
 phép
 phiên
+phỏng
 phút
+postgresdb
 quyền
 sách
 suất

@@ -2,15 +2,16 @@
 # HAProxy - The Reliable, High Performance TCP/HTTP Load Balancer
 # -----------------------------------------
 # 3.1.5 -> https://docs.haproxy.org/3.1/intro.html
+# lua 3.1 -> https://www.arpalert.org/src/haproxy-lua-api/3.1/index.html
 # -----------------------------------------
-# START: docker-compose up -d --build --force-recreate
+# START: docker-compose up -d --build --force-recreate --remove-orphans
 # STOP: docker-compose down -v
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 services:
   haproxy-server-custom:
     container_name: haproxy-server-custom
-    image: nqdev/haproxy-alpine-custom:3.1.5-rc7
+    image: nqdev/haproxy-alpine-custom:3.1.5-rc10
     build:
       context: ./ # Path to your application's Dockerfile
       dockerfile: ./Dockerfile
@@ -18,7 +19,7 @@ services:
     # user: root
     # network_mode: "host"
     ports:
-      - "80:80" # Cổng HTTP để Certbot xác thực
+      - "18080:80" # Cổng HTTP để Certbot xác thực
       # - "443:443" # Cổng HTTPS cho Nginx sử dụng chứng chỉ SSL
       - "17001:7001"
     environment:

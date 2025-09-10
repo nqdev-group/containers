@@ -1,0 +1,51 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# PostgreSQL + pgAgent, pgsql-http extension
+# -----------------------------------------
+# START: docker-compose up -d --build --force-recreate --remove-orphans
+# STOP: docker-compose down -v
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+services:
+  postgres-pgagent:
+    container_name: postgres-pgagent-custom
+    # image: postgres:latest
+    image: postgres:17.5-custom
+    build:
+      context: ./ # Path to your application's Dockerfile
+      dockerfile: ./Dockerfile
+    # restart: always
+    # user: root
+    # network_mode: "host"
+    ports:
+      - "5432:5432"
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+      POSTGRES_USER: ${POSTGRES_USER:-superuser} # superuser
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-superuser} # pass for superuser
+      POSTGRES_DB: ${POSTGRES_DB:-postgresdb} # postgresdb
+      POSTGRES_HOST_AUTH_METHOD: trust # trust | scram-sha-256 | md5
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432} # Cổng PostgreSQL, mặc định là 5432
+      POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS:-"--data-checksums"} # Thêm --data-checksums để kiểm tra dữ liệu
+    env_file:
+      - .env
+    volumes:
+      - ./data:/var/lib/postgresql/data:rw
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Để kết nối đến localhost của host từ container
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+      - 8.8.8.8
+      - 8.8.4.4
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m" # Giới hạn mỗi file log 100MB (hoặc giữ 1g nếu bạn muốn)
+        max-file: "5" # Tối đa giữ 5 file log (500MB tổng cộng nếu mỗi file 100MB)
+    deploy:
+      resources:
+        limits:
+          cpus: "0.80" # Giới hạn 80% CPU
+          memory: "3.2G" # Giới hạn 3.2GB RAM (80% của 4GB)
+        reservations:
+          memory: "256M" # Đảm bảo container có ít nhất 256MB RAM
