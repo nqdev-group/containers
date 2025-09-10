@@ -8,21 +8,71 @@ name: "GHCR Package PostgreSQL pgAgent"
 run-name: Build and Push PostgreSQL with pgAgent, pgsql-http Docker Image on ${{ github.event_name }} by @${{ github.actor }}
 
 on:
-  workflow_dispatch: # Cho phép kích hoạt thủ công
-    inputs:
-      subversion:
-        description: "SubVersion"
-        required: false
-        type: string
+  workflow_dispatch: # Cho phép chạy thủ công
+  # release:
+  #   # created : # ✅ Chỉ chạy khi release được tạo
+  #   # published: # ✅ Chỉ chạy khi release được phát hành
+  #   types: [published] # ✅ Chỉ chạy khi release được phát hành
 
 # Remove all permissions by default
 permissions: write-all
 
 env:
   SERVER: production
-  PREFIX: "3.1.5"
-  VERSION: "3.1.5-rc${{ github.run_number }}"
+  BRANCH: ${{ github.ref_name }}
+  REPOSITORY: ${{ github.repository }}
+  # VERSION: "1.0.${{ github.run_number }}-${{ github.ref_name == 'main' && 'prod' || 'dev' }}"
+  VERSION: >-
+    ${{
+      github.ref_type == 'branch' && github.ref_name == 'main'
+        && format('1.0.{0}-main', github.run_number)
+        || github.ref_type == 'tag'
+        && format('1.0.{0}', github.run_number)
+        || format('1.0.{0}-dev', github.run_number)
+    }}
 
 jobs:
-  build-and-push:
+  docker-deploy:
     runs-on: ubuntu-latest
+
+    steps:
+      # 2. Checkout code từ repository
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      # 4. Đăng nhập vào GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }} # GitHub token cần thiết cho việc push image
+
+      # 5. Đăng nhập vào Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }} # Đảm bảo thêm secret DOCKER_USERNAME vào repository secrets
+          password: ${{ secrets.DOCKER_TOKEN }} # Đảm bảo thêm secret DOCKER_TOKEN vào repository secrets
+
+      # 6. Xây dựng Docker image với file Dockerfile cụ thể
+      - name: Build Docker Image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/postgres-pgagent:${{ env.VERSION }} \
+                       -t ghcr.io/${{ github.repository_owner }}/postgres-pgagent:latest \
+                       -t docker.io/${{ secrets.DOCKER_USERNAME }}/postgres-pgagent:${{ env.VERSION }} \
+                       -t docker.io/${{ secrets.DOCKER_USERNAME }}/postgres-pgagent:latest \
+                       -f ./nqdev/postgres-pgagent/Dockerfile ./nqdev/postgres-pgagent
+
+      # 7. Đẩy Docker Image lên GitHub Container Registry
+      - name: Push Docker Image to GHCR
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/postgres-pgagent:${{ env.VERSION }}
+          docker push ghcr.io/${{ github.repository_owner }}/postgres-pgagent:latest
+
+      # 8. Đẩy Docker Image lên Docker Hub
+      - name: Push Docker Image to Docker Hub
+        run: |
+          docker push docker.io/${{ secrets.DOCKER_USERNAME }}/postgres-pgagent:${{ env.VERSION }}
+          docker push docker.io/${{ secrets.DOCKER_USERNAME }}/postgres-pgagent:latest
