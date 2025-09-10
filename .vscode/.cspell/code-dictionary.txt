@@ -1,0 +1,12 @@
+# Custom Dictionary Words
+abortonclose
+dbname
+httpchk
+initdb
+ipclient
+nqdev
+PGDATA
+pgsql
+postgresdb
+psql
+tzdata
