@@ -9,6 +9,7 @@ run-name: Build and Push PostgreSQL with pgAgent, pgsql-http Docker Image on ${{
 
 on:
   workflow_dispatch: # Cho phép chạy thủ công
+  push:
   # release:
   #   # created : # ✅ Chỉ chạy khi release được tạo
   #   # published: # ✅ Chỉ chạy khi release được phát hành
