@@ -4,9 +4,11 @@ dbname
 httpchk
 initdb
 ipclient
+mnesia
 nqdev
 PGDATA
 pgsql
 postgresdb
 psql
+rabbitmq
 tzdata
