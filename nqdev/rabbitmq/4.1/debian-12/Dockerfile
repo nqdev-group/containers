@@ -21,12 +21,7 @@ ENV HOME="/opt/bitnami/rabbitmq/.rabbitmq" \
   OS_NAME="linux" \
   PATH="/opt/bitnami/erlang/bin:/opt/bitnami/rabbitmq/sbin:$PATH"
 
-# Switch to root to install dependencies and copy files
-USER root
-
 COPY prebuildfs /
-# Thêm quyền thực thi cho tất cả scripts ngay từ đầu
-RUN chmod -R +x /opt/bitnami/scripts /usr/sbin/install_packages
 
 SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
 
@@ -92,12 +87,16 @@ ENV APP_VERSION="4.1.4" \
 
 EXPOSE 4369 5551 5552 5671 5672 15671 15672 25672
 
-# Switch to daemon user
-USER 1001
+# Đảm bảo entrypoint scripts có quyền thực thi
+# ⚙️ Sửa lỗi "Operation not permitted" bằng cách tạm dùng quyền root
+USER root
 
 # Đảm bảo entrypoint scripts có quyền thực thi
 RUN chmod +x /opt/bitnami/scripts/rabbitmq/entrypoint.sh && \
   chmod +x /opt/bitnami/scripts/rabbitmq/run.sh
+
+# Chuyển lại user mặc định của Bitnami (1001)
+USER 1001
 
 ENTRYPOINT [ "/opt/bitnami/scripts/rabbitmq/entrypoint.sh" ]
 CMD [ "/opt/bitnami/scripts/rabbitmq/run.sh" ]
