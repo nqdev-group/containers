@@ -22,9 +22,12 @@ ENV HOME="/opt/bitnami/rabbitmq/.rabbitmq" \
   PATH="/opt/bitnami/erlang/bin:/opt/bitnami/rabbitmq/sbin:$PATH"
 
 COPY prebuildfs /
+# Thêm quyền thực thi cho tất cả scripts ngay từ đầu
+RUN chmod -R +x /opt/bitnami/scripts /usr/sbin/install_packages
+
 SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
+
 # Install required system packages and dependencies
-# RUN install_packages ca-certificates curl libgcc-s1 libssl3 libstdc++6 libtinfo6 locales procps zlib1g
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
   ca-certificates \
@@ -38,6 +41,7 @@ RUN apt-get update && \
   zlib1g && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
+
 RUN --mount=type=secret,id=downloads_url,env=SECRET_DOWNLOADS_URL \
   DOWNLOADS_URL=${SECRET_DOWNLOADS_URL:-${DOWNLOADS_URL}} ; \
   mkdir -p /tmp/bitnami/pkg/cache/ ; cd /tmp/bitnami/pkg/cache/ || exit 1 ; \
@@ -54,17 +58,29 @@ RUN --mount=type=secret,id=downloads_url,env=SECRET_DOWNLOADS_URL \
   tar -zxf "${COMPONENT}.tar.gz" -C /opt/bitnami --strip-components=2 --no-same-owner ; \
   rm -rf "${COMPONENT}".tar.gz{,.sha256} ; \
   done
+
 RUN apt-get update && apt-get upgrade -y && \
   apt-get clean && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
 RUN chmod g+rwX /opt/bitnami
 RUN find / -perm /6000 -type f -exec chmod a-s {} \; || true
+
 RUN update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
   DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
   echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen
-RUN /opt/bitnami/scripts/locales/generate-locales.sh
+
+# Đảm bảo script có quyền thực thi trước khi chạy
+RUN chmod +x /opt/bitnami/scripts/locales/generate-locales.sh && \
+  /opt/bitnami/scripts/locales/generate-locales.sh
 
 COPY rootfs /
-RUN /opt/bitnami/scripts/rabbitmq/postunpack.sh
+# Đảm bảo tất cả scripts trong rootfs có quyền thực thi
+RUN chmod -R +x /opt/bitnami/scripts
+
+# Đảm bảo script postunpack có quyền thực thi
+RUN chmod +x /opt/bitnami/scripts/rabbitmq/postunpack.sh && \
+  /opt/bitnami/scripts/rabbitmq/postunpack.sh
+
 ENV APP_VERSION="4.1.4" \
   BITNAMI_APP_NAME="rabbitmq" \
   IMAGE_REVISION="2" \
@@ -74,5 +90,10 @@ ENV APP_VERSION="4.1.4" \
 EXPOSE 4369 5551 5552 5671 5672 15671 15672 25672
 
 USER 1001
+
+# Đảm bảo entrypoint scripts có quyền thực thi
+RUN chmod +x /opt/bitnami/scripts/rabbitmq/entrypoint.sh && \
+  chmod +x /opt/bitnami/scripts/rabbitmq/run.sh
+
 ENTRYPOINT [ "/opt/bitnami/scripts/rabbitmq/entrypoint.sh" ]
 CMD [ "/opt/bitnami/scripts/rabbitmq/run.sh" ]
