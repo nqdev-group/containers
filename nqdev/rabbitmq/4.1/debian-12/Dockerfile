@@ -21,6 +21,9 @@ ENV HOME="/opt/bitnami/rabbitmq/.rabbitmq" \
   OS_NAME="linux" \
   PATH="/opt/bitnami/erlang/bin:/opt/bitnami/rabbitmq/sbin:$PATH"
 
+# Switch to root to install dependencies and copy files
+USER root
+
 COPY prebuildfs /
 # Thêm quyền thực thi cho tất cả scripts ngay từ đầu
 RUN chmod -R +x /opt/bitnami/scripts /usr/sbin/install_packages
@@ -89,6 +92,7 @@ ENV APP_VERSION="4.1.4" \
 
 EXPOSE 4369 5551 5552 5671 5672 15671 15672 25672
 
+# Switch to daemon user
 USER 1001
 
 # Đảm bảo entrypoint scripts có quyền thực thi
