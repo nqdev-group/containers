@@ -10,6 +10,8 @@ nqdev
 PGDATA
 pgsql
 postgresdb
+prebuildfs
 psql
 rabbitmq
+rootfs
 tzdata
