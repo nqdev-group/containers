@@ -1,401 +1,798 @@
-# Bitnami package for RabbitMQ
+# RabbitMQ Docker Container - NQDev# RabbitMQ Docker Container - NQDev
 
-## What is RabbitMQ?
+## Giới thiệu## Giới thiệu
 
-> RabbitMQ is an open source general-purpose message broker that is designed for consistent, highly-available messaging scenarios (both synchronous and asynchronous).
+RabbitMQ là một message broker mã nguồn mở được thiết kế cho các kịch bản messaging có tính khả dụng cao (both synchronous và asynchronous).RabbitMQ là một message broker mã nguồn mở được thiết kế cho các kịch bản messaging có tính khả dụng cao (both synchronous và asynchronous).
 
-[Overview of RabbitMQ](https://www.rabbitmq.com)
-Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+- **Phiên bản**: RabbitMQ 4.1.4[Tài liệu chính thức RabbitMQ](https://www.rabbitmq.com)
 
-## TL;DR
+- **Erlang**: 27.3.4
 
-```console
-docker run --name rabbitmq bitnami/rabbitmq:latest
-```
+- **Base OS**: Debian 12 (Bookworm)## Sử dụng nhanh
 
-You can find the default credentials and available configuration options in the [Environment Variables](#environment-variables) section.
+[Tài liệu chính thức RabbitMQ](https://www.rabbitmq.com)```bash
 
-## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
+# Chạy với Docker Compose (khuyến nghị)
 
-Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
+## Sử dụng nhanhdocker-compose up -d
 
-- Granting community users access for the first time to security-optimized versions of popular container images.
-- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
-- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
-- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+````bash# Hoặc chạy trực tiếp với Docker
 
-These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+# Khởi động với Docker Compose (khuyến nghị)docker run --name rabbitmq -p 15672:15672 -p 5672:5672 bitnamilegacy/rabbitmq:4.1
 
-## Why use Bitnami Secure Images?
+docker-compose up -d```
 
-- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
-- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
-- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+
+
+# Hoặc chạy trực tiếp với Docker## Cấu hình dự án
+
+docker run --name rabbitmq -p 15672:15672 -p 5672:5672 bitnamilegacy/rabbitmq:4.1
+
+```### Docker Compose
+
+
+
+## Cấu hình Docker ComposeFile `docker-compose.yml` cấu hình container RabbitMQ với các thiết lập tối ưu:
+
+
+
+```yaml## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
+
+services:
+
+  rabbitmq:Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
+
+    image: docker.io/bitnamilegacy/rabbitmq:4.1
+
+    ports:- Granting community users access for the first time to security-optimized versions of popular container images.
+
+      - '4369:4369'      # Erlang Port Mapper Daemon- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+
+      - '5551:5551'      # RabbitMQ clustering port- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+
+      - '5552:5552'      # RabbitMQ clustering port- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+      - '5672:5672'      # AMQP port
+
+      - '25672:25672'    # Inter-node communicationThese changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+      - '15672:15672'    # Management UI
+
+    environment:## Why use Bitnami Secure Images?
+
+      - RABBITMQ_SECURE_PASSWORD=yes
+
+      - RABBITMQ_LOGS=-- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+
+    volumes:- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+
+      - 'rabbitmq_data:/bitnami/rabbitmq/mnesia'- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+
 - Stay more secure and compliant with continuously built images updated within hours of upstream patches.
-- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
 
-Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
+volumes:- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
 
-## How to deploy RabbitMQ in Kubernetes?
+  rabbitmq_data:- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
 
-Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami RabbitMQ Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/rabbitmq).
+    driver: local
 
-## Why use a non-root container?
+```Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
+
+
+## Custom Dockerfile## How to deploy RabbitMQ in Kubernetes?
+
+
+
+Dự án bao gồm Dockerfile tùy chỉnh tại `4.1/debian-12/Dockerfile` với các tối ưu hóa:Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami RabbitMQ Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/rabbitmq).
+
+
+
+- **Base image**: `bitnami/minideb:bookworm`## Why use a non-root container?
+
+- **Non-root user**: Container chạy với user ID 1001 để tăng bảo mật
+
+- **Scripts tự động**: Cấu hình và khởi động tự độngNon-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
+
+- **Locale**: Cấu hình đa ngôn ngữ (UTF-8)
 
 ## Supported tags and respective `Dockerfile` links
 
+### Build custom image
+
 Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
-You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
+```bash
 
-Subscribe to project updates by watching the [bitnami/containers GitHub repo](https://github.com/bitnami/containers).
+# Build từ DockerfileYou can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
-## Get this image
+cd 4.1/debian-12
 
-The recommended way to get the Bitnami RabbitMQ Docker Image is to pull the prebuilt image from the [Docker Hub Registry](https://hub.docker.com/r/bitnami/rabbitmq).
+docker build -t nqdev/rabbitmq:4.1 .Subscribe to project updates by watching the [bitnami/containers GitHub repo](https://github.com/bitnami/containers).
 
-```console
-docker pull bitnami/rabbitmq:latest
-```
+
+
+# Chạy với custom image## Get this image
+
+docker run -d --name rabbitmq \
+
+  -p 15672:15672 \The recommended way to get the Bitnami RabbitMQ Docker Image is to pull the prebuilt image from the [Docker Hub Registry](https://hub.docker.com/r/bitnami/rabbitmq).
+
+  -p 5672:5672 \
+
+  nqdev/rabbitmq:4.1```console
+
+```docker pull bitnami/rabbitmq:latest
+
+````
+
+## Truy cập Management UI
 
 To use a specific version, you can pull a versioned tag. You can view the [list of available versions](https://hub.docker.com/r/bitnami/rabbitmq/tags/) in the Docker Hub Registry.
 
-```console
-docker pull bitnami/rabbitmq:[TAG]
-```
+Sau khi container chạy thành công:
+
+````console
+
+- **URL**: http://localhost:15672docker pull bitnami/rabbitmq:[TAG]
+
+- **Username**: `user` (mặc định)```
+
+- **Password**: Được tạo tự động, xem logs:
 
 If you wish, you can also build the image yourself by cloning the repository, changing to the directory containing the Dockerfile and executing the `docker build` command. Remember to replace the `APP`, `VERSION` and `OPERATING-SYSTEM` path placeholders in the example command below with the correct values.
 
-```console
-git clone https://github.com/bitnami/containers.git
+```bash
+
+docker-compose logs rabbitmq | grep "password"```console
+
+```git clone https://github.com/bitnami/containers.git
+
 cd bitnami/APP/VERSION/OPERATING-SYSTEM
-docker build -t bitnami/APP:latest .
-```
+
+## Quản lý Containerdocker build -t bitnami/APP:latest .
+
+````
+
+### Khởi động và dừng
 
 ## Persisting your application
 
-If you remove the container all your data will be lost, and the next time you run the image the database will be reinitialized. To avoid this loss of data, you should mount a volume that will persist even after the container is removed.
+````bash
+
+# Khởi độngIf you remove the container all your data will be lost, and the next time you run the image the database will be reinitialized. To avoid this loss of data, you should mount a volume that will persist even after the container is removed.
+
+docker-compose up -d
 
 For persistence you should mount a directory at the `/bitnami/rabbitmq/mnesia` path. If the mounted directory is empty, it will be initialized on the first run.
 
-```console
-docker run \
-    -v /path/to/rabbitmq-persistence:/bitnami/rabbitmq/mnesia \
-    bitnami/rabbitmq:latest
-```
+# Xem logs
 
-> NOTE: As this is a non-root container, the mounted files and directories must have the proper permissions for the UID `1001`.
+docker-compose logs -f rabbitmq```console
+
+docker run \
+
+# Dừng    -v /path/to/rabbitmq-persistence:/bitnami/rabbitmq/mnesia \
+
+docker-compose down    bitnami/rabbitmq:latest
+
+````
+
+# Dừng và xóa data (cẩn thận!)
+
+docker-compose down -v> NOTE: As this is a non-root container, the mounted files and directories must have the proper permissions for the UID `1001`.
+
+```````
 
 ## Connecting to other containers
 
+### Kiểm tra trạng thái
+
 Using [Docker container networking](https://docs.docker.com/engine/userguide/networking/), a RabbitMQ server running inside a container can easily be accessed by your application containers.
 
-Containers attached to the same network can communicate with each other using the container name as the hostname.
+```bash
+
+# Kiểm tra containerContainers attached to the same network can communicate with each other using the container name as the hostname.
+
+docker-compose ps
 
 ### Using the Command Line
 
-In this example, we will create a RabbitMQ client instance that will connect to the server instance that is running on the same docker network as the client.
+# Xem resource usage
 
-#### Step 1: Create a network
+docker stats $(docker-compose ps -q)In this example, we will create a RabbitMQ client instance that will connect to the server instance that is running on the same docker network as the client.
 
-```console
+
+
+# Vào container để debug#### Step 1: Create a network
+
+docker-compose exec rabbitmq bash
+
+``````console
+
 docker network create app-tier --driver bridge
-```
 
-#### Step 2: Launch the RabbitMQ server instance
+## Environment Variables```
 
-Use the `--network app-tier` argument to the `docker run` command to attach the RabbitMQ container to the `app-tier` network.
 
-```console
-docker run -d --name rabbitmq-server \
-    --network app-tier \
-    bitnami/rabbitmq:latest
-```
+
+### Cấu hình cơ bản#### Step 2: Launch the RabbitMQ server instance
+
+
+
+| Biến                              | Mô tả                                    | Giá trị mặc định |Use the `--network app-tier` argument to the `docker run` command to attach the RabbitMQ container to the `app-tier` network.
+
+|-----------------------------------|------------------------------------------|------------------|
+
+| `RABBITMQ_USERNAME`               | Tên đăng nhập                           | `user`           |```console
+
+| `RABBITMQ_PASSWORD`               | Mật khẩu (nếu SECURE_PASSWORD=no)      | `bitnami`        |docker run -d --name rabbitmq-server \
+
+| `RABBITMQ_SECURE_PASSWORD`        | Tạo mật khẩu ngẫu nhiên                 | `yes`            |    --network app-tier \
+
+| `RABBITMQ_VHOST`                  | Virtual host mặc định                   | `/`              |    bitnami/rabbitmq:latest
+
+| `RABBITMQ_NODE_PORT_NUMBER`       | Port AMQP                               | `5672`           |```
+
+| `RABBITMQ_MANAGEMENT_PORT_NUMBER` | Port Management UI                      | `15672`          |
 
 #### Step 3: Launch your RabbitMQ client instance
 
+### Cấu hình clustering
+
 Finally we create a new container instance to launch the RabbitMQ client and connect to the server created in the previous step:
 
-```console
-docker run -it --rm \
-    --network app-tier \
-    bitnami/rabbitmq:latest rabbitmqctl -n rabbit@rabbitmq-server status
-```
+| Biến                              | Mô tả                                    | Giá trị mặc định |
 
-### Using a Docker Compose file
+|-----------------------------------|------------------------------------------|------------------|```console
 
-When not specified, Docker Compose automatically sets up a new network and attaches all deployed services to that network. However, we will explicitly define a new `bridge` network named `app-tier`. In this example we assume that you want to connect to the RabbitMQ server from your own custom application image which is identified in the following snippet by the service name `myapp`.
+| `RABBITMQ_ERL_COOKIE`             | Erlang cookie cho clustering            | `nil`            |docker run -it --rm \
 
-```yaml
-version: "2"
+| `RABBITMQ_NODE_TYPE`              | Loại node (stats/queue-disc/queue-ram) | `stats`          |    --network app-tier \
 
-networks:
-  app-tier:
-    driver: bridge
+| `RABBITMQ_NODE_NAME`              | Tên node                                | `rabbit@localhost` |    bitnami/rabbitmq:latest rabbitmqctl -n rabbit@rabbitmq-server status
 
-services:
-  rabbitmq:
-    image: bitnami/rabbitmq:latest
-    networks:
-      - app-tier
-  myapp:
-    image: YOUR_APPLICATION_IMAGE
-    networks:
-      - app-tier
-```
+| `RABBITMQ_CLUSTER_NODE_NAME`      | Node để join cluster                    | `nil`            |```
 
-> **IMPORTANT**:
->
+
+
+## RabbitMQ Clustering### Using a Docker Compose file
+
+
+
+### Cấu hình Cluster với Docker ComposeWhen not specified, Docker Compose automatically sets up a new network and attaches all deployed services to that network. However, we will explicitly define a new `bridge` network named `app-tier`. In this example we assume that you want to connect to the RabbitMQ server from your own custom application image which is identified in the following snippet by the service name `myapp`.
+
+
+
+```yaml```yaml
+
+version: "3.8"version: "2"
+
+
+
+services:networks:
+
+  rabbitmq-node1:  app-tier:
+
+    image: docker.io/bitnamilegacy/rabbitmq:4.1    driver: bridge
+
+    container_name: rabbitmq-node1
+
+    environment:services:
+
+      - RABBITMQ_NODE_TYPE=stats  rabbitmq:
+
+      - RABBITMQ_NODE_NAME=rabbit@node1    image: bitnami/rabbitmq:latest
+
+      - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3    networks:
+
+      - RABBITMQ_USERNAME=admin      - app-tier
+
+      - RABBITMQ_PASSWORD=admin123  myapp:
+
+    ports:    image: YOUR_APPLICATION_IMAGE
+
+      - "15672:15672"    networks:
+
+      - "5672:5672"      - app-tier
+
+    volumes:```
+
+      - rabbitmq1_data:/bitnami/rabbitmq/mnesia
+
+    networks:> **IMPORTANT**:
+
+      - rabbitmq-cluster>
+
 > 1. Please update the **YOUR_APPLICATION_IMAGE** placeholder in the above snippet with your application image
-> 2. In your application container, use the hostname `rabbitmq` to connect to the RabbitMQ server
 
-Launch the containers using:
+  rabbitmq-node2:> 2. In your application container, use the hostname `rabbitmq` to connect to the RabbitMQ server
 
-```console
-docker-compose up -d
-```
+    image: docker.io/bitnamilegacy/rabbitmq:4.1
 
-## Configuration
+    container_name: rabbitmq-node2Launch the containers using:
 
-### Environment variables
+    environment:
 
-#### Customizable environment variables
+      - RABBITMQ_NODE_TYPE=queue-disc```console
+
+      - RABBITMQ_NODE_NAME=rabbit@node2docker-compose up -d
+
+      - RABBITMQ_CLUSTER_NODE_NAME=rabbit@node1```
+
+      - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
+
+    volumes:## Configuration
+
+      - rabbitmq2_data:/bitnami/rabbitmq/mnesia
+
+    networks:### Environment variables
+
+      - rabbitmq-cluster
+
+    depends_on:#### Customizable environment variables
+
+      - rabbitmq-node1
 
 | Name                                           | Description                                                                                                                                                                                      | Default Value                        |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
-| `RABBITMQ_CONF_FILE`                           | RabbitMQ configuration file.                                                                                                                                                                     | `${RABBITMQ_CONF_DIR}/rabbitmq.conf` |
-| `RABBITMQ_DEFINITIONS_FILE`                    | Whether to load external RabbitMQ definitions. This is incompatible with setting the RabbitMQ password securely.                                                                                 | `/app/load_definition.json`          |
-| `RABBITMQ_SECURE_PASSWORD`                     | Whether to set the RabbitMQ password securely. This is incompatible with loading external RabbitMQ definitions.                                                                                  | `no`                                 |
-| `RABBITMQ_UPDATE_PASSWORD`                     | Whether to update the password on container restart.                                                                                                                                             | `no`                                 |
-| `RABBITMQ_CLUSTER_NODE_NAME`                   | RabbitMQ cluster node name. When specifying this, ensure you also specify a valid hostname as RabbitMQ will fail to start otherwise.                                                             | `nil`                                |
-| `RABBITMQ_CLUSTER_PARTITION_HANDLING`          | RabbitMQ cluster partition recovery mechanism.                                                                                                                                                   | `ignore`                             |
-| `RABBITMQ_DISK_FREE_RELATIVE_LIMIT`            | Disk relative free space limit of the partition on which RabbitMQ is storing data.                                                                                                               | `1.0`                                |
-| `RABBITMQ_DISK_FREE_ABSOLUTE_LIMIT`            | Disk absolute free space limit of the partition on which RabbitMQ is storing data (takes precedence over the relative limit).                                                                    | `nil`                                |
-| `RABBITMQ_ERL_COOKIE`                          | Erlang cookie to determine whether different nodes are allowed to communicate with each other.                                                                                                   | `nil`                                |
-| `RABBITMQ_VM_MEMORY_HIGH_WATERMARK`            | High memory watermark for RabbitMQ to block publishers and prevent new messages from being enqueued. Can be specified as an absolute or relative value (as percentage or value between 0 and 1). | `nil`                                |
-| `RABBITMQ_LOAD_DEFINITIONS`                    | Whether to load external RabbitMQ definitions. This is incompatible with setting the RabbitMQ password securely.                                                                                 | `no`                                 |
-| `RABBITMQ_MANAGEMENT_BIND_IP`                  | RabbitMQ management server bind IP address.                                                                                                                                                      | `0.0.0.0`                            |
-| `RABBITMQ_MANAGEMENT_PORT_NUMBER`              | RabbitMQ management server port number.                                                                                                                                                          | `15672`                              |
+
+  rabbitmq-node3:| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
+
+    image: docker.io/bitnamilegacy/rabbitmq:4.1| `RABBITMQ_CONF_FILE`                           | RabbitMQ configuration file.                                                                                                                                                                     | `${RABBITMQ_CONF_DIR}/rabbitmq.conf` |
+
+    container_name: rabbitmq-node3| `RABBITMQ_DEFINITIONS_FILE`                    | Whether to load external RabbitMQ definitions. This is incompatible with setting the RabbitMQ password securely.                                                                                 | `/app/load_definition.json`          |
+
+    environment:| `RABBITMQ_SECURE_PASSWORD`                     | Whether to set the RabbitMQ password securely. This is incompatible with loading external RabbitMQ definitions.                                                                                  | `no`                                 |
+
+      - RABBITMQ_NODE_TYPE=queue-ram| `RABBITMQ_UPDATE_PASSWORD`                     | Whether to update the password on container restart.                                                                                                                                             | `no`                                 |
+
+      - RABBITMQ_NODE_NAME=rabbit@node3| `RABBITMQ_CLUSTER_NODE_NAME`                   | RabbitMQ cluster node name. When specifying this, ensure you also specify a valid hostname as RabbitMQ will fail to start otherwise.                                                             | `nil`                                |
+
+      - RABBITMQ_CLUSTER_NODE_NAME=rabbit@node1| `RABBITMQ_CLUSTER_PARTITION_HANDLING`          | RabbitMQ cluster partition recovery mechanism.                                                                                                                                                   | `ignore`                             |
+
+      - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3| `RABBITMQ_DISK_FREE_RELATIVE_LIMIT`            | Disk relative free space limit of the partition on which RabbitMQ is storing data.                                                                                                               | `1.0`                                |
+
+    volumes:| `RABBITMQ_DISK_FREE_ABSOLUTE_LIMIT`            | Disk absolute free space limit of the partition on which RabbitMQ is storing data (takes precedence over the relative limit).                                                                    | `nil`                                |
+
+      - rabbitmq3_data:/bitnami/rabbitmq/mnesia| `RABBITMQ_ERL_COOKIE`                          | Erlang cookie to determine whether different nodes are allowed to communicate with each other.                                                                                                   | `nil`                                |
+
+    networks:| `RABBITMQ_VM_MEMORY_HIGH_WATERMARK`            | High memory watermark for RabbitMQ to block publishers and prevent new messages from being enqueued. Can be specified as an absolute or relative value (as percentage or value between 0 and 1). | `nil`                                |
+
+      - rabbitmq-cluster| `RABBITMQ_LOAD_DEFINITIONS`                    | Whether to load external RabbitMQ definitions. This is incompatible with setting the RabbitMQ password securely.                                                                                 | `no`                                 |
+
+    depends_on:| `RABBITMQ_MANAGEMENT_BIND_IP`                  | RabbitMQ management server bind IP address.                                                                                                                                                      | `0.0.0.0`                            |
+
+      - rabbitmq-node1| `RABBITMQ_MANAGEMENT_PORT_NUMBER`              | RabbitMQ management server port number.                                                                                                                                                          | `15672`                              |
+
 | `RABBITMQ_MANAGEMENT_ALLOW_WEB_ACCESS`         | Allow web access to RabbitMQ management portal for RABBITMQ_USERNAME                                                                                                                             | `false`                              |
-| `RABBITMQ_NODE_NAME`                           | RabbitMQ node name.                                                                                                                                                                              | `rabbit@localhost`                   |
-| `RABBITMQ_NODE_DEFAULT_QUEUE_TYPE`             | RabbitMQ default queue type node-wide.                                                                                                                                                           | `nil`                                |
-| `RABBITMQ_USE_LONGNAME`                        | Whether to use fully qualified names to identify nodes                                                                                                                                           | `false`                              |
-| `RABBITMQ_NODE_PORT_NUMBER`                    | RabbitMQ node port number.                                                                                                                                                                       | `5672`                               |
-| `RABBITMQ_NODE_TYPE`                           | RabbitMQ node type.                                                                                                                                                                              | `stats`                              |
-| `RABBITMQ_VHOST`                               | RabbitMQ vhost.                                                                                                                                                                                  | `/`                                  |
-| `RABBITMQ_VHOSTS`                              | List of additional virtual host (vhost). Default queue type can be set using colon separator (RABBITMQ_VHOSTS=queue_name_0 queue_name_1:quorum)                                                  | `nil`                                |
+
+volumes:| `RABBITMQ_NODE_NAME`                           | RabbitMQ node name.                                                                                                                                                                              | `rabbit@localhost`                   |
+
+  rabbitmq1_data:| `RABBITMQ_NODE_DEFAULT_QUEUE_TYPE`             | RabbitMQ default queue type node-wide.                                                                                                                                                           | `nil`                                |
+
+    driver: local| `RABBITMQ_USE_LONGNAME`                        | Whether to use fully qualified names to identify nodes                                                                                                                                           | `false`                              |
+
+  rabbitmq2_data:| `RABBITMQ_NODE_PORT_NUMBER`                    | RabbitMQ node port number.                                                                                                                                                                       | `5672`                               |
+
+    driver: local| `RABBITMQ_NODE_TYPE`                           | RabbitMQ node type.                                                                                                                                                                              | `stats`                              |
+
+  rabbitmq3_data:| `RABBITMQ_VHOST`                               | RabbitMQ vhost.                                                                                                                                                                                  | `/`                                  |
+
+    driver: local| `RABBITMQ_VHOSTS`                              | List of additional virtual host (vhost). Default queue type can be set using colon separator (RABBITMQ_VHOSTS=queue_name_0 queue_name_1:quorum)                                                  | `nil`                                |
+
 | `RABBITMQ_CLUSTER_REBALANCE`                   | Rebalance the RabbitMQ Cluster.                                                                                                                                                                  | `false`                              |
-| `RABBITMQ_CLUSTER_REBALANCE_ATTEMPTS`          | Max attempts for the rebalance check to run                                                                                                                                                      | `100`                                |
-| `RABBITMQ_USERNAME`                            | RabbitMQ user name.                                                                                                                                                                              | `user`                               |
-| `RABBITMQ_PASSWORD`                            | RabbitMQ user password.                                                                                                                                                                          | `bitnami`                            |
-| `RABBITMQ_FORCE_BOOT`                          | Force a node to start even if it was not the last to shut down                                                                                                                                   | `no`                                 |
+
+networks:| `RABBITMQ_CLUSTER_REBALANCE_ATTEMPTS`          | Max attempts for the rebalance check to run                                                                                                                                                      | `100`                                |
+
+  rabbitmq-cluster:| `RABBITMQ_USERNAME`                            | RabbitMQ user name.                                                                                                                                                                              | `user`                               |
+
+    driver: bridge| `RABBITMQ_PASSWORD`                            | RabbitMQ user password.                                                                                                                                                                          | `bitnami`                            |
+
+```| `RABBITMQ_FORCE_BOOT`                          | Force a node to start even if it was not the last to shut down                                                                                                                                   | `no`                                 |
+
 | `RABBITMQ_ENABLE_LDAP`                         | Enable the LDAP configuration.                                                                                                                                                                   | `no`                                 |
-| `RABBITMQ_LDAP_TLS`                            | Enable secure LDAP configuration.                                                                                                                                                                | `no`                                 |
+
+## Cấu hình SSL/TLS| `RABBITMQ_LDAP_TLS`                            | Enable secure LDAP configuration.                                                                                                                                                                | `no`                                 |
+
 | `RABBITMQ_LDAP_SERVERS`                        | Comma, semi-colon or space separated list of LDAP server hostnames.                                                                                                                              | `nil`                                |
-| `RABBITMQ_LDAP_SERVERS_PORT`                   | LDAP servers port.                                                                                                                                                                               | `389`                                |
+
+### Tạo self-signed certificates| `RABBITMQ_LDAP_SERVERS_PORT`                   | LDAP servers port.                                                                                                                                                                               | `389`                                |
+
 | `RABBITMQ_LDAP_USER_DN_PATTERN`                | DN used to bind to LDAP in the form cn=$${username},dc=example,dc=org.                                                                                                                           | `nil`                                |
-| `RABBITMQ_NODE_SSL_PORT_NUMBER`                | RabbitMQ node port number for SSL connections.                                                                                                                                                   | `5671`                               |
-| `RABBITMQ_SSL_CACERTFILE`                      | Path to the RabbitMQ server SSL CA certificate file.                                                                                                                                             | `nil`                                |
-| `RABBITMQ_SSL_CERTFILE`                        | Path to the RabbitMQ server SSL certificate file.                                                                                                                                                | `nil`                                |
-| `RABBITMQ_SSL_KEYFILE`                         | Path to the RabbitMQ server SSL certificate key file.                                                                                                                                            | `nil`                                |
+
+```bash| `RABBITMQ_NODE_SSL_PORT_NUMBER`                | RabbitMQ node port number for SSL connections.                                                                                                                                                   | `5671`                               |
+
+# Tạo thư mục certs| `RABBITMQ_SSL_CACERTFILE`                      | Path to the RabbitMQ server SSL CA certificate file.                                                                                                                                             | `nil`                                |
+
+mkdir -p ./certs| `RABBITMQ_SSL_CERTFILE`                        | Path to the RabbitMQ server SSL certificate file.                                                                                                                                                | `nil`                                |
+
+cd certs| `RABBITMQ_SSL_KEYFILE`                         | Path to the RabbitMQ server SSL certificate key file.                                                                                                                                            | `nil`                                |
+
 | `RABBITMQ_SSL_PASSWORD`                        | RabbitMQ server SSL certificate key password.                                                                                                                                                    | `nil`                                |
-| `RABBITMQ_SSL_DEPTH`                           | Maximum number of non-self-issued intermediate certificates that may follow the peer certificate in a valid certification path.                                                                  | `nil`                                |
-| `RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT`            | Whether to reject TLS connections if client fails to provide a certificate.                                                                                                                      | `no`                                 |
+
+# Tạo CA private key| `RABBITMQ_SSL_DEPTH`                           | Maximum number of non-self-issued intermediate certificates that may follow the peer certificate in a valid certification path.                                                                  | `nil`                                |
+
+openssl genrsa -out ca-key.pem 4096| `RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT`            | Whether to reject TLS connections if client fails to provide a certificate.                                                                                                                      | `no`                                 |
+
 | `RABBITMQ_SSL_VERIFY`                          | Whether to enable peer SSL certificate verification. Valid values: verify_none, verify_peer.                                                                                                     | `verify_none`                        |
-| `RABBITMQ_MANAGEMENT_SSL_PORT_NUMBER`          | RabbitMQ management server port number for SSL/TLS connections.                                                                                                                                  | `15671`                              |
-| `RABBITMQ_MANAGEMENT_SSL_CACERTFILE`           | Path to the RabbitMQ management server SSL CA certificate file.                                                                                                                                  | `$RABBITMQ_SSL_CACERTFILE`           |
-| `RABBITMQ_MANAGEMENT_SSL_CERTFILE`             | Path to the RabbitMQ server SSL certificate file.                                                                                                                                                | `$RABBITMQ_SSL_CERTFILE`             |
+
+# Tạo CA certificate| `RABBITMQ_MANAGEMENT_SSL_PORT_NUMBER`          | RabbitMQ management server port number for SSL/TLS connections.                                                                                                                                  | `15671`                              |
+
+openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem \| `RABBITMQ_MANAGEMENT_SSL_CACERTFILE`           | Path to the RabbitMQ management server SSL CA certificate file.                                                                                                                                  | `$RABBITMQ_SSL_CACERTFILE`           |
+
+  -subj "/C=VN/ST=HCM/L=HCM/O=NQDev/CN=RabbitMQ-CA"| `RABBITMQ_MANAGEMENT_SSL_CERTFILE`             | Path to the RabbitMQ server SSL certificate file.                                                                                                                                                | `$RABBITMQ_SSL_CERTFILE`             |
+
 | `RABBITMQ_MANAGEMENT_SSL_KEYFILE`              | Path to the RabbitMQ management server SSL certificate key file.                                                                                                                                 | `$RABBITMQ_SSL_KEYFILE`              |
-| `RABBITMQ_MANAGEMENT_SSL_PASSWORD`             | RabbitMQ management server SSL certificate key password.                                                                                                                                         | `$RABBITMQ_SSL_PASSWORD`             |
-| `RABBITMQ_MANAGEMENT_SSL_DEPTH`                | Maximum number of non-self-issued intermediate certificates that may follow the peer certificate in a valid certification path, for the RabbitMQ management server.                              | `nil`                                |
+
+# Tạo server private key| `RABBITMQ_MANAGEMENT_SSL_PASSWORD`             | RabbitMQ management server SSL certificate key password.                                                                                                                                         | `$RABBITMQ_SSL_PASSWORD`             |
+
+openssl genrsa -out server-key.pem 4096| `RABBITMQ_MANAGEMENT_SSL_DEPTH`                | Maximum number of non-self-issued intermediate certificates that may follow the peer certificate in a valid certification path, for the RabbitMQ management server.                              | `nil`                                |
+
 | `RABBITMQ_MANAGEMENT_SSL_FAIL_IF_NO_PEER_CERT` | Whether to reject TLS connections if client fails to provide a certificate for the RabbitMQ management server.                                                                                   | `yes`                                |
-| `RABBITMQ_MANAGEMENT_SSL_VERIFY`               | Whether to enable peer SSL certificate verification for the RabbitMQ management server. Valid values: verify_none, verify_peer.                                                                  | `verify_peer`                        |
 
-#### Read-only environment variables
+# Tạo server certificate request| `RABBITMQ_MANAGEMENT_SSL_VERIFY`               | Whether to enable peer SSL certificate verification for the RabbitMQ management server. Valid values: verify_none, verify_peer.                                                                  | `verify_peer`                        |
 
-| Name                          | Description                                            | Value                                                             |
-| ----------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------- |
-| `RABBITMQ_VOLUME_DIR`         | Persistence base directory.                            | `/bitnami/rabbitmq`                                               |
-| `RABBITMQ_BASE_DIR`           | RabbitMQ installation directory.                       | `/opt/bitnami/rabbitmq`                                           |
+openssl req -subj "/C=VN/ST=HCM/L=HCM/O=NQDev/CN=rabbitmq" \
+
+  -sha256 -new -key server-key.pem -out server.csr#### Read-only environment variables
+
+
+
+# Sign server certificate| Name                          | Description                                            | Value                                                             |
+
+openssl x509 -req -days 365 -sha256 -in server.csr \| ----------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------- |
+
+  -CA ca.pem -CAkey ca-key.pem -out server.pem -CAcreateserial| `RABBITMQ_VOLUME_DIR`         | Persistence base directory.                            | `/bitnami/rabbitmq`                                               |
+
+```| `RABBITMQ_BASE_DIR`           | RabbitMQ installation directory.                       | `/opt/bitnami/rabbitmq`                                           |
+
 | `RABBITMQ_BIN_DIR`            | RabbitMQ executables directory.                        | `${RABBITMQ_BASE_DIR}/sbin`                                       |
-| `RABBITMQ_DATA_DIR`           | RabbitMQ data directory.                               | `${RABBITMQ_VOLUME_DIR}/mnesia`                                   |
+
+### Docker Compose với SSL| `RABBITMQ_DATA_DIR`           | RabbitMQ data directory.                               | `${RABBITMQ_VOLUME_DIR}/mnesia`                                   |
+
 | `RABBITMQ_CONF_DIR`           | RabbitMQ configuration directory.                      | `${RABBITMQ_BASE_DIR}/etc/rabbitmq`                               |
-| `RABBITMQ_DEFAULT_CONF_DIR`   | RabbitMQ default configuration directory.              | `${RABBITMQ_BASE_DIR}/etc/rabbitmq.default`                       |
-| `RABBITMQ_CONF_ENV_FILE`      | RabbitMQ configuration file for environment variables. | `${RABBITMQ_CONF_DIR}/rabbitmq-env.conf`                          |
-| `RABBITMQ_HOME_DIR`           | RabbitMQ home directory.                               | `${RABBITMQ_BASE_DIR}/.rabbitmq`                                  |
-| `RABBITMQ_LIB_DIR`            | RabbitMQ lib directory.                                | `${RABBITMQ_BASE_DIR}/var/lib/rabbitmq`                           |
-| `RABBITMQ_INITSCRIPTS_DIR`    | RabbitMQ init scripts directory.                       | `/docker-entrypoint-initdb.d`                                     |
-| `RABBITMQ_LOGS_DIR`           | RabbitMQ logs directory.                               | `${RABBITMQ_BASE_DIR}/var/log/rabbitmq`                           |
-| `RABBITMQ_PLUGINS_DIR`        | RabbitMQ plugins directory.                            | `${RABBITMQ_BASE_DIR}/plugins`                                    |
-| `RABBITMQ_MOUNTED_CONF_DIR`   | RabbitMQ directory for mounted configuration files.    | `${RABBITMQ_VOLUME_DIR}/conf`                                     |
-| `RABBITMQ_DAEMON_USER`        | RabbitMQ system user name.                             | `rabbitmq`                                                        |
-| `RABBITMQ_DAEMON_GROUP`       | RabbitMQ system user group.                            | `rabbitmq`                                                        |
-| `RABBITMQ_MNESIA_BASE`        | Path to RabbitMQ mnesia directory.                     | `$RABBITMQ_DATA_DIR`                                              |
-| `RABBITMQ_COMBINED_CERT_PATH` | Path to the RabbitMQ server SSL certificate key file.  | `${RABBITMQ_COMBINED_CERT_PATH:-/tmp/rabbitmq_combined_keys.pem}` |
 
-When you start the rabbitmq image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
+```yaml| `RABBITMQ_DEFAULT_CONF_DIR`   | RabbitMQ default configuration directory.              | `${RABBITMQ_BASE_DIR}/etc/rabbitmq.default`                       |
 
-- For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/rabbitmq/docker-compose.yml) file present in this repository: :
+services:| `RABBITMQ_CONF_ENV_FILE`      | RabbitMQ configuration file for environment variables. | `${RABBITMQ_CONF_DIR}/rabbitmq-env.conf`                          |
 
-```yaml
+  rabbitmq:| `RABBITMQ_HOME_DIR`           | RabbitMQ home directory.                               | `${RABBITMQ_BASE_DIR}/.rabbitmq`                                  |
+
+    image: docker.io/bitnamilegacy/rabbitmq:4.1| `RABBITMQ_LIB_DIR`            | RabbitMQ lib directory.                                | `${RABBITMQ_BASE_DIR}/var/lib/rabbitmq`                           |
+
+    ports:| `RABBITMQ_INITSCRIPTS_DIR`    | RabbitMQ init scripts directory.                       | `/docker-entrypoint-initdb.d`                                     |
+
+      - '5671:5671'      # AMQPS port| `RABBITMQ_LOGS_DIR`           | RabbitMQ logs directory.                               | `${RABBITMQ_BASE_DIR}/var/log/rabbitmq`                           |
+
+      - '15671:15671'    # Management UI HTTPS| `RABBITMQ_PLUGINS_DIR`        | RabbitMQ plugins directory.                            | `${RABBITMQ_BASE_DIR}/plugins`                                    |
+
+    environment:| `RABBITMQ_MOUNTED_CONF_DIR`   | RabbitMQ directory for mounted configuration files.    | `${RABBITMQ_VOLUME_DIR}/conf`                                     |
+
+      - RABBITMQ_SECURE_PASSWORD=yes| `RABBITMQ_DAEMON_USER`        | RabbitMQ system user name.                             | `rabbitmq`                                                        |
+
+      - RABBITMQ_SSL_CACERTFILE=/certs/ca.pem| `RABBITMQ_DAEMON_GROUP`       | RabbitMQ system user group.                            | `rabbitmq`                                                        |
+
+      - RABBITMQ_SSL_CERTFILE=/certs/server.pem| `RABBITMQ_MNESIA_BASE`        | Path to RabbitMQ mnesia directory.                     | `$RABBITMQ_DATA_DIR`                                              |
+
+      - RABBITMQ_SSL_KEYFILE=/certs/server-key.pem| `RABBITMQ_COMBINED_CERT_PATH` | Path to the RabbitMQ server SSL certificate key file.  | `${RABBITMQ_COMBINED_CERT_PATH:-/tmp/rabbitmq_combined_keys.pem}` |
+
+      - RABBITMQ_SSL_VERIFY=verify_peer
+
+      - RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT=noWhen you start the rabbitmq image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
+
+    volumes:
+
+      - 'rabbitmq_data:/bitnami/rabbitmq/mnesia'- For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/rabbitmq/docker-compose.yml) file present in this repository: :
+
+      - './certs:/certs:ro'
+
+``````yaml
+
 rabbitmq:
-  ...
+
+## Monitoring & Health Check  ...
+
   environment:
-    - RABBITMQ_PASSWORD=my_password
+
+### Health Check Script    - RABBITMQ_PASSWORD=my_password
+
   ...
-```
 
-- For manual execution add a `-e` option with each variable and value.
+```bash```
 
-### Setting up a cluster
+#!/bin/bash
 
-#### Using Docker Compose
+# health-check.sh- For manual execution add a `-e` option with each variable and value.
 
-This is the simplest way to run RabbitMQ with clustering configuration:
 
-##### Step 1: Add a stats node in your `docker-compose.yml`
 
-Copy the snippet below into your docker-compose.yml to add a RabbitMQ stats node to your cluster configuration.
+rabbitmqctl status > /dev/null 2>&1### Setting up a cluster
 
-```yaml
+if [ $? -eq 0 ]; then
+
+    echo "RabbitMQ is healthy"#### Using Docker Compose
+
+    exit 0
+
+elseThis is the simplest way to run RabbitMQ with clustering configuration:
+
+    echo "RabbitMQ is not healthy"
+
+    exit 1##### Step 1: Add a stats node in your `docker-compose.yml`
+
+fi
+
+```Copy the snippet below into your docker-compose.yml to add a RabbitMQ stats node to your cluster configuration.
+
+
+
+### Prometheus Monitoring```yaml
+
 version: "2"
 
+RabbitMQ có plugin prometheus built-in:
+
 services:
-  stats:
-    image: bitnami/rabbitmq:latest
-    environment:
+
+```bash  stats:
+
+# Enable prometheus plugin    image: bitnami/rabbitmq:latest
+
+docker-compose exec rabbitmq rabbitmq-plugins enable rabbitmq_prometheus    environment:
+
       - RABBITMQ_NODE_TYPE=stats
-      - RABBITMQ_NODE_NAME=rabbit@stats
-      - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
-    ports:
+
+# Metrics endpoint      - RABBITMQ_NODE_NAME=rabbit@stats
+
+curl http://localhost:15692/metrics      - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
+
+```    ports:
+
       - 15672:15672
-    volumes:
+
+## Backup và Restore    volumes:
+
       - rabbitmqstats_data:/bitnami/rabbitmq/mnesia
-```
 
-> **Note:** The name of the service (**stats**) is important so that a node could resolve the hostname to cluster with. (Note that the node name is `rabbit@stats`)
+### Backup```
 
-##### Step 2: Add a queue node in your configuration
 
-Update the definitions for nodes you want your RabbitMQ stats node cluster with.
 
-```yaml
-queue-disc1:
+```bash> **Note:** The name of the service (**stats**) is important so that a node could resolve the hostname to cluster with. (Note that the node name is `rabbit@stats`)
+
+# Backup definitions (queues, exchanges, bindings, users, etc.)
+
+curl -u admin:password http://localhost:15672/api/definitions -o backup-$(date +%Y%m%d).json##### Step 2: Add a queue node in your configuration
+
+
+
+# Backup data directoryUpdate the definitions for nodes you want your RabbitMQ stats node cluster with.
+
+docker run --rm -v rabbitmq_data:/data -v $(pwd):/backup \
+
+  alpine tar czf /backup/rabbitmq-data-$(date +%Y%m%d).tar.gz /data```yaml
+
+```queue-disc1:
+
   image: bitnami/rabbitmq:latest
-  environment:
-    - RABBITMQ_NODE_TYPE=queue-disc
-    - RABBITMQ_NODE_NAME=rabbit@queue-disc1
-    - RABBITMQ_CLUSTER_NODE_NAME=rabbit@stats
-    - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
-  volumes:
-    - rabbitmqdisc1_data:/bitnami/rabbitmq/mnesia
-```
 
-> **Note:** Again, the name of the service (**queue-disc1**) is important so that each node could resolve the hostname of this one.
+### Restore  environment:
+
+    - RABBITMQ_NODE_TYPE=queue-disc
+
+```bash    - RABBITMQ_NODE_NAME=rabbit@queue-disc1
+
+# Restore definitions    - RABBITMQ_CLUSTER_NODE_NAME=rabbit@stats
+
+curl -u admin:password -X POST -H "Content-Type: application/json" \    - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
+
+  -d @backup-20241112.json http://localhost:15672/api/definitions  volumes:
+
+    - rabbitmqdisc1_data:/bitnami/rabbitmq/mnesia
+
+# Restore data```
+
+docker run --rm -v rabbitmq_data:/data -v $(pwd):/backup \
+
+  alpine tar xzf /backup/rabbitmq-data-20241112.tar.gz -C /> **Note:** Again, the name of the service (**queue-disc1**) is important so that each node could resolve the hostname of this one.
+
+```````
 
 We are going to add a ram node too:
 
-```yaml
-queue-ram1:
+## Troubleshooting
+
+````yaml
+
+### Common Issuesqueue-ram1:
+
   image: bitnami/rabbitmq:latest
-  environment:
-    - RABBITMQ_NODE_TYPE=queue-ram
-    - RABBITMQ_NODE_NAME=rabbit@queue-ram1
-    - RABBITMQ_CLUSTER_NODE_NAME=rabbit@stats
-    - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
-  volumes:
-    - rabbitmqram1_data:/bitnami/rabbitmq/mnesia
-```
 
-##### Step 3: Add the volume description
+1. **Container không start được**  environment:
 
-```yaml
-volumes:
-  rabbitmqstats_data:
-    driver: local
-  rabbitmqdisc1_data:
-    driver: local
-  rabbitmqram1_data:
-    driver: local
-```
+   ```bash    - RABBITMQ_NODE_TYPE=queue-ram
 
-The `docker-compose.yml` will look like this:
+   # Xem logs chi tiết    - RABBITMQ_NODE_NAME=rabbit@queue-ram1
 
-```yaml
-version: "2"
+   docker-compose logs rabbitmq    - RABBITMQ_CLUSTER_NODE_NAME=rabbit@stats
 
-services:
-  stats:
-    image: bitnami/rabbitmq:latest
-    environment:
+       - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
+
+   # Kiểm tra quyền truy cập volume  volumes:
+
+   ls -la /var/lib/docker/volumes/    - rabbitmqram1_data:/bitnami/rabbitmq/mnesia
+
+````
+
+2. **Không truy cập được Management UI**##### Step 3: Add the volume description
+
+   ````bash
+
+   # Kiểm tra port binding```yaml
+
+   docker-compose psvolumes:
+
+   netstat -tlnp | grep 15672  rabbitmqstats_data:
+
+   ```    driver: local
+   ````
+
+rabbitmqdisc1_data:
+
+3. **Memory issues** driver: local
+
+   ````bash rabbitmqram1_data:
+
+   # Cấu hình memory limit    driver: local
+
+   environment:```
+
+     - RABBITMQ_VM_MEMORY_HIGH_WATERMARK=0.6
+
+   ```The `docker-compose.yml` will look like this:
+
+   ````
+
+4. **Clustering issues**```yaml
+
+   ````bashversion: "2"
+
+   # Reset cluster
+
+   docker-compose exec rabbitmq rabbitmqctl stop_appservices:
+
+   docker-compose exec rabbitmq rabbitmqctl reset  stats:
+
+   docker-compose exec rabbitmq rabbitmqctl start_app    image: bitnami/rabbitmq:latest
+
+   ```    environment:
+
       - RABBITMQ_NODE_TYPE=stats
-      - RABBITMQ_NODE_NAME=rabbit@stats
+   ````
+
+### Useful Commands - RABBITMQ_NODE_NAME=rabbit@stats
+
       - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
-    ports:
-      - 15672:15672
-    volumes:
+
+````bash ports:
+
+# Xem cluster status      - 15672:15672
+
+docker-compose exec rabbitmq rabbitmqctl cluster_status    volumes:
+
       - rabbitmqstats_data:/bitnami/rabbitmq/mnesia
-  queue-disc1:
-    image: bitnami/rabbitmq:latest
+
+# List queues  queue-disc1:
+
+docker-compose exec rabbitmq rabbitmqctl list_queues    image: bitnami/rabbitmq:latest
+
     environment:
-      - RABBITMQ_NODE_TYPE=queue-disc
-      - RABBITMQ_NODE_NAME=rabbit@queue-disc1
+
+# List exchanges      - RABBITMQ_NODE_TYPE=queue-disc
+
+docker-compose exec rabbitmq rabbitmqctl list_exchanges      - RABBITMQ_NODE_NAME=rabbit@queue-disc1
+
       - RABBITMQ_CLUSTER_NODE_NAME=rabbit@stats
-      - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
-    volumes:
+
+# List users      - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
+
+docker-compose exec rabbitmq rabbitmqctl list_users    volumes:
+
       - rabbitmqdisc1_data:/bitnami/rabbitmq/mnesia
-  queue-ram1:
-    image: bitnami/rabbitmq:latest
+
+# Add user  queue-ram1:
+
+docker-compose exec rabbitmq rabbitmqctl add_user newuser password123    image: bitnami/rabbitmq:latest
+
     environment:
-      - RABBITMQ_NODE_TYPE=queue-ram
-      - RABBITMQ_NODE_NAME=rabbit@queue-ram1
-      - RABBITMQ_CLUSTER_NODE_NAME=rabbit@stats
+
+# Set user tags      - RABBITMQ_NODE_TYPE=queue-ram
+
+docker-compose exec rabbitmq rabbitmqctl set_user_tags newuser administrator      - RABBITMQ_NODE_NAME=rabbit@queue-ram1
+
+```      - RABBITMQ_CLUSTER_NODE_NAME=rabbit@stats
+
       - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
-    volumes:
+
+## Performance Tuning    volumes:
+
       - rabbitmqram1_data:/bitnami/rabbitmq/mnesia
 
+### Cấu hình tối ưu cho Production
+
 volumes:
-  rabbitmqstats_data:
-    driver: local
-  rabbitmqdisc1_data:
-    driver: local
-  rabbitmqram1_data:
-    driver: local
-```
 
-### Configuration file
+```yaml  rabbitmqstats_data:
 
-A custom `rabbitmq.conf` configuration file can be mounted to the `/bitnami/rabbitmq/conf` directory. If no file is mounted, the container will generate a default one based on the environment variables. You can also mount on this directory your own `advanced.config` (using classic Erlang terms) and `rabbitmq-env.conf` configuration files.
+services:    driver: local
 
-As an alternative, you can also mount a `custom.conf` configuration file and mount it to the `/bitnami/rabbitmq/conf` directory. In this case, the default configuation file will be generated and, later on, the settings available in the `custom.conf` configuration file will be merged with the default ones. For example, in order to override the `listeners.tcp.default` directive:
+  rabbitmq:  rabbitmqdisc1_data:
 
-#### Step 1: Write your custom.conf configuation file with the following content
+    image: docker.io/bitnamilegacy/rabbitmq:4.1    driver: local
 
-```ini
-listeners.tcp.default=1337
-```
+    deploy:  rabbitmqram1_data:
 
-#### Step 2: Run RabbitMQ mounting your custom.conf configuation file
+      resources:    driver: local
 
-```console
-docker run -d --name rabbitmq-server \
-   -v /path/to/custom.conf:/bitnami/rabbitmq/conf/custom.conf:ro \
-    bitnami/rabbitmq:latest
-```
+        limits:```
+
+          memory: 2G
+
+          cpus: '2'### Configuration file
+
+        reservations:
+
+          memory: 1GA custom `rabbitmq.conf` configuration file can be mounted to the `/bitnami/rabbitmq/conf` directory. If no file is mounted, the container will generate a default one based on the environment variables. You can also mount on this directory your own `advanced.config` (using classic Erlang terms) and `rabbitmq-env.conf` configuration files.
+
+          cpus: '1'
+
+    environment:As an alternative, you can also mount a `custom.conf` configuration file and mount it to the `/bitnami/rabbitmq/conf` directory. In this case, the default configuation file will be generated and, later on, the settings available in the `custom.conf` configuration file will be merged with the default ones. For example, in order to override the `listeners.tcp.default` directive:
+
+      - RABBITMQ_VM_MEMORY_HIGH_WATERMARK=0.6
+
+      - RABBITMQ_DISK_FREE_ABSOLUTE_LIMIT=2GB#### Step 1: Write your custom.conf configuation file with the following content
+
+      - RABBITMQ_CLUSTER_PARTITION_HANDLING=autoheal
+
+    ulimits:```ini
+
+      nofile: 65536listeners.tcp.default=1337
+
+````
+
+## Security Best Practices#### Step 2: Run RabbitMQ mounting your custom.conf configuation file
+
+1. **Thay đổi mật khẩu mặc định**```console
+
+2. **Sử dụng SSL/TLS cho production**docker run -d --name rabbitmq-server \
+
+3. **Giới hạn network access** -v /path/to/custom.conf:/bitnami/rabbitmq/conf/custom.conf:ro \
+
+4. **Regular backup** bitnami/rabbitmq:latest
+
+5. **Monitor logs và metrics**```
+
+6. **Update thường xuyên**
 
 After that, your changes will be taken into account in the server's behaviour.
 
+## Tài liệu tham khảo
+
 ### FIPS configuration in Bitnami Secure Images
 
-The Bitnami RabbitMQ Docker image from the [Bitnami Secure Images](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/) catalog includes extra features and settings to configure the container with FIPS capabilities. You can configure the next environment variables:
+- [RabbitMQ Official Documentation](https://www.rabbitmq.com/documentation.html)
+
+- [Bitnami RabbitMQ](https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq)The Bitnami RabbitMQ Docker image from the [Bitnami Secure Images](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/) catalog includes extra features and settings to configure the container with FIPS capabilities. You can configure the next environment variables:
+
+- [Docker Compose Reference](https://docs.docker.com/compose/compose-file/)
 
 - `OPENSSL_FIPS`: whether OpenSSL runs in FIPS mode or not. `yes` (default), `no`.
 
+---
+
 ## Permission of SSL/TLS certificate and key files
 
+**NQDev Team** - Container Solutions
 If you bind mount the certificate and key files from your local host to the container, make sure to set proper ownership and permissions of those files:
 
 ```console
