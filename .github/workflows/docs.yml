@@ -1,9 +1,10 @@
 name: Deploy Jekyll Documentation
 
 on:
-  push:
-    branches: [main, develop]
-    paths: ["docs/**"]
+  workflow_dispatch: # Cho phép kích hoạt thủ công
+  # push:
+  #   branches: [main, develop]
+  #   paths: ["docs/**"]
   pull_request:
     branches: [main]
     paths: ["docs/**"]
