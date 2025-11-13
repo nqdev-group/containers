@@ -1,0 +1,41 @@
+---
+layout: default
+---
+<article class="guide">
+
+  <header class="guide-header">
+    <h1 class="guide-title">{{ page.title | escape }}</h1>
+    {% if page.description %}
+    <p class="guide-description">{{ page.description }}</p>
+    {% endif %}
+
+    <div class="guide-meta">
+      {% if page.date %}
+      <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        {{ page.date | date: date_format }}
+      </time>
+      {% endif %}
+
+      {% if page.author %}
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">{{ page.author }}</span>
+      </span>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="guide-content">
+    {{ content }}
+  </div>
+
+  {% if page.tags.size > 0 %}
+  <div class="guide-tags">
+    <h4>Tags:</h4>
+    {% for tag in page.tags %}
+    <span class="tag">{{ tag }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+</article>
