@@ -11,7 +11,7 @@
   3. cspell.config.js -> cspell.config.cjs
   4. cspell.config.json
   5. cspell.config.yaml -> cspell.config.yml -> cspell.yaml -> cspell.yml
-*/{
+*/ {
   "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
   // Version of the setting file.  Always 0.2
   "version": "0.2",
@@ -19,31 +19,22 @@
   "language": "en,vi",
   // words - list of words to be always considered correct
   "words": [
-    "bitnami",
-    "cpus",
-    "crontabs",
-    "dcron",
-    "dontlognull",
-    "errno",
-    "fstat",
-    "gpoll",
-    "incrby",
-    "luajit",
-    "luarocks",
-    "objs",
-    "pcre",
     "quyit",
-    "rpath",
-    "setex",
-    "xzvf",
-    "zxvf"
+    "nqdev",
+    "nq",
+    "nqdevs",
+    "nqdev's",
+    "nqdevs's",
+    "nqdevs'",
+    "nqdevs's",
+    "nqdevs'",
+    "nqdevs's",
+    "nguyenquy0710"
   ],
   // flagWords - list of words to be always considered incorrect
   // This is useful for offensive words and common spelling errors.
   // For example "hte" should be "the"
-  "flagWords": [
-    "hte"
-  ],
+  "flagWords": ["hte"],
   // ignoreWords - a list of words to be ignored (even if they are in the flagWords)
   "ignoreWords": [],
   // ignorePaths - a list of globs to specify which files are to be ignored.
@@ -56,10 +47,7 @@
     "node_modules/**"
   ],
   // Enable your dictionary by adding it to the list of `dictionaries`
-  "dictionaries": [
-    "vi-dictionary",
-    "code-dictionary"
-  ],
+  "dictionaries": ["vi-dictionary", "code-dictionary"],
   // Tell CSpell about your dictionary
   "dictionaryDefinitions": [
     {

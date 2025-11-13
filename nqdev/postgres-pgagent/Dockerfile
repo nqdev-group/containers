@@ -5,7 +5,7 @@
 
 ARG VERSION=17.5
 
-FROM postgres:${VERSION} as builder
+FROM postgres:${VERSION} AS builder
 
 # Cài đặt các package cần thiết và tối ưu hóa kích thước
 RUN apt-get update && \

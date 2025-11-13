@@ -1,0 +1,47 @@
+# Loại trừ thư mục node_modules
+node_modules/
+
+# Loại trừ tất cả các tệp .log
+*.log
+**/log-*.txt
+**/logs/log-*.txt
+npm-*.log
+yarn-*.log
+
+# Loại trừ thư mục .git
+.git/
+.svn/
+
+# Loại trừ Dockerfile và .dockerignore
+Dockerfile
+.dockerignore
+
+# Loại trừ các tệp zip và rar
+*.zip
+*.rar
+app/*.zip
+app/*.rar
+**/*.zip
+**/*.rar
+
+# Loại trừ các tệp core.*
+core.*
+
+# Loại trừ thư mục temp và tệp tạm thời
+temp/
+
+# Loại trừ thư mục build
+build/
+build/**/*
+dist/
+dist/**/*
+out/
+out/**/*
+
+# Loại trừ tất cả các tệp trong thư mục wwwroot/publish/
+wwwroot/publish/**/*
+assets/uploads/**/*
+
+# Loại trừ các tệp tạm thời (ví dụ tệp sao lưu của trình soạn thảo)
+*~
+
