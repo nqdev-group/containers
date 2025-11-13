@@ -113,21 +113,38 @@ layout: default
 
 ### Components
 
-Tạo reusable components trong `_includes/`:
+Tạo reusable components trong `_includes/`. Ví dụ, tạo service card component:
 
 ```html
 <!-- _includes/service-card.html -->
 <div class="service-card">
   <h3>{{ include.title }}</h3>
   <p>{{ include.description }}</p>
+  {% if include.link %}
+  <a href="{{ include.link | relative_url }}">Learn More →</a>
+  {% endif %}
 </div>
 ```
 
-Sử dụng:
+Sử dụng trong markdown:
 
-```markdown
-{% include service-card.html title="NGINX" description="Web server" %}
+```liquid
+{% raw %}
+{% include service-card.html
+   title="NGINX"
+   description="Web server with custom modules"
+   link="/nginx-guide"
+%}
+{% endraw %}
 ```
+
+Kết quả:
+
+{% include service-card.html
+   title="NGINX Example"
+   description="Web server with custom modules and advanced features"
+   link="/nginx-guide"
+%}
 
 ## 🚀 Deployment
 

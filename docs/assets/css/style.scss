@@ -233,6 +233,105 @@ img[src*="shields.io"] {
   margin: 0 4px 4px 0;
 }
 
+/* Service Card Component */
+.service-card {
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--border-radius);
+  background: white;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 1.5rem;
+}
+
+.service-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.15);
+}
+
+.service-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.service-icon {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.service-title {
+  margin: 0;
+  color: var(--nqdev-primary);
+  font-size: 1.25rem;
+}
+
+.service-description {
+  color: #6b7280;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.service-image {
+  margin: 0.75rem 0;
+  padding: 0.5rem;
+  background: #f8fafc;
+  border-radius: var(--border-radius);
+  border-left: 3px solid var(--nqdev-primary);
+}
+
+.service-image code {
+  font-size: 0.875rem;
+  color: var(--nqdev-dark);
+}
+
+.service-ports {
+  margin: 0.75rem 0;
+  font-size: 0.875rem;
+  color: var(--nqdev-secondary);
+}
+
+.service-features {
+  margin: 1rem 0;
+}
+
+.service-features strong {
+  color: var(--nqdev-dark);
+  font-size: 0.875rem;
+}
+
+.service-features ul {
+  margin: 0.5rem 0 0 1rem;
+  padding: 0;
+}
+
+.service-features li {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.service-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.service-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--nqdev-primary);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: color 0.2s ease;
+}
+
+.service-link:hover {
+  color: var(--nqdev-secondary);
+  text-decoration: none;
+}
+
 /* Footer styling */
 .site-footer {
   background: #1f2937;

@@ -22,15 +22,48 @@ Chào mừng bạn đến với tài liệu hướng dẫn sử dụng NQDEV Con
 
 ## 📦 Services Available
 
-<div class="code-example" markdown="1">
+<div class="grid-container">
+{% include service-card.html 
+   icon="🌐"
+   title="NGINX"
+   description="Web server với custom modules"
+   image="nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1"
+   ports="32768, 18080"
+   link="/nginx-guide"
+%}
 
-| Service        | Image                                        | Ports        | Description                     |
-| :------------- | :------------------------------------------- | :----------- | :------------------------------ |
-| **NGINX**      | `nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1` | 32768, 18080 | Web server với custom modules   |
-| **HAProxy**    | `nqdev/haproxy-alpine-custom:3.1.5`          | 18080, 17001 | Load balancer với Lua scripting |
-| **PostgreSQL** | `postgres:17.5-custom`                       | 5432         | Database với pgAgent extension  |
-| **WordPress**  | WordPress 6.8.3 on Debian 12                 | 8080, 8443   | CMS với PHP 8.4                 |
-| **RabbitMQ**   | `bitnamilegacy/rabbitmq:4.1`                 | 5672, 15672  | Message broker                  |
+{% include service-card.html
+   icon="⚖️"
+   title="HAProxy"
+   description="Load balancer với Lua scripting"
+   image="nqdev/haproxy-alpine-custom:3.1.5"
+   ports="18080, 17001"
+   link="/haproxy-guide"
+%}
+
+{% include service-card.html
+   icon="🗄️"
+   title="PostgreSQL"
+   description="Database với pgAgent extension"
+   image="postgres:17.5-custom"
+   ports="5432"
+%}
+
+{% include service-card.html
+   icon="📱"
+   title="WordPress"
+   description="CMS với PHP 8.4"
+   image="WordPress 6.8.3 on Debian 12"
+   ports="8080, 8443"
+%}
+
+{% include service-card.html
+   icon="🐰"
+   title="RabbitMQ"
+   description="Message broker"
+   image="bitnamilegacy/rabbitmq:4.1"
+   ports="5672, 15672"
+%}
 
 </div>
 

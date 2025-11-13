@@ -1,0 +1,45 @@
+<!-- Service Card Component -->
+<div class="service-card">
+  <div class="service-header">
+    {% if include.icon %}
+    <span class="service-icon">{{ include.icon }}</span>
+    {% endif %}
+    <h3 class="service-title">{{ include.title }}</h3>
+  </div>
+
+  <div class="service-content">
+    <p class="service-description">{{ include.description }}</p>
+
+    {% if include.image %}
+    <div class="service-image">
+      <code>{{ include.image }}</code>
+    </div>
+    {% endif %}
+
+    {% if include.ports %}
+    <div class="service-ports">
+      <strong>Ports:</strong> {{ include.ports }}
+    </div>
+    {% endif %}
+
+    {% if include.features %}
+    <div class="service-features">
+      <strong>Features:</strong>
+      <ul>
+        {% assign features_array = include.features | split: "," %}
+        {% for feature in features_array %}
+        <li>{{ feature | strip }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if include.link %}
+  <div class="service-footer">
+    <a href="{{ include.link | relative_url }}" class="service-link">
+      Learn More →
+    </a>
+  </div>
+  {% endif %}
+</div>
