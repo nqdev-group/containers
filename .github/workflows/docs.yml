@@ -70,7 +70,6 @@ jobs:
           publish_dir: ./docs/_site
           publish_branch: gh-pages
           force_orphan: true
-        if: github.event_name == 'release' && github.ref == 'refs/heads/main'
 
   # Deployment job - only run when release event occurs
   # deploy:
