@@ -1,0 +1,99 @@
+# Jekyll Configuration for NQDEV Containers Documentation
+title: NQDEV Containers Documentation
+description: >-
+  Comprehensive documentation for NQDEV Docker containers including
+  NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations.
+
+url: "https://nqdev-group.github.io"
+baseurl: "/containers"
+
+# GitHub repository
+repository: nqdev-group/containers
+
+# Author information
+author:
+  name: NQDEV Team
+  email: quynh@nhquydev.net
+  url: https://nhquydev.net
+
+# Theme configuration
+theme: minima
+# Alternative themes:
+# remote_theme: pages-themes/cayman@v0.2.0
+# remote_theme: pages-themes/architect@v0.2.0
+# remote_theme: pages-themes/minimal@v0.2.0
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-relative-links
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Collections
+collections:
+  guides:
+    output: true
+    permalink: /:collection/:name/
+
+# Navigation
+header_pages:
+  - index.md
+  - guides.md
+  - examples.md
+  - about.md
+
+# Exclude from processing
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - README.md
+
+# Default front matter
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+      type: "guides"
+    values:
+      layout: "guide"
+
+# Custom variables
+nqdev:
+  registry_url: "ghcr.io/nqdev-group"
+  support_email: "quynh@nhquydev.net"
+  github_org: "nqdev-group"
+
+# Social links
+github_username: nqdev-group
+linkedin_username: nhquydev
+# Google Analytics (optional)
+# google_analytics: UA-XXXXXXXX-X
+
+# Disqus comments (optional)
+# disqus:
+#   shortname: nqdev-containers

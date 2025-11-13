@@ -1,0 +1,67 @@
+<footer class="site-footer h-card">
+  <data class="u-url" href="{{ '/' | relative_url }}"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <h3>NQDEV Containers</h3>
+        <p>Production-ready Docker containers cho Vietnamese developers</p>
+        <ul class="contact-list">
+          <li class="p-name">{{ site.title | default: site.github.repository_name | escape }}</li>
+          {%- if site.nqdev.support_email -%}
+          <li><a class="u-email" href="mailto:{{ site.nqdev.support_email }}">{{ site.nqdev.support_email }}</a></li>
+          {%- endif -%}
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <h3>Quick Links</h3>
+        <ul class="quick-links">
+          <li><a href="{{ '/nqdev-containers-guide' | relative_url }}">📋 Tổng quan</a></li>
+          <li><a href="{{ '/nginx-guide' | relative_url }}">🌐 NGINX Guide</a></li>
+          <li><a href="{{ '/haproxy-guide' | relative_url }}">⚖️ HAProxy Guide</a></li>
+          <li><a href="{{ '/examples-best-practices' | relative_url }}">💡 Best Practices</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <h3>Resources</h3>
+        <ul class="resource-links">
+          <li><a href="https://github.com/{{ site.nqdev.github_org }}/containers">📦 GitHub Repository</a></li>
+          <li><a href="https://github.com/{{ site.nqdev.github_org }}/containers/packages">🐳 Container Registry</a></li>
+          <li><a href="https://github.com/{{ site.nqdev.github_org }}/containers/issues">🐛 Report Issues</a></li>
+          <li><a href="https://nhquydev.net">🌐 NQDEV Website</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-info">
+        <p>&copy; {{ 'now' | date: "%Y" }} NQDEV Team. Licensed under <a
+            href="https://github.com/{{ site.nqdev.github_org }}/containers/blob/main/LICENSE">MIT License</a>.</p>
+        <p>Built with ❤️ in Vietnam 🇻🇳 | Powered by <a href="https://jekyllrb.com/">Jekyll</a></p>
+      </div>
+
+      <div class="social-links">
+        {%- if site.github_username -%}
+        <a href="https://github.com/{{ site.github_username }}">
+          <svg class="svg-icon">
+            <use xlink:href="{{ '/assets/minima-social-icons.svg#github' | relative_url }}"></use>
+          </svg>
+        </a>
+        {%- endif -%}
+
+        {%- if site.linkedin_username -%}
+        <a href="https://linkedin.com/in/{{ site.linkedin_username }}">
+          <svg class="svg-icon">
+            <use xlink:href="{{ '/assets/minima-social-icons.svg#linkedin' | relative_url }}"></use>
+          </svg>
+        </a>
+        {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+
+</footer>
