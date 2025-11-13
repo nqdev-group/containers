@@ -63,7 +63,7 @@ jobs:
 
   # Deployment job - only run on main branch and if build succeeds
   deploy:
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.event_name == 'release' || (github.ref == 'refs/heads/main' && github.event_name != 'pull_request')
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
