@@ -85,6 +85,7 @@ khỏi
 khởi
 không
 khớp
+Khuyến
 kích
 kiểm
 kiệm
@@ -114,6 +115,7 @@ ngẫu
 ngay
 ngày
 nghe
+nghị
 nghĩa
 ngoài
 Ngôn
