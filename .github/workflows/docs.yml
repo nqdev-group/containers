@@ -1,24 +1,27 @@
 name: Deploy Jekyll Documentation
 
 on:
-  workflow_dispatch: # Cho phép kích hoạt thủ công
-  # push:
-  #   branches: [main, develop]
-  #   paths: ["docs/**"]
+  push:
+    branches: [main, develop]
+    paths: ["docs/**"]
   pull_request:
     branches: [main]
     paths: ["docs/**"]
+  workflow_dispatch: # Allow manual trigger
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
+  # Build job
   build:
     runs-on: ubuntu-latest
     steps:
@@ -33,14 +36,18 @@ jobs:
           cache-version: 0
           working-directory: "./docs"
 
+      # Try to setup pages, but continue if it fails
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v4
+        continue-on-error: true
 
       - name: Build with Jekyll
         run: |
           cd docs
-          bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+          # Use base path if available, otherwise use repository name
+          BASE_PATH="${{ steps.pages.outputs.base_path || '/containers' }}"
+          bundle exec jekyll build --baseurl "$BASE_PATH"
         env:
           JEKYLL_ENV: production
 
@@ -49,8 +56,9 @@ jobs:
         with:
           path: ./docs/_site
 
+  # Deployment job - only run on main branch and if build succeeds
   deploy:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
