@@ -12,7 +12,7 @@ on:
   release:
     # created : # ✅ Chỉ chạy khi release được tạo
     # published: # ✅ Chỉ chạy khi release được phát hành
-    types: [created] # ✅ Chỉ chạy khi release được tạo
+    types: [published] # ✅ Chỉ chạy khi release được tạo
 
 permissions: write-all
 # permissions:
