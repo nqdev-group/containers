@@ -15,6 +15,9 @@ LABEL org.opencontainers.image.base.name="docker.io/bitnami/minideb:bookworm" \
   org.opencontainers.image.vendor="Broadcom, Inc." \
   org.opencontainers.image.version="6.8.3"
 
+# Added for nqdev-group containers
+LABEL org.opencontainers.image.source=https://github.com/nqdev-group/containers
+
 ENV HOME="/" \
   OS_ARCH="${TARGETARCH:-amd64}" \
   OS_FLAVOUR="debian-12" \
