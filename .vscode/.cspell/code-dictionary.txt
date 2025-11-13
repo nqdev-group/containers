@@ -1,4 +1,6 @@
 # Custom Dictionary Words
+bitnami
+buildx
 campaignid
 cffinit
 chcp
@@ -13,7 +15,11 @@ HOTP
 initdb
 jscoverage
 jspm
+libbrotli
+libbz
 libc
+libgpg
+libzstd
 luajit
 luarocks
 Misa
@@ -33,9 +39,11 @@ PDPA
 pgsql
 pids
 postgresdb
+prebuildfs
 pycache
 quynh
 reranker
+rootfs
 sapo
 spreadsheetml
 swal

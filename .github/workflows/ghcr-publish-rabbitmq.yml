@@ -72,3 +72,19 @@ jobs:
         run: |
           docker push docker.io/${{ secrets.DOCKER_USERNAME }}/rabbitmq:${{ env.VERSION }}
           docker push docker.io/${{ secrets.DOCKER_USERNAME }}/rabbitmq:latest
+
+      # 🟢 Annotation khi thành công
+      - name: Show success annotation
+        if: success()
+        run: |
+          echo "::notice::✅ Docker image pushed successfully!"
+          echo "::notice file=nqdev/wordpress/6/debian-12/Dockerfile,line=1::📦 Image version: ${{ env.VERSION }}"
+          echo "::notice::🔗 GHCR: ghcr.io/${{ github.repository_owner }}/wordpress:${{ env.VERSION }}"
+          echo "::notice::🔗 Docker Hub: docker.io/${{ secrets.DOCKER_USERNAME }}/wordpress:${{ env.VERSION }}"
+
+      # 🔴 Annotation khi thất bại
+      - name: Show error annotation
+        if: failure()
+        run: |
+          echo "::error::❌ Build or push failed for version ${{ env.VERSION }}"
+          echo "::error file=nqdev/rabbitmq/4.1/debian-12/Dockerfile,line=1::Check build logs for details."
