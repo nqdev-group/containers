@@ -1,13 +1,18 @@
 name: Deploy Jekyll Documentation
 
 on:
-  push:
-    branches: [main, develop]
-    paths: ["docs/**"]
-  pull_request:
-    branches: [main]
-    paths: ["docs/**"]
+  # push:
+  #   branches: [main, develop]
+  #   paths: ["docs/**"]
+  # pull_request:
+  #   branches: [main]
+  #   paths: ["docs/**"]
   workflow_dispatch: # Allow manual trigger
+  repository_dispatch: # ✅ Cho phép kích hoạt từ bên ngoài (ví dụ: từ một workflow khác)
+  release:
+    # created : # ✅ Chỉ chạy khi release được tạo
+    # published: # ✅ Chỉ chạy khi release được phát hành
+    types: [created] # ✅ Chỉ chạy khi release được tạo
 
 permissions:
   contents: read
