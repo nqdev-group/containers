@@ -13,6 +13,9 @@ HOTP
 initdb
 jscoverage
 jspm
+libc
+luajit
+luarocks
 Misa
 miscased
 myharavan
@@ -27,7 +30,9 @@ orcid
 otpauth
 otplib
 PDPA
+pgsql
 pids
+postgresdb
 pycache
 quynh
 reranker
@@ -35,6 +40,7 @@ sapo
 spreadsheetml
 swal
 totp
+tzdata
 uuidv
 vietqr
 virtuals

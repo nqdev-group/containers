@@ -25,6 +25,7 @@ chuẩn
 Chuỗi
 chuyển
 công
+Cổng
 cộng
 cuối
 dàng
