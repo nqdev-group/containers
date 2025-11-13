@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>NGINX Container Guide | NQDEV Containers Documentation</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="NGINX Container Guide" />
+<meta name="author" content="NQDEV Team" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations." />
+<meta property="og:description" content="Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations." />
+<link rel="canonical" href="https://nqdev-group.github.io/containers/nginx-guide.html" />
+<meta property="og:url" content="https://nqdev-group.github.io/containers/nginx-guide.html" />
+<meta property="og:site_name" content="NQDEV Containers Documentation" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="NGINX Container Guide" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"NQDEV Team","url":"https://nhquydev.net"},"description":"Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations.","headline":"NGINX Container Guide","url":"https://nqdev-group.github.io/containers/nginx-guide.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/containers/assets/css/style.css">
+  <link rel="stylesheet" href="/containers/assets/css/custom.css"><link type="application/atom+xml" rel="alternate" href="https://nqdev-group.github.io/containers/feed.xml" title="NQDEV Containers Documentation" /><!-- Custom favicon -->
+  <link rel="icon" type="image/x-icon" href="/containers/assets/images/favicon.ico">
+
+  <!-- Syntax highlighting -->
+  <link rel="stylesheet" href="/containers/assets/css/syntax.css">
+
+  <!-- Mermaid for diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default'
+    });
+  </script>
+</head>
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/containers/">
+      <span class="site-logo">🐳</span> NQDEV Containers Documentation
+    </a><nav class="site-nav">
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+      <label for="nav-trigger">
+        <span class="menu-icon">
+          <svg viewBox="0 0 18 15" width="18px" height="15px">
+            <path
+              d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z" />
+          </svg>
+        </span>
+      </label>
+
+      <div class="trigger">
+        <a class="page-link" href="/containers/">🏠 Trang chủ</a>
+        <a class="page-link" href="/containers/nqdev-containers-guide">📋 Tổng quan</a>
+        <a class="page-link" href="/containers/nginx-guide">🌐 NGINX</a>
+        <a class="page-link" href="/containers/haproxy-guide">⚖️ HAProxy</a>
+        <a class="page-link" href="/containers/examples-best-practices">💡 Examples</a>
+        <a class="page-link" href="https://github.com/nqdev-group/containers">
+          <span class="github-icon">⭐</span> GitHub
+        </a>
+      </div>
+    </nav></div>
+</header>
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h1 id="nginx-container---hướng-dẫn-sử-dụng-chi-tiết">NGINX Container - Hướng dẫn sử dụng chi tiết</h1>
+
+<p><img src="https://img.shields.io/badge/nginx-1.27.2-green" alt="NGINX" />
+<img src="https://img.shields.io/badge/alpine-3.20-blue" alt="Alpine" />
+<img src="https://img.shields.io/badge/custom-modules-orange" alt="Custom" /></p>
+
+<h2 id="-thông-tin-cơ-bản">📋 Thông tin cơ bản</h2>
+
+<ul>
+  <li><strong>Image</strong>: <code class="language-plaintext highlighter-rouge">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</code></li>
+  <li><strong>Base</strong>: Alpine Linux 3.20</li>
+  <li><strong>NGINX Version</strong>: 1.27.2</li>
+  <li><strong>Custom Modules</strong>: 6+ modules tích hợp</li>
+</ul>
+
+<h2 id="-khởi-động-nhanh">🚀 Khởi động nhanh</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Di chuyển vào thư mục NGINX</span>
+<span class="nb">cd </span>nqdev/nginx/alpine
+
+<span class="c"># Khởi chạy container</span>
+docker-compose up <span class="nt">-d</span> <span class="nt">--build</span> <span class="nt">--force-recreate</span> <span class="nt">--remove-orphans</span>
+
+<span class="c"># Kiểm tra trạng thái</span>
+curl http://localhost:32768
+curl http://localhost:18080/nginx_status
+</code></pre></div></div>
+
+<h2 id="-tính-năng-nổi-bật">🧱 Tính năng nổi bật</h2>
+
+<h3 id="custom-modules">Custom Modules</h3>
+
+<ul>
+  <li><strong>headers-more-nginx-module</strong>: Thao tác HTTP headers nâng cao</li>
+  <li><strong>rate-limit-nginx-module</strong>: Giới hạn request rate</li>
+  <li><strong>ngx_http_geoip_module</strong>: Xác định vị trí địa lý</li>
+  <li><strong>ngx_http_image_filter_module</strong>: Xử lý ảnh real-time</li>
+  <li><strong>ngx_http_xslt_filter_module</strong>: Transformation XML</li>
+  <li><strong>ngx_http_js_module</strong>: JavaScript/NJS scripting</li>
+</ul>
+
+<h3 id="features-nâng-cao">Features nâng cao</h3>
+
+<ul>
+  <li><strong>Redis Integration</strong>: Session management và caching</li>
+  <li><strong>Real IP Detection</strong>: Từ multiple proxy layers</li>
+  <li><strong>GeoIP Services</strong>: Geographic routing</li>
+  <li><strong>Multi-zone Caching</strong>: Public và private cache</li>
+  <li><strong>Automated Backup</strong>: Configuration backups với cron</li>
+  <li><strong>Status Monitoring</strong>: Endpoint trên port 8080</li>
+</ul>
+
+<h2 id="️-cấu-hình">⚙️ Cấu hình</h2>
+
+<h3 id="environment-variables">Environment Variables</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">TZ</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Asia/Ho_Chi_Minh</code></td>
+      <td>Container timezone</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">NGINX_HTTP_PORT_NUMBER</code></td>
+      <td><code class="language-plaintext highlighter-rouge">80</code></td>
+      <td>HTTP port</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">NGINX_HTTPS_PORT_NUMBER</code></td>
+      <td><code class="language-plaintext highlighter-rouge">443</code></td>
+      <td>HTTPS port</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">CRONTAB_ENABLE</code></td>
+      <td><code class="language-plaintext highlighter-rouge">false</code></td>
+      <td>Enable automated backups</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="port-mapping">Port Mapping</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Container Port</th>
+      <th>Host Port</th>
+      <th>Service</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>80</td>
+      <td>32768</td>
+      <td>HTTP main</td>
+    </tr>
+    <tr>
+      <td>8080</td>
+      <td>18080</td>
+      <td>Status monitoring</td>
+    </tr>
+    <tr>
+      <td>81</td>
+      <td>32769</td>
+      <td>Additional service</td>
+    </tr>
+    <tr>
+      <td>82</td>
+      <td>32770</td>
+      <td>Additional service</td>
+    </tr>
+    <tr>
+      <td>83</td>
+      <td>32771</td>
+      <td>Additional service</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="volume-mounts">Volume Mounts</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">volumes</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">./data-etc/nginx/nginx.conf:/etc/nginx/nginx.conf:rw</span>
+  <span class="pi">-</span> <span class="s">./data-etc/nginx/conf.d/:/etc/nginx/conf.d:rw</span>
+  <span class="pi">-</span> <span class="s">./data-etc/nginx/njs/:/etc/nginx/njs:rw</span>
+  <span class="pi">-</span> <span class="s">./data-log/nginx/:/var/log/nginx:rw</span>
+  <span class="pi">-</span> <span class="s">./data-share/GeoIP/:/usr/share/GeoIP:rw</span>
+  <span class="pi">-</span> <span class="s">./data-share/nginx/:/usr/share/nginx:rw</span>
+</code></pre></div></div>
+
+<h2 id="-cấu-trúc-file">📁 Cấu trúc file</h2>
+
+<h3 id="configuration-structure">Configuration Structure</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/nginx/
+├── nginx.conf                 # Main configuration
+├── conf.d/                   # Server configs
+│   └── nginx_status.conf     # Status endpoint
+├── include/                  # Shared configs
+│   ├── log.conf             # Logging setup
+│   ├── proxy.conf           # Proxy settings
+│   ├── ssl-ciphers.conf     # SSL configuration
+│   └── ip_ranges.conf       # IP definitions
+└── njs/                     # JavaScript files
+</code></pre></div></div>
+
+<h3 id="cache-directories">Cache Directories</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/tmp/nginx/cache/
+├── body/                    # Request body cache
+├── public/                  # Public cache zone
+└── private/                 # Private cache zone
+</code></pre></div></div>
+
+<h2 id="-cấu-hình-nâng-cao">🔧 Cấu hình nâng cao</h2>
+
+<h3 id="1-rate-limiting">1. Rate Limiting</h3>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Trong nginx.conf</span>
+<span class="k">http</span> <span class="p">{</span>
+    <span class="c1"># Define rate limiting zones</span>
+    <span class="kn">limit_req_zone</span> <span class="nv">$binary_remote_addr</span> <span class="s">zone=api:10m</span> <span class="s">rate=10r/s</span><span class="p">;</span>
+    <span class="kn">limit_req_zone</span> <span class="nv">$binary_remote_addr</span> <span class="s">zone=general:10m</span> <span class="s">rate=1r/s</span><span class="p">;</span>
+
+    <span class="kn">server</span> <span class="p">{</span>
+        <span class="kn">location</span> <span class="n">/api/</span> <span class="p">{</span>
+            <span class="kn">limit_req</span> <span class="s">zone=api</span> <span class="s">burst=20</span> <span class="s">nodelay</span><span class="p">;</span>
+            <span class="kn">proxy_pass</span> <span class="s">http://backend</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kn">location</span> <span class="n">/</span> <span class="p">{</span>
+            <span class="kn">limit_req</span> <span class="s">zone=general</span> <span class="s">burst=5</span> <span class="s">nodelay</span><span class="p">;</span>
+            <span class="kn">try_files</span> <span class="nv">$uri</span> <span class="nv">$uri</span><span class="n">/</span> <span class="p">=</span><span class="mi">404</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="2-ssltls-configuration">2. SSL/TLS Configuration</h3>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">443</span> <span class="s">ssl</span> <span class="s">http2</span><span class="p">;</span>
+    <span class="kn">server_name</span> <span class="s">example.com</span><span class="p">;</span>
+
+    <span class="c1"># SSL certificates</span>
+    <span class="kn">ssl_certificate</span> <span class="n">/etc/ssl/certs/example.com.crt</span><span class="p">;</span>
+    <span class="kn">ssl_certificate_key</span> <span class="n">/etc/ssl/private/example.com.key</span><span class="p">;</span>
+
+    <span class="c1"># SSL settings</span>
+    <span class="kn">ssl_protocols</span> <span class="s">TLSv1.2</span> <span class="s">TLSv1.3</span><span class="p">;</span>
+    <span class="kn">ssl_ciphers</span> <span class="s">ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256</span><span class="p">;</span>
+    <span class="kn">ssl_prefer_server_ciphers</span> <span class="no">off</span><span class="p">;</span>
+
+    <span class="c1"># HSTS</span>
+    <span class="kn">add_header</span> <span class="s">Strict-Transport-Security</span> <span class="s">"max-age=31536000"</span> <span class="s">always</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="3-reverse-proxy-setup">3. Reverse Proxy Setup</h3>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">upstream</span> <span class="s">backend_servers</span> <span class="p">{</span>
+    <span class="kn">least_conn</span><span class="p">;</span>
+    <span class="kn">server</span> <span class="nf">192.168.1.100</span><span class="p">:</span><span class="mi">8080</span> <span class="s">weight=3</span><span class="p">;</span>
+    <span class="kn">server</span> <span class="nf">192.168.1.101</span><span class="p">:</span><span class="mi">8080</span> <span class="s">weight=2</span><span class="p">;</span>
+    <span class="kn">server</span> <span class="nf">192.168.1.102</span><span class="p">:</span><span class="mi">8080</span> <span class="s">weight=1</span> <span class="s">backup</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+    <span class="kn">server_name</span> <span class="s">api.example.com</span><span class="p">;</span>
+
+    <span class="kn">location</span> <span class="n">/</span> <span class="p">{</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://backend_servers</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$host</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-Proto</span> <span class="nv">$scheme</span><span class="p">;</span>
+
+        <span class="c1"># Caching</span>
+        <span class="kn">proxy_cache</span> <span class="s">private-cache</span><span class="p">;</span>
+        <span class="kn">proxy_cache_valid</span> <span class="mi">200</span> <span class="mi">302</span> <span class="mi">10m</span><span class="p">;</span>
+        <span class="kn">proxy_cache_valid</span> <span class="mi">404</span> <span class="mi">1m</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="4-geoip-configuration">4. GeoIP Configuration</h3>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Trong nginx.conf</span>
+<span class="k">http</span> <span class="p">{</span>
+    <span class="c1"># Load GeoIP databases</span>
+    <span class="kn">geoip_country</span> <span class="n">/usr/share/GeoIP/GeoIP.dat</span><span class="p">;</span>
+    <span class="kn">geoip_city</span> <span class="n">/usr/share/GeoIP/GeoLiteCity.dat</span><span class="p">;</span>
+
+    <span class="c1"># Geographic restrictions</span>
+    <span class="kn">map</span> <span class="nv">$geoip_country_code</span> <span class="nv">$allowed_country</span> <span class="p">{</span>
+        <span class="kn">default</span> <span class="s">no</span><span class="p">;</span>
+        <span class="kn">VN</span> <span class="s">yes</span><span class="p">;</span>
+        <span class="kn">US</span> <span class="s">yes</span><span class="p">;</span>
+        <span class="kn">JP</span> <span class="s">yes</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kn">server</span> <span class="p">{</span>
+        <span class="kn">if</span> <span class="s">(</span><span class="nv">$allowed_country</span> <span class="p">=</span> <span class="s">no)</span> <span class="p">{</span>
+            <span class="kn">return</span> <span class="mi">403</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="5-image-processing">5. Image Processing</h3>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Dynamic image resizing</span>
+<span class="k">location</span> <span class="p">~</span> <span class="sr">^/resize/(\d+)x(\d+)/(.+)</span> <span class="p">{</span>
+    <span class="kn">set</span> <span class="nv">$width</span> <span class="nv">$1</span><span class="p">;</span>
+    <span class="kn">set</span> <span class="nv">$height</span> <span class="nv">$2</span><span class="p">;</span>
+    <span class="kn">set</span> <span class="nv">$image_path</span> <span class="nv">$3</span><span class="p">;</span>
+
+    <span class="kn">image_filter</span> <span class="s">resize</span> <span class="nv">$width</span> <span class="nv">$height</span><span class="p">;</span>
+    <span class="kn">image_filter_jpeg_quality</span> <span class="mi">95</span><span class="p">;</span>
+    <span class="kn">image_filter_buffer</span> <span class="mi">2M</span><span class="p">;</span>
+
+    <span class="kn">try_files</span> <span class="n">/</span><span class="nv">$image_path</span> <span class="p">=</span><span class="mi">404</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1"># Thumbnails</span>
+<span class="k">location</span> <span class="p">~</span> <span class="sr">^/thumb/(\d+)/(.+)</span> <span class="p">{</span>
+    <span class="kn">set</span> <span class="nv">$size</span> <span class="nv">$1</span><span class="p">;</span>
+    <span class="kn">set</span> <span class="nv">$image_path</span> <span class="nv">$2</span><span class="p">;</span>
+
+    <span class="kn">image_filter</span> <span class="s">resize</span> <span class="nv">$size</span> <span class="nv">$size</span><span class="p">;</span>
+    <span class="kn">image_filter</span> <span class="s">crop</span> <span class="nv">$size</span> <span class="nv">$size</span><span class="p">;</span>
+
+    <span class="kn">try_files</span> <span class="n">/</span><span class="nv">$image_path</span> <span class="p">=</span><span class="mi">404</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="-monitoring">📊 Monitoring</h2>
+
+<h3 id="status-endpoint">Status Endpoint</h3>
+
+<p>Truy cập: http://localhost:18080/nginx_status</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Active connections: 15
+server accepts handled requests
+ 1234 1234 5678
+Reading: 2 Writing: 5 Waiting: 8
+</code></pre></div></div>
+
+<h3 id="log-monitoring">Log Monitoring</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Real-time access logs</span>
+docker-compose <span class="nb">exec </span>nginx-server <span class="nb">tail</span> <span class="nt">-f</span> /var/log/nginx/access.log
+
+<span class="c"># Error logs</span>
+docker-compose <span class="nb">exec </span>nginx-server <span class="nb">tail</span> <span class="nt">-f</span> /var/log/nginx/error.log
+
+<span class="c"># Custom log format</span>
+log_format detailed <span class="s1">'$remote_addr - $remote_user [$time_local] '</span>
+                   <span class="s1">'"$request" $status $body_bytes_sent '</span>
+                   <span class="s1">'"$http_referer" "$http_user_agent" '</span>
+                   <span class="s1">'$request_time $upstream_response_time'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="backup-monitoring">Backup Monitoring</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Check automated backups</span>
+<span class="nb">ls</span> <span class="nt">-la</span> ./data-backups/nginx/
+
+<span class="c"># Manual backup</span>
+docker-compose <span class="nb">exec </span>nginx-server /usr/local/bin/100-backup-nginx.sh
+</code></pre></div></div>
+
+<h2 id="️-management-scripts">🛠️ Management Scripts</h2>
+
+<h3 id="configuration-validation">Configuration Validation</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Test configuration</span>
+./01-verify-config.sh
+
+<span class="c"># Reload without downtime</span>
+./02-reload-config.sh
+
+<span class="c"># Full startup with build</span>
+./00-startup.sh
+</code></pre></div></div>
+
+<h3 id="health-checks">Health Checks</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Syntax check</span>
+docker-compose <span class="nb">exec </span>nginx-server nginx <span class="nt">-t</span>
+
+<span class="c"># Module verification</span>
+docker-compose <span class="nb">exec </span>nginx-server nginx <span class="nt">-V</span> 2&gt;&amp;1 | <span class="nb">grep</span> <span class="nt">-o</span> <span class="s1">'with-[^[:space:]]*'</span>
+
+<span class="c"># Performance test</span>
+ab <span class="nt">-n</span> 1000 <span class="nt">-c</span> 10 http://localhost:32768/
+</code></pre></div></div>
+
+<h2 id="-troubleshooting">🔍 Troubleshooting</h2>
+
+<h3 id="common-issues">Common Issues</h3>
+
+<h4 id="1-configuration-syntax-errors">1. Configuration syntax errors</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Check syntax</span>
+docker-compose <span class="nb">exec </span>nginx-server nginx <span class="nt">-t</span>
+
+<span class="c"># Detailed error information</span>
+docker-compose <span class="nb">exec </span>nginx-server nginx <span class="nt">-T</span>
+</code></pre></div></div>
+
+<h4 id="2-permission-issues">2. Permission issues</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Fix file permissions</span>
+<span class="nb">sudo chown</span> <span class="nt">-R</span> 101:101 ./data-etc/nginx/
+<span class="nb">sudo chmod</span> <span class="nt">-R</span> 644 ./data-etc/nginx/<span class="k">*</span>.conf
+</code></pre></div></div>
+
+<h4 id="3-module-loading-errors">3. Module loading errors</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Check module availability</span>
+docker-compose <span class="nb">exec </span>nginx-server <span class="nb">ls</span> <span class="nt">-la</span> /usr/lib/nginx/modules/
+
+<span class="c"># Test module load</span>
+docker-compose <span class="nb">exec </span>nginx-server nginx <span class="nt">-t</span> <span class="nt">-c</span> /etc/nginx/nginx.conf
+</code></pre></div></div>
+
+<h4 id="4-performance-issues">4. Performance issues</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Check worker processes</span>
+docker-compose <span class="nb">exec </span>nginx-server ps aux | <span class="nb">grep </span>nginx
+
+<span class="c"># Monitor connections</span>
+watch <span class="nt">-n</span> 1 <span class="s1">'curl -s http://localhost:18080/nginx_status'</span>
+</code></pre></div></div>
+
+<h3 id="debug-commands">Debug Commands</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Container logs</span>
+docker-compose logs <span class="nt">-f</span> nginx-server
+
+<span class="c"># Access patterns</span>
+<span class="nb">awk</span> <span class="s1">'{print $1}'</span> ./data-log/nginx/access.log | <span class="nb">sort</span> | <span class="nb">uniq</span> <span class="nt">-c</span> | <span class="nb">sort</span> <span class="nt">-nr</span> | <span class="nb">head</span> <span class="nt">-10</span>
+
+<span class="c"># Error analysis</span>
+<span class="nb">grep</span> <span class="s2">"ERROR"</span> ./data-log/nginx/error.log | <span class="nb">tail</span> <span class="nt">-20</span>
+</code></pre></div></div>
+
+<h2 id="-production-deployment">🚀 Production Deployment</h2>
+
+<h3 id="high-performance-setup">High Performance Setup</h3>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Worker optimization</span>
+<span class="k">worker_processes</span> <span class="s">auto</span><span class="p">;</span>
+<span class="k">worker_connections</span> <span class="mi">2048</span><span class="p">;</span>
+<span class="k">worker_rlimit_nofile</span> <span class="mi">65535</span><span class="p">;</span>
+
+<span class="c1"># Event handling</span>
+<span class="k">events</span> <span class="p">{</span>
+    <span class="kn">use</span> <span class="s">epoll</span><span class="p">;</span>
+    <span class="kn">multi_accept</span> <span class="no">on</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1"># HTTP optimization</span>
+<span class="k">http</span> <span class="p">{</span>
+    <span class="kn">sendfile</span> <span class="no">on</span><span class="p">;</span>
+    <span class="kn">tcp_nopush</span> <span class="no">on</span><span class="p">;</span>
+    <span class="kn">tcp_nodelay</span> <span class="no">on</span><span class="p">;</span>
+
+    <span class="c1"># Buffer sizes</span>
+    <span class="kn">client_body_buffer_size</span> <span class="mi">128k</span><span class="p">;</span>
+    <span class="kn">client_max_body_size</span> <span class="mi">2000m</span><span class="p">;</span>
+    <span class="kn">large_client_header_buffers</span> <span class="mi">4</span> <span class="mi">16k</span><span class="p">;</span>
+
+    <span class="c1"># Timeouts</span>
+    <span class="kn">keepalive_timeout</span> <span class="s">90s</span><span class="p">;</span>
+    <span class="kn">client_header_timeout</span> <span class="s">10s</span><span class="p">;</span>
+    <span class="kn">client_body_timeout</span> <span class="s">10s</span><span class="p">;</span>
+    <span class="kn">send_timeout</span> <span class="s">10s</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="security-hardening">Security Hardening</h3>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Security headers</span>
+<span class="k">add_header</span> <span class="s">X-Frame-Options</span> <span class="s">"SAMEORIGIN"</span> <span class="s">always</span><span class="p">;</span>
+<span class="k">add_header</span> <span class="s">X-Content-Type-Options</span> <span class="s">"nosniff"</span> <span class="s">always</span><span class="p">;</span>
+<span class="k">add_header</span> <span class="s">X-XSS-Protection</span> <span class="s">"1</span><span class="p">;</span> <span class="k">mode=block"</span> <span class="s">always</span><span class="p">;</span>
+<span class="k">add_header</span> <span class="s">Referrer-Policy</span> <span class="s">"no-referrer-when-downgrade"</span> <span class="s">always</span><span class="p">;</span>
+
+<span class="c1"># Hide version</span>
+<span class="k">server_tokens</span> <span class="no">off</span><span class="p">;</span>
+
+<span class="c1"># Rate limiting</span>
+<span class="k">limit_req_zone</span> <span class="nv">$binary_remote_addr</span> <span class="s">zone=login:10m</span> <span class="s">rate=1r/s</span><span class="p">;</span>
+<span class="k">location</span> <span class="n">/login</span> <span class="p">{</span>
+    <span class="kn">limit_req</span> <span class="s">zone=login</span> <span class="s">burst=3</span> <span class="s">nodelay</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="ssl-best-practices">SSL Best Practices</h3>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Strong SSL configuration</span>
+<span class="k">ssl_protocols</span> <span class="s">TLSv1.2</span> <span class="s">TLSv1.3</span><span class="p">;</span>
+<span class="k">ssl_ciphers</span> <span class="s">ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384</span><span class="p">;</span>
+<span class="k">ssl_prefer_server_ciphers</span> <span class="no">off</span><span class="p">;</span>
+
+<span class="c1"># SSL session caching</span>
+<span class="k">ssl_session_cache</span> <span class="s">shared:SSL:10m</span><span class="p">;</span>
+<span class="k">ssl_session_timeout</span> <span class="mi">10m</span><span class="p">;</span>
+
+<span class="c1"># OCSP stapling</span>
+<span class="k">ssl_stapling</span> <span class="no">on</span><span class="p">;</span>
+<span class="k">ssl_stapling_verify</span> <span class="no">on</span><span class="p">;</span>
+<span class="k">ssl_trusted_certificate</span> <span class="n">/path/to/ca-chain.crt</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="-examples">📚 Examples</h2>
+
+<h3 id="example-1-static-website">Example 1: Static Website</h3>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+    <span class="kn">server_name</span> <span class="s">static.example.com</span><span class="p">;</span>
+    <span class="kn">root</span> <span class="n">/usr/share/nginx/html/static</span><span class="p">;</span>
+
+    <span class="c1"># Cache static assets</span>
+    <span class="kn">location</span> <span class="p">~</span><span class="sr">*</span> <span class="err">\</span><span class="s">.(jpg|jpeg|png|gif|ico|css|js)</span>$ <span class="p">{</span>
+        <span class="kn">expires</span> <span class="s">1y</span><span class="p">;</span>
+        <span class="kn">add_header</span> <span class="s">Cache-Control</span> <span class="s">"public,</span> <span class="s">immutable"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Compression</span>
+    <span class="kn">gzip</span> <span class="no">on</span><span class="p">;</span>
+    <span class="kn">gzip_types</span> <span class="nc">text/plain</span> <span class="nc">text/css</span> <span class="nc">application/json</span> <span class="nc">application/javascript</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="example-2-api-gateway">Example 2: API Gateway</h3>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># API rate limiting per client</span>
+<span class="k">map</span> <span class="nv">$http_authorization</span> <span class="nv">$api_client</span> <span class="p">{</span>
+    <span class="kn">~^Bearer\s+</span><span class="s">(.+)</span> <span class="nv">$1</span><span class="p">;</span>
+    <span class="kn">default</span> <span class="s">"anonymous"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">limit_req_zone</span> <span class="nv">$api_client</span> <span class="s">zone=api_per_client:10m</span> <span class="s">rate=100r/s</span><span class="p">;</span>
+
+<span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+    <span class="kn">server_name</span> <span class="s">api.example.com</span><span class="p">;</span>
+
+    <span class="kn">location</span> <span class="n">/api/v1/</span> <span class="p">{</span>
+        <span class="kn">limit_req</span> <span class="s">zone=api_per_client</span> <span class="s">burst=200</span> <span class="s">nodelay</span><span class="p">;</span>
+
+        <span class="kn">proxy_pass</span> <span class="s">http://api_backend</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$host</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
+
+        <span class="c1"># Response modification</span>
+        <span class="kn">more_set_headers</span> <span class="s">"X-API-Version:</span> <span class="s">v1"</span><span class="p">;</span>
+        <span class="kn">more_set_headers</span> <span class="s">"X-Response-Time:</span> <span class="nv">$upstream_response_time</span><span class="s">"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="example-3-microservices-routing">Example 3: Microservices Routing</h3>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Service discovery via consul template (example)</span>
+<span class="k">upstream</span> <span class="s">user_service</span> <span class="p">{</span>
+    <span class="kn">server</span> <span class="nf">user-service-1</span><span class="p">:</span><span class="mi">8080</span><span class="p">;</span>
+    <span class="kn">server</span> <span class="nf">user-service-2</span><span class="p">:</span><span class="mi">8080</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">upstream</span> <span class="s">order_service</span> <span class="p">{</span>
+    <span class="kn">server</span> <span class="nf">order-service-1</span><span class="p">:</span><span class="mi">8080</span><span class="p">;</span>
+    <span class="kn">server</span> <span class="nf">order-service-2</span><span class="p">:</span><span class="mi">8080</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+    <span class="kn">server_name</span> <span class="s">api.microservices.com</span><span class="p">;</span>
+
+    <span class="kn">location</span> <span class="n">/users/</span> <span class="p">{</span>
+        <span class="kn">rewrite</span> <span class="s">^/users/(.*)</span>$ <span class="n">/</span><span class="nv">$1</span> <span class="s">break</span><span class="p">;</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://user_service</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kn">location</span> <span class="n">/orders/</span> <span class="p">{</span>
+        <span class="kn">rewrite</span> <span class="s">^/orders/(.*)</span>$ <span class="n">/</span><span class="nv">$1</span> <span class="s">break</span><span class="p">;</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://order_service</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-support">📞 Support</h2>
+
+<ul>
+  <li><strong>Documentation</strong>: Xem <a href="https://nginx.org/en/docs/">NGINX Official Docs</a></li>
+  <li><strong>Issues</strong>: <a href="https://github.com/nqdev-group/containers/issues">GitHub Issues</a></li>
+  <li><strong>Community</strong>: NQDEV Discord/Slack</li>
+</ul>
+
+<hr />
+
+<p><strong>NQDEV Team</strong> - Platform Engineering<br />
+📧 quynh@nhquydev.net | 🌐 <a href="https://nhquydev.net">nhquydev.net</a></p>
+
+      </div>
+    </main>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/containers/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <h3>NQDEV Containers</h3>
+        <p>Production-ready Docker containers cho Vietnamese developers</p>
+        <ul class="contact-list">
+          <li class="p-name">NQDEV Containers Documentation</li><li><a class="u-email" href="mailto:quynh@nhquydev.net">quynh@nhquydev.net</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <h3>Quick Links</h3>
+        <ul class="quick-links">
+          <li><a href="/containers/nqdev-containers-guide">📋 Tổng quan</a></li>
+          <li><a href="/containers/nginx-guide">🌐 NGINX Guide</a></li>
+          <li><a href="/containers/haproxy-guide">⚖️ HAProxy Guide</a></li>
+          <li><a href="/containers/examples-best-practices">💡 Best Practices</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <h3>Resources</h3>
+        <ul class="resource-links">
+          <li><a href="https://github.com/nqdev-group/containers">📦 GitHub Repository</a></li>
+          <li><a href="https://github.com/nqdev-group/containers/packages">🐳 Container Registry</a></li>
+          <li><a href="https://github.com/nqdev-group/containers/issues">🐛 Report Issues</a></li>
+          <li><a href="https://nhquydev.net">🌐 NQDEV Website</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-info">
+        <p>&copy; 2025 NQDEV Team. Licensed under <a
+            href="https://github.com/nqdev-group/containers/blob/main/LICENSE">MIT License</a>.</p>
+        <p>Built with ❤️ in Vietnam 🇻🇳 | Powered by <a href="https://jekyllrb.com/">Jekyll</a></p>
+      </div>
+
+      <div class="social-links"><a href="https://github.com/nqdev-group">
+          <svg class="svg-icon">
+            <use xlink:href="/containers/assets/minima-social-icons.svg#github"></use>
+          </svg>
+        </a><a href="https://linkedin.com/in/nhquydev">
+          <svg class="svg-icon">
+            <use xlink:href="/containers/assets/minima-social-icons.svg#linkedin"></use>
+          </svg>
+        </a></div>
+    </div>
+
+  </div>
+
+</footer>
+
+  </body>
+
+</html>

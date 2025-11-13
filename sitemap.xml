@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://nqdev-group.github.io/containers/examples-best-practices.html</loc>
+</url>
+<url>
+<loc>https://nqdev-group.github.io/containers/haproxy-guide.html</loc>
+</url>
+<url>
+<loc>https://nqdev-group.github.io/containers/</loc>
+</url>
+<url>
+<loc>https://nqdev-group.github.io/containers/nginx-guide.html</loc>
+</url>
+<url>
+<loc>https://nqdev-group.github.io/containers/nqdev-containers-guide.html</loc>
+</url>
+<url>
+<loc>https://nqdev-group.github.io/containers/service-cards-demo.html</loc>
+</url>
+<url>
+<loc>https://nqdev-group.github.io/containers/service-guides.html</loc>
+</url>
+<url>
+<loc>https://nqdev-group.github.io/containers/GITHUB_PAGES_SETUP.html</loc>
+</url>
+<url>
+<loc>https://nqdev-group.github.io/containers/JEKYLL_SETUP.html</loc>
+</url>
+</urlset>

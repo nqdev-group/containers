@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Examples &amp; Best Practices | NQDEV Containers Documentation</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Examples &amp; Best Practices" />
+<meta name="author" content="NQDEV Team" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations." />
+<meta property="og:description" content="Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations." />
+<link rel="canonical" href="https://nqdev-group.github.io/containers/examples-best-practices.html" />
+<meta property="og:url" content="https://nqdev-group.github.io/containers/examples-best-practices.html" />
+<meta property="og:site_name" content="NQDEV Containers Documentation" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Examples &amp; Best Practices" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"NQDEV Team","url":"https://nhquydev.net"},"description":"Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations.","headline":"Examples &amp; Best Practices","url":"https://nqdev-group.github.io/containers/examples-best-practices.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/containers/assets/css/style.css">
+  <link rel="stylesheet" href="/containers/assets/css/custom.css"><link type="application/atom+xml" rel="alternate" href="https://nqdev-group.github.io/containers/feed.xml" title="NQDEV Containers Documentation" /><!-- Custom favicon -->
+  <link rel="icon" type="image/x-icon" href="/containers/assets/images/favicon.ico">
+
+  <!-- Syntax highlighting -->
+  <link rel="stylesheet" href="/containers/assets/css/syntax.css">
+
+  <!-- Mermaid for diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default'
+    });
+  </script>
+</head>
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/containers/">
+      <span class="site-logo">🐳</span> NQDEV Containers Documentation
+    </a><nav class="site-nav">
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+      <label for="nav-trigger">
+        <span class="menu-icon">
+          <svg viewBox="0 0 18 15" width="18px" height="15px">
+            <path
+              d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z" />
+          </svg>
+        </span>
+      </label>
+
+      <div class="trigger">
+        <a class="page-link" href="/containers/">🏠 Trang chủ</a>
+        <a class="page-link" href="/containers/nqdev-containers-guide">📋 Tổng quan</a>
+        <a class="page-link" href="/containers/nginx-guide">🌐 NGINX</a>
+        <a class="page-link" href="/containers/haproxy-guide">⚖️ HAProxy</a>
+        <a class="page-link" href="/containers/examples-best-practices">💡 Examples</a>
+        <a class="page-link" href="https://github.com/nqdev-group/containers">
+          <span class="github-icon">⭐</span> GitHub
+        </a>
+      </div>
+    </nav></div>
+</header>
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h1 id="nqdev-containers---examples--best-practices">NQDEV Containers - Examples &amp; Best Practices</h1>
+
+<p><img src="https://img.shields.io/badge/examples-production--ready-green" alt="Examples" />
+<img src="https://img.shields.io/badge/best--practices-security--focused-blue" alt="Best Practices" /></p>
+
+<p>Tổng hợp các ví dụ thực tế và best practices khi sử dụng NQDEV containers trong production.</p>
+
+<h2 id="-mục-lục">📋 Mục lục</h2>
+
+<ul>
+  <li><a href="#️-architecture-patterns">🏗️ Architecture Patterns</a></li>
+  <li><a href="#-production-examples">🚀 Production Examples</a></li>
+  <li><a href="#-security-best-practices">🔒 Security Best Practices</a></li>
+  <li><a href="#-monitoring--logging">📊 Monitoring &amp; Logging</a></li>
+  <li><a href="#-performance-optimization">⚡ Performance Optimization</a></li>
+  <li><a href="#-devops-workflows">🔧 DevOps Workflows</a></li>
+</ul>
+
+<h2 id="️-architecture-patterns">🏗️ Architecture Patterns</h2>
+
+<h3 id="1-microservices-architecture">1. Microservices Architecture</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Full microservices stack</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">networks</span><span class="pi">:</span>
+  <span class="na">frontend</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
+  <span class="na">backend</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
+  <span class="na">database</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="c1"># Load Balancer</span>
+  <span class="na">haproxy</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/haproxy-alpine-custom:3.1.5</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">80:80"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">443:443"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">7001:7001"</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">frontend</span>
+      <span class="pi">-</span> <span class="s">backend</span>
+    <span class="na">configs</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">source</span><span class="pi">:</span> <span class="s">haproxy_config</span>
+        <span class="na">target</span><span class="pi">:</span> <span class="s">/usr/local/etc/haproxy/haproxy.cfg</span>
+
+  <span class="c1"># API Gateway</span>
+  <span class="na">nginx-gateway</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">frontend</span>
+      <span class="pi">-</span> <span class="s">backend</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./nginx/gateway.conf:/etc/nginx/conf.d/default.conf</span>
+
+  <span class="c1"># Application Services</span>
+  <span class="na">user-service</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">user-service:latest</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">backend</span>
+      <span class="pi">-</span> <span class="s">database</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">DATABASE_URL=postgresql://user:pass@postgres:5432/users</span>
+
+  <span class="na">order-service</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">order-service:latest</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">backend</span>
+      <span class="pi">-</span> <span class="s">database</span>
+
+  <span class="c1"># Database</span>
+  <span class="na">postgres</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/postgres-pgagent:latest</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">database</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">postgres_data:/var/lib/postgresql/data</span>
+
+  <span class="c1"># Message Queue</span>
+  <span class="na">rabbitmq</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">bitnamilegacy/rabbitmq:4.1</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">backend</span>
+
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">postgres_data</span><span class="pi">:</span>
+
+<span class="na">configs</span><span class="pi">:</span>
+  <span class="na">haproxy_config</span><span class="pi">:</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">./haproxy/microservices.cfg</span>
+</code></pre></div></div>
+
+<h3 id="2-three-tier-web-application">2. Three-Tier Web Application</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Classic three-tier: Presentation, Application, Database</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="c1"># Presentation Tier - NGINX serving static content + reverse proxy</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">80:80"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">443:443"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./nginx/three-tier.conf:/etc/nginx/nginx.conf</span>
+      <span class="pi">-</span> <span class="s">./static:/usr/share/nginx/html</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">app</span>
+
+  <span class="c1"># Application Tier - WordPress or custom app</span>
+  <span class="na">app</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/wordpress:6-debian-12</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">WORDPRESS_DATABASE_HOST=database</span>
+      <span class="pi">-</span> <span class="s">WORDPRESS_DATABASE_NAME=webapp</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">app_data:/bitnami/wordpress</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">database</span>
+
+  <span class="c1"># Database Tier - PostgreSQL with pgAgent</span>
+  <span class="na">database</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/postgres-pgagent:latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_DB=webapp</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_USER=webuser</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_PASSWORD=securepassword</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">db_data:/var/lib/postgresql/data</span>
+
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">app_data</span><span class="pi">:</span>
+  <span class="na">db_data</span><span class="pi">:</span>
+</code></pre></div></div>
+
+<h2 id="-production-examples">🚀 Production Examples</h2>
+
+<h3 id="1-high-traffic-e-commerce-site">1. High-Traffic E-commerce Site</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># E-commerce platform with auto-scaling</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">x-logging</span><span class="pi">:</span> <span class="nl">&amp;default-logging</span>
+  <span class="na">driver</span><span class="pi">:</span> <span class="s2">"</span><span class="s">json-file"</span>
+  <span class="na">options</span><span class="pi">:</span>
+    <span class="na">max-size</span><span class="pi">:</span> <span class="s2">"</span><span class="s">100m"</span>
+    <span class="na">max-file</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="c1"># Load Balancer with SSL termination</span>
+  <span class="na">loadbalancer</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/haproxy-alpine-custom:3.1.5</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">80:80"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">443:443"</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">REDIS_HOST=redis-cache</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./ssl:/usr/local/etc/haproxy/ssl:ro</span>
+      <span class="pi">-</span> <span class="s">./haproxy/ecommerce.cfg:/usr/local/etc/haproxy/haproxy.cfg</span>
+    <span class="na">logging</span><span class="pi">:</span> <span class="nv">*default-logging</span>
+    <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">replicas</span><span class="pi">:</span> <span class="m">2</span>
+      <span class="na">resources</span><span class="pi">:</span>
+        <span class="na">limits</span><span class="pi">:</span>
+          <span class="na">memory</span><span class="pi">:</span> <span class="s">1G</span>
+          <span class="na">cpus</span><span class="pi">:</span> <span class="s2">"</span><span class="s">1"</span>
+
+  <span class="c1"># NGINX for static assets và CDN</span>
+  <span class="na">cdn</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./nginx/cdn.conf:/etc/nginx/nginx.conf</span>
+      <span class="pi">-</span> <span class="s">media_storage:/usr/share/nginx/html/media</span>
+    <span class="na">logging</span><span class="pi">:</span> <span class="nv">*default-logging</span>
+    <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">replicas</span><span class="pi">:</span> <span class="m">3</span>
+
+  <span class="c1"># WordPress application servers</span>
+  <span class="na">wordpress</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/wordpress:6-debian-12</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">WORDPRESS_DATABASE_HOST=database</span>
+      <span class="pi">-</span> <span class="s">WORDPRESS_ENABLE_HTTPS=yes</span>
+      <span class="pi">-</span> <span class="s">WORDPRESS_DATABASE_NAME=ecommerce</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">wordpress_data:/bitnami/wordpress</span>
+    <span class="na">logging</span><span class="pi">:</span> <span class="nv">*default-logging</span>
+    <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">replicas</span><span class="pi">:</span> <span class="m">3</span>
+      <span class="na">resources</span><span class="pi">:</span>
+        <span class="na">limits</span><span class="pi">:</span>
+          <span class="na">memory</span><span class="pi">:</span> <span class="s">2G</span>
+          <span class="na">cpus</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2"</span>
+
+  <span class="c1"># Database cluster</span>
+  <span class="na">database</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/postgres-pgagent:latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_DB=ecommerce</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_USER=ecommerce_user</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_PASSWORD_FILE=/run/secrets/db_password</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">db_data:/var/lib/postgresql/data</span>
+    <span class="na">secrets</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">db_password</span>
+    <span class="na">logging</span><span class="pi">:</span> <span class="nv">*default-logging</span>
+
+  <span class="c1"># Redis for caching và sessions</span>
+  <span class="na">redis-cache</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">redis:alpine3.18</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s">redis-server --appendonly yes --requirepass redis_password</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">redis_data:/data</span>
+    <span class="na">logging</span><span class="pi">:</span> <span class="nv">*default-logging</span>
+
+  <span class="c1"># Message queue cho background jobs</span>
+  <span class="na">rabbitmq</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">bitnamilegacy/rabbitmq:4.1</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">RABBITMQ_DEFAULT_USER=admin</span>
+      <span class="pi">-</span> <span class="s">RABBITMQ_DEFAULT_PASS_FILE=/run/secrets/rabbitmq_password</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">rabbitmq_data:/bitnami/rabbitmq/mnesia</span>
+    <span class="na">secrets</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">rabbitmq_password</span>
+    <span class="na">logging</span><span class="pi">:</span> <span class="nv">*default-logging</span>
+
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">wordpress_data</span><span class="pi">:</span>
+  <span class="na">db_data</span><span class="pi">:</span>
+  <span class="na">redis_data</span><span class="pi">:</span>
+  <span class="na">rabbitmq_data</span><span class="pi">:</span>
+  <span class="na">media_storage</span><span class="pi">:</span>
+
+<span class="na">secrets</span><span class="pi">:</span>
+  <span class="na">db_password</span><span class="pi">:</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">./secrets/db_password.txt</span>
+  <span class="na">rabbitmq_password</span><span class="pi">:</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">./secrets/rabbitmq_password.txt</span>
+</code></pre></div></div>
+
+<h3 id="2-api-first-application">2. API-First Application</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Microservices API platform</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="c1"># API Gateway với rate limiting</span>
+  <span class="na">api-gateway</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/haproxy-alpine-custom:3.1.5</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">80:80"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">443:443"</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">REDIS_HOST=redis-rate-limit</span>
+      <span class="pi">-</span> <span class="s">REDIS_PORT=6379</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./haproxy/api-gateway.cfg:/usr/local/etc/haproxy/haproxy.cfg</span>
+      <span class="pi">-</span> <span class="s">./haproxy/lua:/nqdev/haproxy/lua</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">redis-rate-limit</span>
+
+  <span class="c1"># Authentication service</span>
+  <span class="na">auth-service</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">auth-api:latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">JWT_SECRET_FILE=/run/secrets/jwt_secret</span>
+      <span class="pi">-</span> <span class="s">DATABASE_URL=postgresql://auth_user:auth_pass@postgres:5432/auth</span>
+    <span class="na">secrets</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">jwt_secret</span>
+
+  <span class="c1"># User management service</span>
+  <span class="na">user-service</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">user-api:latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">DATABASE_URL=postgresql://user_user:user_pass@postgres:5432/users</span>
+
+  <span class="c1"># Order processing service</span>
+  <span class="na">order-service</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">order-api:latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">DATABASE_URL=postgresql://order_user:order_pass@postgres:5432/orders</span>
+      <span class="pi">-</span> <span class="s">RABBITMQ_URL=amqp://admin:admin@rabbitmq:5672</span>
+
+  <span class="c1"># Notification service</span>
+  <span class="na">notification-service</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">notification-api:latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">RABBITMQ_URL=amqp://admin:admin@rabbitmq:5672</span>
+      <span class="pi">-</span> <span class="s">EMAIL_SERVICE_KEY_FILE=/run/secrets/email_key</span>
+    <span class="na">secrets</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">email_key</span>
+
+  <span class="c1"># Database</span>
+  <span class="na">postgres</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/postgres-pgagent:latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_MULTIPLE_DATABASES=auth,users,orders</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./postgres/init:/docker-entrypoint-initdb.d</span>
+      <span class="pi">-</span> <span class="s">postgres_data:/var/lib/postgresql/data</span>
+
+  <span class="c1"># Message queue</span>
+  <span class="na">rabbitmq</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">bitnamilegacy/rabbitmq:4.1</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">RABBITMQ_DEFAULT_USER=admin</span>
+      <span class="pi">-</span> <span class="s">RABBITMQ_DEFAULT_PASS=admin</span>
+
+  <span class="c1"># Rate limiting cache</span>
+  <span class="na">redis-rate-limit</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">redis:alpine3.18</span>
+
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">postgres_data</span><span class="pi">:</span>
+
+<span class="na">secrets</span><span class="pi">:</span>
+  <span class="na">jwt_secret</span><span class="pi">:</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">./secrets/jwt_secret.txt</span>
+  <span class="na">email_key</span><span class="pi">:</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">./secrets/email_key.txt</span>
+</code></pre></div></div>
+
+<h2 id="-security-best-practices">🔒 Security Best Practices</h2>
+
+<h3 id="1-ssltls-configuration">1. SSL/TLS Configuration</h3>
+
+<h4 id="haproxy-ssl-termination">HAProxy SSL Termination</h4>
+
+<pre><code class="language-haproxy"># /haproxy/ssl-config.cfg
+global
+    ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256
+    ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
+
+frontend https_frontend
+    bind *:443 ssl crt /usr/local/etc/haproxy/ssl/ alpn h2,http/1.1
+
+    # Security headers
+    http-response set-header Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    http-response set-header X-Frame-Options DENY
+    http-response set-header X-Content-Type-Options nosniff
+    http-response set-header X-XSS-Protection "1; mode=block"
+
+    # Hide server information
+    http-response del-header Server
+    http-response del-header X-Powered-By
+</code></pre>
+
+<h4 id="nginx-ssl-configuration">NGINX SSL Configuration</h4>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># /nginx/ssl-security.conf</span>
+<span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">443</span> <span class="s">ssl</span> <span class="s">http2</span><span class="p">;</span>
+
+    <span class="c1"># Modern SSL configuration</span>
+    <span class="kn">ssl_protocols</span> <span class="s">TLSv1.2</span> <span class="s">TLSv1.3</span><span class="p">;</span>
+    <span class="kn">ssl_ciphers</span> <span class="s">ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256</span><span class="p">;</span>
+    <span class="kn">ssl_prefer_server_ciphers</span> <span class="no">off</span><span class="p">;</span>
+
+    <span class="c1"># SSL optimization</span>
+    <span class="kn">ssl_session_cache</span> <span class="s">shared:SSL:10m</span><span class="p">;</span>
+    <span class="kn">ssl_session_timeout</span> <span class="mi">10m</span><span class="p">;</span>
+
+    <span class="c1"># OCSP stapling</span>
+    <span class="kn">ssl_stapling</span> <span class="no">on</span><span class="p">;</span>
+    <span class="kn">ssl_stapling_verify</span> <span class="no">on</span><span class="p">;</span>
+    <span class="kn">ssl_trusted_certificate</span> <span class="n">/etc/ssl/certs/ca-certificates.crt</span><span class="p">;</span>
+
+    <span class="c1"># Security headers</span>
+    <span class="kn">add_header</span> <span class="s">Strict-Transport-Security</span> <span class="s">"max-age=31536000</span><span class="p">;</span> <span class="kn">includeSubDomains"</span> <span class="s">always</span><span class="p">;</span>
+    <span class="kn">add_header</span> <span class="s">X-Frame-Options</span> <span class="s">DENY</span> <span class="s">always</span><span class="p">;</span>
+    <span class="kn">add_header</span> <span class="s">X-Content-Type-Options</span> <span class="s">nosniff</span> <span class="s">always</span><span class="p">;</span>
+    <span class="kn">add_header</span> <span class="s">X-XSS-Protection</span> <span class="s">"1</span><span class="p">;</span> <span class="kn">mode=block"</span> <span class="s">always</span><span class="p">;</span>
+    <span class="kn">add_header</span> <span class="s">Referrer-Policy</span> <span class="s">"strict-origin-when-cross-origin"</span> <span class="s">always</span><span class="p">;</span>
+    <span class="kn">add_header</span> <span class="s">Content-Security-Policy</span> <span class="s">"default-src</span> <span class="s">'self'</span><span class="p">;</span> <span class="kn">script-src</span> <span class="s">'self'</span> <span class="s">'unsafe-inline'"</span> <span class="s">always</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="2-access-control--authentication">2. Access Control &amp; Authentication</h3>
+
+<h4 id="ip-based-access-control">IP-based Access Control</h4>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># docker-compose.security.yml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">secure-app</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./nginx/security.conf:/etc/nginx/nginx.conf</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">TRUSTED_IPS=192.168.1.0/24,10.0.0.0/8</span>
+</code></pre></div></div>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># /nginx/security.conf</span>
+<span class="k">geo</span> <span class="nv">$trusted_ip</span> <span class="p">{</span>
+    <span class="kn">default</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kn">192.168.1.0/24</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kn">10.0.0.0/8</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kn">172.16.0.0/12</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">server</span> <span class="p">{</span>
+    <span class="kn">if</span> <span class="s">(</span><span class="nv">$trusted_ip</span> <span class="p">=</span> <span class="mi">0</span><span class="s">)</span> <span class="p">{</span>
+        <span class="kn">return</span> <span class="mi">403</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Rate limiting</span>
+    <span class="kn">limit_req</span> <span class="s">zone=general</span> <span class="s">burst=10</span> <span class="s">nodelay</span><span class="p">;</span>
+
+    <span class="kn">location</span> <span class="n">/admin</span> <span class="p">{</span>
+        <span class="kn">auth_basic</span> <span class="s">"Admin</span> <span class="s">Area"</span><span class="p">;</span>
+        <span class="kn">auth_basic_user_file</span> <span class="n">/etc/nginx/.htpasswd</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="3-database-security">3. Database Security</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Secure PostgreSQL setup</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">database</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/postgres-pgagent:latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_DB_FILE=/run/secrets/db_name</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_USER_FILE=/run/secrets/db_user</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_PASSWORD_FILE=/run/secrets/db_password</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_HOST_AUTH_METHOD=scram-sha-256</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256 --data-checksums</span>
+    <span class="na">secrets</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">db_name</span>
+      <span class="pi">-</span> <span class="s">db_user</span>
+      <span class="pi">-</span> <span class="s">db_password</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">db_data:/var/lib/postgresql/data</span>
+      <span class="pi">-</span> <span class="s">./postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">database_network</span>
+
+<span class="na">secrets</span><span class="pi">:</span>
+  <span class="na">db_name</span><span class="pi">:</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">./secrets/db_name.txt</span>
+  <span class="na">db_user</span><span class="pi">:</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">./secrets/db_user.txt</span>
+  <span class="na">db_password</span><span class="pi">:</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">./secrets/db_password.txt</span>
+
+<span class="na">networks</span><span class="pi">:</span>
+  <span class="na">database_network</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
+    <span class="na">internal</span><span class="pi">:</span> <span class="kc">true</span> <span class="c1"># No external access</span>
+</code></pre></div></div>
+
+<h2 id="-monitoring--logging">📊 Monitoring &amp; Logging</h2>
+
+<h3 id="1-centralized-logging">1. Centralized Logging</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># ELK Stack integration</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">x-logging</span><span class="pi">:</span> <span class="nl">&amp;elk-logging</span>
+  <span class="na">driver</span><span class="pi">:</span> <span class="s2">"</span><span class="s">gelf"</span>
+  <span class="na">options</span><span class="pi">:</span>
+    <span class="na">gelf-address</span><span class="pi">:</span> <span class="s2">"</span><span class="s">udp://logstash:12201"</span>
+    <span class="na">tag</span><span class="pi">:</span> <span class="s2">"</span><span class="s">//"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">nginx</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</span>
+    <span class="na">logging</span><span class="pi">:</span> <span class="nv">*elk-logging</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./nginx/logging.conf:/etc/nginx/nginx.conf</span>
+
+  <span class="na">haproxy</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/haproxy-alpine-custom:3.1.5</span>
+    <span class="na">logging</span><span class="pi">:</span> <span class="nv">*elk-logging</span>
+
+  <span class="c1"># Log aggregation</span>
+  <span class="na">logstash</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">logstash:8.11.0</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">12201:12201/udp"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./logstash/pipeline:/usr/share/logstash/pipeline</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">LS_JAVA_OPTS=-Xmx256m</span><span class="nv"> </span><span class="s">-Xms256m"</span>
+
+  <span class="na">elasticsearch</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">elasticsearch:8.11.0</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">discovery.type=single-node</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">ES_JAVA_OPTS=-Xms512m</span><span class="nv"> </span><span class="s">-Xmx512m"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">elasticsearch_data:/usr/share/elasticsearch/data</span>
+
+  <span class="na">kibana</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">kibana:8.11.0</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">5601:5601"</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">ELASTICSEARCH_HOSTS=http://elasticsearch:9200</span>
+
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">elasticsearch_data</span><span class="pi">:</span>
+</code></pre></div></div>
+
+<h3 id="2-metrics-collection">2. Metrics Collection</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Prometheus monitoring</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="c1"># Application với metrics endpoint</span>
+  <span class="na">nginx</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./nginx/metrics.conf:/etc/nginx/nginx.conf</span>
+    <span class="na">labels</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">prometheus.io/scrape=true"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">prometheus.io/port=8080"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">prometheus.io/path=/nginx_status"</span>
+
+  <span class="c1"># Metrics collector</span>
+  <span class="na">prometheus</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">prom/prometheus:latest</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">9090:9090"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml</span>
+    <span class="na">command</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--config.file=/etc/prometheus/prometheus.yml"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--storage.tsdb.path=/prometheus"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--web.console.libraries=/etc/prometheus/console_libraries"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--web.console.templates=/etc/prometheus/consoles"</span>
+
+  <span class="c1"># Dashboard</span>
+  <span class="na">grafana</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">grafana/grafana:latest</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">3000:3000"</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">GF_SECURITY_ADMIN_PASSWORD=admin</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">grafana_data:/var/lib/grafana</span>
+      <span class="pi">-</span> <span class="s">./grafana/dashboards:/etc/grafana/provisioning/dashboards</span>
+
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">grafana_data</span><span class="pi">:</span>
+</code></pre></div></div>
+
+<h2 id="-performance-optimization">⚡ Performance Optimization</h2>
+
+<h3 id="1-caching-strategy">1. Caching Strategy</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Multi-layer caching</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="c1"># CDN layer</span>
+  <span class="na">nginx-cdn</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./nginx/cdn.conf:/etc/nginx/nginx.conf</span>
+      <span class="pi">-</span> <span class="s">static_content:/usr/share/nginx/html</span>
+    <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">replicas</span><span class="pi">:</span> <span class="m">3</span>
+
+  <span class="c1"># Application cache</span>
+  <span class="na">redis-app-cache</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">redis:alpine3.18</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s">redis-server --maxmemory 1gb --maxmemory-policy allkeys-lru</span>
+
+  <span class="c1"># Session store</span>
+  <span class="na">redis-sessions</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">redis:alpine3.18</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s">redis-server --maxmemory 512mb --maxmemory-policy noeviction</span>
+
+  <span class="c1"># Database query cache</span>
+  <span class="na">postgres</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/postgres-pgagent:latest</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./postgres/optimized.conf:/var/lib/postgresql/data/postgresql.conf</span>
+
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">static_content</span><span class="pi">:</span>
+</code></pre></div></div>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># /nginx/cdn.conf - Aggressive caching</span>
+<span class="k">server</span> <span class="p">{</span>
+    <span class="kn">location</span> <span class="p">~</span><span class="sr">*</span> <span class="err">\</span><span class="s">.(jpg|jpeg|png|gif|ico|css|js|woff2)</span>$ <span class="p">{</span>
+        <span class="kn">expires</span> <span class="s">1y</span><span class="p">;</span>
+        <span class="kn">add_header</span> <span class="s">Cache-Control</span> <span class="s">"public,</span> <span class="s">immutable"</span><span class="p">;</span>
+        <span class="kn">add_header</span> <span class="s">Vary</span> <span class="s">Accept-Encoding</span><span class="p">;</span>
+        <span class="kn">gzip_static</span> <span class="no">on</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kn">location</span> <span class="n">/api/</span> <span class="p">{</span>
+        <span class="c1"># API response caching</span>
+        <span class="kn">proxy_cache</span> <span class="s">api_cache</span><span class="p">;</span>
+        <span class="kn">proxy_cache_valid</span> <span class="mi">200</span> <span class="mi">302</span> <span class="mi">10m</span><span class="p">;</span>
+        <span class="kn">proxy_cache_valid</span> <span class="mi">404</span> <span class="mi">1m</span><span class="p">;</span>
+        <span class="kn">proxy_cache_use_stale</span> <span class="s">error</span> <span class="s">timeout</span> <span class="s">updating</span><span class="p">;</span>
+        <span class="kn">add_header</span> <span class="s">X-Cache-Status</span> <span class="nv">$upstream_cache_status</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="2-database-optimization">2. Database Optimization</h3>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- /postgres/init/optimization.sql</span>
+<span class="c1">-- Connection pooling</span>
+<span class="k">ALTER</span> <span class="k">SYSTEM</span> <span class="k">SET</span> <span class="n">max_connections</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">SYSTEM</span> <span class="k">SET</span> <span class="n">shared_buffers</span> <span class="o">=</span> <span class="s1">'256MB'</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">SYSTEM</span> <span class="k">SET</span> <span class="n">effective_cache_size</span> <span class="o">=</span> <span class="s1">'1GB'</span><span class="p">;</span>
+
+<span class="c1">-- Query optimization</span>
+<span class="k">ALTER</span> <span class="k">SYSTEM</span> <span class="k">SET</span> <span class="n">random_page_cost</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">1</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">SYSTEM</span> <span class="k">SET</span> <span class="n">seq_page_cost</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">SYSTEM</span> <span class="k">SET</span> <span class="n">default_statistics_target</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+
+<span class="c1">-- Logging optimization</span>
+<span class="k">ALTER</span> <span class="k">SYSTEM</span> <span class="k">SET</span> <span class="n">log_statement</span> <span class="o">=</span> <span class="s1">'mod'</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">SYSTEM</span> <span class="k">SET</span> <span class="n">log_min_duration_statement</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+
+<span class="k">SELECT</span> <span class="n">pg_reload_conf</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h2 id="-devops-workflows">🔧 DevOps Workflows</h2>
+
+<h3 id="1-cicd-pipeline">1. CI/CD Pipeline</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># .github/workflows/deploy.yml</span>
+<span class="na">name</span><span class="pi">:</span> <span class="s">Deploy to Production</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">deploy</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v3</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Build and push images</span>
+        <span class="na">env</span><span class="pi">:</span>
+          <span class="na">REGISTRY</span><span class="pi">:</span> <span class="s">ghcr.io</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">echo $ | docker login $REGISTRY -u $ --password-stdin</span>
+
+          <span class="s"># Build custom images</span>
+          <span class="s">docker build -t $REGISTRY/nqdev/app:$ ./app</span>
+          <span class="s">docker push $REGISTRY/nqdev/app:$</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Deploy to production</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">appleboy/ssh-action@v0.1.5</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">host</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">username</span><span class="pi">:</span> <span class="s">deploy</span>
+          <span class="na">key</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">script</span><span class="pi">:</span> <span class="pi">|</span>
+            <span class="s">cd /opt/app</span>
+            <span class="s">export IMAGE_TAG=$</span>
+            <span class="s">docker-compose -f docker-compose.prod.yml pull</span>
+            <span class="s">docker-compose -f docker-compose.prod.yml up -d --remove-orphans</span>
+            <span class="s">docker system prune -f</span>
+</code></pre></div></div>
+
+<h3 id="2-health-checks--auto-healing">2. Health Checks &amp; Auto-healing</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># docker-compose.health.yml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">nginx</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</span>
+    <span class="na">healthcheck</span><span class="pi">:</span>
+      <span class="na">test</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">CMD"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">curl"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">-f"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">http://localhost/health"</span><span class="pi">]</span>
+      <span class="na">interval</span><span class="pi">:</span> <span class="s">30s</span>
+      <span class="na">timeout</span><span class="pi">:</span> <span class="s">10s</span>
+      <span class="na">retries</span><span class="pi">:</span> <span class="m">3</span>
+      <span class="na">start_period</span><span class="pi">:</span> <span class="s">40s</span>
+    <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">restart_policy</span><span class="pi">:</span>
+        <span class="na">condition</span><span class="pi">:</span> <span class="s">on-failure</span>
+        <span class="na">delay</span><span class="pi">:</span> <span class="s">5s</span>
+        <span class="na">max_attempts</span><span class="pi">:</span> <span class="m">3</span>
+
+  <span class="na">postgres</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/postgres-pgagent:latest</span>
+    <span class="na">healthcheck</span><span class="pi">:</span>
+      <span class="na">test</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">CMD-SHELL"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">pg_isready</span><span class="nv"> </span><span class="s">-U</span><span class="nv"> </span><span class="s">${POSTGRES_USER}</span><span class="nv"> </span><span class="s">-d</span><span class="nv"> </span><span class="s">${POSTGRES_DB}"</span><span class="pi">]</span>
+      <span class="na">interval</span><span class="pi">:</span> <span class="s">10s</span>
+      <span class="na">timeout</span><span class="pi">:</span> <span class="s">5s</span>
+      <span class="na">retries</span><span class="pi">:</span> <span class="m">5</span>
+</code></pre></div></div>
+
+<h3 id="3-backup--disaster-recovery">3. Backup &amp; Disaster Recovery</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># scripts/backup.sh</span>
+
+<span class="nb">set</span> <span class="nt">-euo</span> pipefail
+
+<span class="nv">BACKUP_DIR</span><span class="o">=</span><span class="s2">"/backups"</span>
+<span class="nv">DATE</span><span class="o">=</span><span class="si">$(</span><span class="nb">date</span> +%Y%m%d_%H%M%S<span class="si">)</span>
+
+<span class="c"># Database backup</span>
+docker-compose <span class="nb">exec</span> <span class="nt">-T</span> postgres pg_dumpall <span class="nt">-U</span> postgres <span class="o">&gt;</span> <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/db_backup_</span><span class="nv">$DATE</span><span class="s2">.sql"</span>
+
+<span class="c"># Application data backup</span>
+docker run <span class="nt">--rm</span> <span class="se">\</span>
+  <span class="nt">-v</span> app_data:/data <span class="se">\</span>
+  <span class="nt">-v</span> <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">:/backup"</span> <span class="se">\</span>
+  alpine <span class="nb">tar </span>czf <span class="s2">"/backup/app_data_</span><span class="nv">$DATE</span><span class="s2">.tar.gz"</span> <span class="nt">-C</span> /data <span class="nb">.</span>
+
+<span class="c"># Configuration backup</span>
+<span class="nb">tar </span>czf <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/configs_</span><span class="nv">$DATE</span><span class="s2">.tar.gz"</span> <span class="se">\</span>
+  ./nginx <span class="se">\</span>
+  ./haproxy <span class="se">\</span>
+  ./docker-compose<span class="k">*</span>.yml
+
+<span class="c"># Upload to S3 (optional)</span>
+aws s3 <span class="nb">sync</span> <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">"</span> <span class="s2">"s3://mybucket/backups/</span><span class="si">$(</span><span class="nb">date</span> +%Y/%m/%d<span class="si">)</span><span class="s2">/"</span>
+
+<span class="c"># Cleanup old backups (keep 7 days)</span>
+find <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">"</span> <span class="nt">-name</span> <span class="s2">"*.tar.gz"</span> <span class="nt">-mtime</span> +7 <span class="nt">-delete</span>
+find <span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">"</span> <span class="nt">-name</span> <span class="s2">"*.sql"</span> <span class="nt">-mtime</span> +7 <span class="nt">-delete</span>
+
+<span class="nb">echo</span> <span class="s2">"Backup completed: </span><span class="nv">$DATE</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h3 id="4-auto-scaling-configuration">4. Auto-scaling Configuration</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># docker-compose.scale.yml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">nginx</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</span>
+    <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">replicas</span><span class="pi">:</span> <span class="m">3</span>
+      <span class="na">update_config</span><span class="pi">:</span>
+        <span class="na">parallelism</span><span class="pi">:</span> <span class="m">1</span>
+        <span class="na">delay</span><span class="pi">:</span> <span class="s">10s</span>
+      <span class="na">restart_policy</span><span class="pi">:</span>
+        <span class="na">condition</span><span class="pi">:</span> <span class="s">on-failure</span>
+      <span class="na">resources</span><span class="pi">:</span>
+        <span class="na">limits</span><span class="pi">:</span>
+          <span class="na">memory</span><span class="pi">:</span> <span class="s">512M</span>
+        <span class="na">reservations</span><span class="pi">:</span>
+          <span class="na">memory</span><span class="pi">:</span> <span class="s">256M</span>
+
+  <span class="na">app</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">myapp:latest</span>
+    <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">replicas</span><span class="pi">:</span> <span class="m">5</span>
+      <span class="na">update_config</span><span class="pi">:</span>
+        <span class="na">parallelism</span><span class="pi">:</span> <span class="m">2</span>
+        <span class="na">delay</span><span class="pi">:</span> <span class="s">10s</span>
+      <span class="na">restart_policy</span><span class="pi">:</span>
+        <span class="na">condition</span><span class="pi">:</span> <span class="s">on-failure</span>
+      <span class="na">placement</span><span class="pi">:</span>
+        <span class="na">max_replicas_per_node</span><span class="pi">:</span> <span class="m">2</span>
+      <span class="na">resources</span><span class="pi">:</span>
+        <span class="na">limits</span><span class="pi">:</span>
+          <span class="na">memory</span><span class="pi">:</span> <span class="s">1G</span>
+          <span class="na">cpus</span><span class="pi">:</span> <span class="s2">"</span><span class="s">1"</span>
+        <span class="na">reservations</span><span class="pi">:</span>
+          <span class="na">memory</span><span class="pi">:</span> <span class="s">512M</span>
+          <span class="na">cpus</span><span class="pi">:</span> <span class="s2">"</span><span class="s">0.5"</span>
+</code></pre></div></div>
+
+<h2 id="-environment-specific-configurations">🎯 Environment-specific Configurations</h2>
+
+<h3 id="development-environment">Development Environment</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># docker-compose.dev.yml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">nginx</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./nginx/dev.conf:/etc/nginx/nginx.conf</span>
+      <span class="pi">-</span> <span class="s">./app:/usr/share/nginx/html</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">NGINX_LOG_LEVEL=debug</span>
+
+  <span class="na">postgres</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/postgres-pgagent:latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_HOST_AUTH_METHOD=trust</span> <span class="c1"># Dev only!</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">5432:5432"</span> <span class="c1"># Expose for dev tools</span>
+</code></pre></div></div>
+
+<h3 id="staging-environment">Staging Environment</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># docker-compose.staging.yml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">nginx</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">ENVIRONMENT=staging</span>
+    <span class="na">labels</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">staging=true"</span>
+
+  <span class="na">postgres</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/postgres-pgagent:latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">POSTGRES_HOST_AUTH_METHOD=scram-sha-256</span>
+    <span class="c1"># No port exposure for security</span>
+</code></pre></div></div>
+
+<h3 id="production-environment">Production Environment</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># docker-compose.prod.yml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">x-logging</span><span class="pi">:</span> <span class="nl">&amp;default-logging</span>
+  <span class="na">driver</span><span class="pi">:</span> <span class="s2">"</span><span class="s">json-file"</span>
+  <span class="na">options</span><span class="pi">:</span>
+    <span class="na">max-size</span><span class="pi">:</span> <span class="s2">"</span><span class="s">100m"</span>
+    <span class="na">max-file</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">nginx</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</span>
+    <span class="na">logging</span><span class="pi">:</span> <span class="nv">*default-logging</span>
+    <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">replicas</span><span class="pi">:</span> <span class="m">3</span>
+      <span class="na">resources</span><span class="pi">:</span>
+        <span class="na">limits</span><span class="pi">:</span>
+          <span class="na">memory</span><span class="pi">:</span> <span class="s">1G</span>
+          <span class="na">cpus</span><span class="pi">:</span> <span class="s2">"</span><span class="s">1"</span>
+    <span class="na">secrets</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">ssl_cert</span>
+      <span class="pi">-</span> <span class="s">ssl_key</span>
+
+<span class="na">secrets</span><span class="pi">:</span>
+  <span class="na">ssl_cert</span><span class="pi">:</span>
+    <span class="na">external</span><span class="pi">:</span> <span class="kc">true</span>
+  <span class="na">ssl_key</span><span class="pi">:</span>
+    <span class="na">external</span><span class="pi">:</span> <span class="kc">true</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-additional-resources">📚 Additional Resources</h2>
+
+<h3 id="documentation-links">Documentation Links</h3>
+
+<ul>
+  <li><a href="https://docs.docker.com/develop/best-practices/">Docker Best Practices</a></li>
+  <li><a href="https://docs.docker.com/compose/production/">Docker Compose Production Guide</a></li>
+  <li><a href="https://docs.docker.com/engine/scan/">Security Scanning</a></li>
+</ul>
+
+<h3 id="monitoring-tools">Monitoring Tools</h3>
+
+<ul>
+  <li><a href="https://prometheus.io/docs/">Prometheus</a></li>
+  <li><a href="https://grafana.com/grafana/dashboards/">Grafana Dashboards</a></li>
+  <li><a href="https://www.elastic.co/elastic-stack/">ELK Stack</a></li>
+</ul>
+
+<h3 id="security-resources">Security Resources</h3>
+
+<ul>
+  <li><a href="https://owasp.org/www-project-container-security/">OWASP Container Security</a></li>
+  <li><a href="https://www.cisecurity.org/benchmark/docker">CIS Docker Benchmark</a></li>
+  <li><a href="https://snyk.io/learn/container-security/">Snyk Container Security</a></li>
+</ul>
+
+<hr />
+
+<p><strong>NQDEV Team</strong> - Platform Engineering<br />
+📧 quynh@nhquydev.net | 🌐 <a href="https://nhquydev.net">nhquydev.net</a></p>
+
+      </div>
+    </main>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/containers/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <h3>NQDEV Containers</h3>
+        <p>Production-ready Docker containers cho Vietnamese developers</p>
+        <ul class="contact-list">
+          <li class="p-name">NQDEV Containers Documentation</li><li><a class="u-email" href="mailto:quynh@nhquydev.net">quynh@nhquydev.net</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <h3>Quick Links</h3>
+        <ul class="quick-links">
+          <li><a href="/containers/nqdev-containers-guide">📋 Tổng quan</a></li>
+          <li><a href="/containers/nginx-guide">🌐 NGINX Guide</a></li>
+          <li><a href="/containers/haproxy-guide">⚖️ HAProxy Guide</a></li>
+          <li><a href="/containers/examples-best-practices">💡 Best Practices</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <h3>Resources</h3>
+        <ul class="resource-links">
+          <li><a href="https://github.com/nqdev-group/containers">📦 GitHub Repository</a></li>
+          <li><a href="https://github.com/nqdev-group/containers/packages">🐳 Container Registry</a></li>
+          <li><a href="https://github.com/nqdev-group/containers/issues">🐛 Report Issues</a></li>
+          <li><a href="https://nhquydev.net">🌐 NQDEV Website</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-info">
+        <p>&copy; 2025 NQDEV Team. Licensed under <a
+            href="https://github.com/nqdev-group/containers/blob/main/LICENSE">MIT License</a>.</p>
+        <p>Built with ❤️ in Vietnam 🇻🇳 | Powered by <a href="https://jekyllrb.com/">Jekyll</a></p>
+      </div>
+
+      <div class="social-links"><a href="https://github.com/nqdev-group">
+          <svg class="svg-icon">
+            <use xlink:href="/containers/assets/minima-social-icons.svg#github"></use>
+          </svg>
+        </a><a href="https://linkedin.com/in/nhquydev">
+          <svg class="svg-icon">
+            <use xlink:href="/containers/assets/minima-social-icons.svg#linkedin"></use>
+          </svg>
+        </a></div>
+    </div>
+
+  </div>
+
+</footer>
+
+  </body>
+
+</html>

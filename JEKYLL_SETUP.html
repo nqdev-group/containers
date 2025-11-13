@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Jekyll Setup Instructions | NQDEV Containers Documentation</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Jekyll Setup Instructions" />
+<meta name="author" content="NQDEV Team" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations." />
+<meta property="og:description" content="Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations." />
+<link rel="canonical" href="https://nqdev-group.github.io/containers/JEKYLL_SETUP.html" />
+<meta property="og:url" content="https://nqdev-group.github.io/containers/JEKYLL_SETUP.html" />
+<meta property="og:site_name" content="NQDEV Containers Documentation" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Jekyll Setup Instructions" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"NQDEV Team","url":"https://nhquydev.net"},"description":"Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations.","headline":"Jekyll Setup Instructions","url":"https://nqdev-group.github.io/containers/JEKYLL_SETUP.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/containers/assets/css/style.css">
+  <link rel="stylesheet" href="/containers/assets/css/custom.css"><link type="application/atom+xml" rel="alternate" href="https://nqdev-group.github.io/containers/feed.xml" title="NQDEV Containers Documentation" /><!-- Custom favicon -->
+  <link rel="icon" type="image/x-icon" href="/containers/assets/images/favicon.ico">
+
+  <!-- Syntax highlighting -->
+  <link rel="stylesheet" href="/containers/assets/css/syntax.css">
+
+  <!-- Mermaid for diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default'
+    });
+  </script>
+</head>
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/containers/">
+      <span class="site-logo">🐳</span> NQDEV Containers Documentation
+    </a><nav class="site-nav">
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+      <label for="nav-trigger">
+        <span class="menu-icon">
+          <svg viewBox="0 0 18 15" width="18px" height="15px">
+            <path
+              d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z" />
+          </svg>
+        </span>
+      </label>
+
+      <div class="trigger">
+        <a class="page-link" href="/containers/">🏠 Trang chủ</a>
+        <a class="page-link" href="/containers/nqdev-containers-guide">📋 Tổng quan</a>
+        <a class="page-link" href="/containers/nginx-guide">🌐 NGINX</a>
+        <a class="page-link" href="/containers/haproxy-guide">⚖️ HAProxy</a>
+        <a class="page-link" href="/containers/examples-best-practices">💡 Examples</a>
+        <a class="page-link" href="https://github.com/nqdev-group/containers">
+          <span class="github-icon">⭐</span> GitHub
+        </a>
+      </div>
+    </nav></div>
+</header>
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h1 id="jekyll-setup-instructions">Jekyll Setup Instructions</h1>
+
+<h2 id="-tổng-quan">🎯 Tổng quan</h2>
+
+<p>Tài liệu NQDEV Containers đã được setup với Jekyll theme để tạo ra một website documentation chuyên nghiệp. Jekyll sẽ tự động build và deploy lên GitHub Pages khi có thay đổi.</p>
+
+<h2 id="-cấu-trúc-jekyll">📋 Cấu trúc Jekyll</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docs/
+├── _config.yml              # Jekyll configuration
+├── _layouts/                 # Custom layouts
+│   ├── default.html
+│   └── guide.html
+├── _includes/                # Reusable components
+│   ├── head.html
+│   ├── header.html
+│   └── footer.html
+├── assets/
+│   └── css/
+│       └── style.scss        # Custom styles
+├── Gemfile                   # Ruby dependencies
+├── index.md                  # Homepage
+└── *.md                     # Documentation pages
+</code></pre></div></div>
+
+<h2 id="-local-development">🚀 Local Development</h2>
+
+<h3 id="prerequisites">Prerequisites</h3>
+
+<ul>
+  <li>Ruby 3.1+</li>
+  <li>Bundler gem</li>
+</ul>
+
+<h3 id="setup">Setup</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Cài đặt Ruby dependencies</span>
+<span class="nb">cd </span>docs
+bundle <span class="nb">install</span>
+
+<span class="c"># Start development server</span>
+bundle <span class="nb">exec </span>jekyll serve <span class="nt">--livereload</span>
+
+<span class="c"># Truy cập http://localhost:4000</span>
+</code></pre></div></div>
+
+<h3 id="development-workflow">Development Workflow</h3>
+
+<ol>
+  <li><strong>Edit content</strong>: Modify <code class="language-plaintext highlighter-rouge">.md</code> files</li>
+  <li><strong>Add pages</strong>: Create new <code class="language-plaintext highlighter-rouge">.md</code> files with front matter</li>
+  <li><strong>Customize styles</strong>: Edit <code class="language-plaintext highlighter-rouge">assets/css/style.scss</code></li>
+  <li><strong>Test locally</strong>: Use <code class="language-plaintext highlighter-rouge">bundle exec jekyll serve</code></li>
+  <li><strong>Deploy</strong>: Push to GitHub (auto-deploy via Actions)</li>
+</ol>
+
+<h2 id="-content-guidelines">📝 Content Guidelines</h2>
+
+<h3 id="front-matter">Front Matter</h3>
+
+<p>Tất cả markdown files cần có YAML front matter:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">layout</span><span class="pi">:</span> <span class="s">default</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s">Page Title</span>
+<span class="na">nav_order</span><span class="pi">:</span> <span class="m">1</span>
+<span class="nn">---</span>
+</code></pre></div></div>
+
+<h3 id="navigation">Navigation</h3>
+
+<p>Update <code class="language-plaintext highlighter-rouge">_config.yml</code> để thay đổi navigation:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">header_pages</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">index.md</span>
+  <span class="pi">-</span> <span class="s">guides.md</span>
+  <span class="pi">-</span> <span class="s">examples.md</span>
+</code></pre></div></div>
+
+<h3 id="styling-classes">Styling Classes</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">.note</code> - Info callouts</li>
+  <li><code class="language-plaintext highlighter-rouge">.warning</code> - Warning callouts</li>
+  <li><code class="language-plaintext highlighter-rouge">.highlight</code> - Highlighted content</li>
+  <li><code class="language-plaintext highlighter-rouge">.grid-container</code> - Grid layout</li>
+  <li><code class="language-plaintext highlighter-rouge">.code-example</code> - Code examples</li>
+</ul>
+
+<h2 id="-customization">🔧 Customization</h2>
+
+<h3 id="colors">Colors</h3>
+
+<p>Sửa CSS variables trong <code class="language-plaintext highlighter-rouge">style.scss</code>:</p>
+
+<div class="language-scss highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">:root</span> <span class="p">{</span>
+  <span class="na">--nqdev-primary</span><span class="p">:</span> <span class="mh">#2563eb</span><span class="p">;</span>
+  <span class="na">--nqdev-secondary</span><span class="p">:</span> <span class="mh">#7c3aed</span><span class="p">;</span>
+  <span class="na">--nqdev-success</span><span class="p">:</span> <span class="mh">#059669</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="layouts">Layouts</h3>
+
+<p>Tạo layout mới trong <code class="language-plaintext highlighter-rouge">_layouts/</code>:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+layout: default
+---
+
+<span class="nt">&lt;article</span> <span class="na">class=</span><span class="s">"custom-layout"</span><span class="nt">&gt;&lt;h1</span> <span class="na">id=</span><span class="s">"github-pages-setup-guide"</span><span class="nt">&gt;</span>GitHub Pages Setup Guide<span class="nt">&lt;/h1&gt;</span>
+
+<span class="nt">&lt;h2</span> <span class="na">id=</span><span class="s">"️-khắc-phục-lỗi-github-pages"</span><span class="nt">&gt;</span>🛠️ Khắc phục lỗi GitHub Pages<span class="nt">&lt;/h2&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>Nếu bạn gặp lỗi <span class="nt">&lt;code</span> <span class="na">class=</span><span class="s">"language-plaintext highlighter-rouge"</span><span class="nt">&gt;</span>Get Pages site failed<span class="nt">&lt;/code&gt;</span>, hãy làm theo các bước sau:<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;h3</span> <span class="na">id=</span><span class="s">"1-enable-github-pages"</span><span class="nt">&gt;</span>1. Enable GitHub Pages<span class="nt">&lt;/h3&gt;</span>
+
+<span class="nt">&lt;ol&gt;</span>
+  <span class="nt">&lt;li&gt;</span>Vào repository trên GitHub<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;</span>Click <span class="nt">&lt;strong&gt;</span>Settings<span class="nt">&lt;/strong&gt;</span> tab<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;</span>Scroll xuống <span class="nt">&lt;strong&gt;</span>Pages<span class="nt">&lt;/strong&gt;</span> section (bên trái sidebar)<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;</span>Trong <span class="nt">&lt;strong&gt;</span>Source<span class="nt">&lt;/strong&gt;</span>, chọn <span class="nt">&lt;strong&gt;</span>GitHub Actions<span class="nt">&lt;/strong&gt;&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;</span>Click <span class="nt">&lt;strong&gt;</span>Save<span class="nt">&lt;/strong&gt;&lt;/li&gt;</span>
+<span class="nt">&lt;/ol&gt;</span>
+
+<span class="nt">&lt;h3</span> <span class="na">id=</span><span class="s">"2-kiểm-tra-permissions"</span><span class="nt">&gt;</span>2. Kiểm tra Permissions<span class="nt">&lt;/h3&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>Đảm bảo repository có permissions cần thiết:<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;ol&gt;</span>
+  <span class="nt">&lt;li&gt;</span>Vào <span class="nt">&lt;strong&gt;</span>Settings<span class="nt">&lt;/strong&gt;</span> → <span class="nt">&lt;strong&gt;</span>Actions<span class="nt">&lt;/strong&gt;</span> → <span class="nt">&lt;strong&gt;</span>General<span class="nt">&lt;/strong&gt;&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;</span>Trong <span class="nt">&lt;strong&gt;</span>Workflow permissions<span class="nt">&lt;/strong&gt;</span>, chọn:
+    <span class="nt">&lt;ul&gt;</span>
+      <span class="nt">&lt;li&gt;</span>✅ <span class="nt">&lt;strong&gt;</span>Read and write permissions<span class="nt">&lt;/strong&gt;&lt;/li&gt;</span>
+      <span class="nt">&lt;li&gt;</span>✅ <span class="nt">&lt;strong&gt;</span>Allow GitHub Actions to create and approve pull requests<span class="nt">&lt;/strong&gt;&lt;/li&gt;</span>
+    <span class="nt">&lt;/ul&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;</span>Click <span class="nt">&lt;strong&gt;</span>Save<span class="nt">&lt;/strong&gt;&lt;/li&gt;</span>
+<span class="nt">&lt;/ol&gt;</span>
+
+<span class="nt">&lt;h3</span> <span class="na">id=</span><span class="s">"3-alternative-sử-dụng-gh-pages-branch"</span><span class="nt">&gt;</span>3. Alternative: Sử dụng gh-pages Branch<span class="nt">&lt;/h3&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>Nếu vẫn gặp lỗi, sử dụng workflow đơn giản hơn:<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"language-bash highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;&lt;span</span> <span class="na">class=</span><span class="s">"c"</span><span class="nt">&gt;</span># Sử dụng docs-simple.yml thay vì docs.yml<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nb"</span><span class="nt">&gt;</span>mv<span class="nt">&lt;/span&gt;</span> .github/workflows/docs.yml .github/workflows/docs.yml.backup
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nb"</span><span class="nt">&gt;</span>mv<span class="nt">&lt;/span&gt;</span> .github/workflows/docs-simple.yml .github/workflows/docs.yml
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;h3</span> <span class="na">id=</span><span class="s">"4-manual-setup-nếu-cần"</span><span class="nt">&gt;</span>4. Manual Setup (nếu cần)<span class="nt">&lt;/h3&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"language-bash highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;&lt;span</span> <span class="na">class=</span><span class="s">"c"</span><span class="nt">&gt;</span># 1. Build locally<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nb"</span><span class="nt">&gt;</span>cd <span class="nt">&lt;/span&gt;</span>docs
+bundle <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nb"</span><span class="nt">&gt;</span>install
+<span class="nt">&lt;/span&gt;</span>bundle <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nb"</span><span class="nt">&gt;</span>exec <span class="nt">&lt;/span&gt;</span>jekyll build
+
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"c"</span><span class="nt">&gt;</span># 2. Push _site content to gh-pages branch<span class="nt">&lt;/span&gt;</span>
+git checkout <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span>-b<span class="nt">&lt;/span&gt;</span> gh-pages
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nb"</span><span class="nt">&gt;</span>cp<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span>-r<span class="nt">&lt;/span&gt;</span> _site/<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"k"</span><span class="nt">&gt;</span>*<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nb"</span><span class="nt">&gt;</span>.<span class="nt">&lt;/span&gt;</span>
+git add <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nb"</span><span class="nt">&gt;</span>.<span class="nt">&lt;/span&gt;</span>
+git commit <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span>-m<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"s2"</span><span class="nt">&gt;</span>"Deploy Jekyll site"<span class="nt">&lt;/span&gt;</span>
+git push origin gh-pages
+
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"c"</span><span class="nt">&gt;</span># 3. Configure Pages source<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"c"</span><span class="nt">&gt;</span># GitHub Settings → Pages → Source: Deploy from branch → gh-pages<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;h2</span> <span class="na">id=</span><span class="s">"-troubleshooting"</span><span class="nt">&gt;</span>🔧 Troubleshooting<span class="nt">&lt;/h2&gt;</span>
+
+<span class="nt">&lt;h3</span> <span class="na">id=</span><span class="s">"common-issues"</span><span class="nt">&gt;</span>Common Issues<span class="nt">&lt;/h3&gt;</span>
+
+<span class="nt">&lt;h4</span> <span class="na">id=</span><span class="s">"1-pages-not-enabled"</span><span class="nt">&gt;</span>1. Pages not enabled<span class="nt">&lt;/h4&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"language-plaintext highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;</span>Error: Get Pages site failed. Please verify that the repository has Pages enabled
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;strong&gt;</span>Solution<span class="nt">&lt;/strong&gt;</span>: Enable Pages trong repository settings<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;h4</span> <span class="na">id=</span><span class="s">"2-permission-denied"</span><span class="nt">&gt;</span>2. Permission denied<span class="nt">&lt;/h4&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"language-plaintext highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;</span>Error: HttpError: Forbidden
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;strong&gt;</span>Solution<span class="nt">&lt;/strong&gt;</span>: Check workflow permissions trong Actions settings<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;h4</span> <span class="na">id=</span><span class="s">"3-build-fails"</span><span class="nt">&gt;</span>3. Build fails<span class="nt">&lt;/h4&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"language-plaintext highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;</span>Error: The process 'bundle' with arguments 'exec jekyll build' failed
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;strong&gt;</span>Solution<span class="nt">&lt;/strong&gt;</span>: Check Ruby version và dependencies trong Gemfile<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;h3</span> <span class="na">id=</span><span class="s">"4-wrong-base-url"</span><span class="nt">&gt;</span>4. Wrong base URL<span class="nt">&lt;/h3&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"language-plaintext highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;</span>Assets not loading correctly
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;strong&gt;</span>Solution<span class="nt">&lt;/strong&gt;</span>: Update <span class="nt">&lt;code</span> <span class="na">class=</span><span class="s">"language-plaintext highlighter-rouge"</span><span class="nt">&gt;</span>_config.yml<span class="nt">&lt;/code&gt;</span>:<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"language-yaml highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>url<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"pi"</span><span class="nt">&gt;</span>:<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"s2"</span><span class="nt">&gt;</span>"<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>https://nqdev-group.github.io"<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>baseurl<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"pi"</span><span class="nt">&gt;</span>:<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"s2"</span><span class="nt">&gt;</span>"<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>/containers"<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;h2</span> <span class="na">id=</span><span class="s">"-verification"</span><span class="nt">&gt;</span>✅ Verification<span class="nt">&lt;/h2&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>Sau khi setup thành công:<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;ol&gt;</span>
+  <span class="nt">&lt;li&gt;&lt;strong&gt;</span>Build Action<span class="nt">&lt;/strong&gt;</span>: Check trong <span class="nt">&lt;strong&gt;</span>Actions<span class="nt">&lt;/strong&gt;</span> tab<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;&lt;strong&gt;</span>Deployment<span class="nt">&lt;/strong&gt;</span>: Check trong <span class="nt">&lt;strong&gt;</span>Deployments<span class="nt">&lt;/strong&gt;</span> (repository main page)<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;&lt;strong&gt;</span>Live Site<span class="nt">&lt;/strong&gt;</span>: Visit <span class="nt">&lt;code</span> <span class="na">class=</span><span class="s">"language-plaintext highlighter-rouge"</span><span class="nt">&gt;</span>https://nqdev-group.github.io/containers<span class="nt">&lt;/code&gt;&lt;/li&gt;</span>
+<span class="nt">&lt;/ol&gt;</span>
+
+<span class="nt">&lt;h2</span> <span class="na">id=</span><span class="s">"-development-workflow"</span><span class="nt">&gt;</span>🚀 Development Workflow<span class="nt">&lt;/h2&gt;</span>
+
+<span class="nt">&lt;h3</span> <span class="na">id=</span><span class="s">"local-development"</span><span class="nt">&gt;</span>Local Development<span class="nt">&lt;/h3&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"language-bash highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nb"</span><span class="nt">&gt;</span>cd <span class="nt">&lt;/span&gt;</span>docs
+bundle <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nb"</span><span class="nt">&gt;</span>install
+<span class="nt">&lt;/span&gt;</span>bundle <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nb"</span><span class="nt">&gt;</span>exec <span class="nt">&lt;/span&gt;</span>jekyll serve <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span>--livereload<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"c"</span><span class="nt">&gt;</span># Visit: http://localhost:4000/containers<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;h3</span> <span class="na">id=</span><span class="s">"deploy-to-production"</span><span class="nt">&gt;</span>Deploy to Production<span class="nt">&lt;/h3&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"language-bash highlighter-rouge"</span><span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;code&gt;</span>git add <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nb"</span><span class="nt">&gt;</span>.<span class="nt">&lt;/span&gt;</span>
+git commit <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span>-m<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"s2"</span><span class="nt">&gt;</span>"Update documentation"<span class="nt">&lt;/span&gt;</span>
+git push origin main  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"c"</span><span class="nt">&gt;</span># Triggers auto-deployment<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</span>
+
+<span class="nt">&lt;h2</span> <span class="na">id=</span><span class="s">"-final-checklist"</span><span class="nt">&gt;</span>📋 Final Checklist<span class="nt">&lt;/h2&gt;</span>
+
+<span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"task-list"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"task-list-item"</span><span class="nt">&gt;&lt;input</span> <span class="na">type=</span><span class="s">"checkbox"</span> <span class="na">class=</span><span class="s">"task-list-item-checkbox"</span> <span class="na">disabled=</span><span class="s">"disabled"</span> <span class="nt">/&gt;</span>Repository có public visibility (hoặc GitHub Pro/Team)<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"task-list-item"</span><span class="nt">&gt;&lt;input</span> <span class="na">type=</span><span class="s">"checkbox"</span> <span class="na">class=</span><span class="s">"task-list-item-checkbox"</span> <span class="na">disabled=</span><span class="s">"disabled"</span> <span class="nt">/&gt;</span>Pages enabled trong Settings<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"task-list-item"</span><span class="nt">&gt;&lt;input</span> <span class="na">type=</span><span class="s">"checkbox"</span> <span class="na">class=</span><span class="s">"task-list-item-checkbox"</span> <span class="na">disabled=</span><span class="s">"disabled"</span> <span class="nt">/&gt;</span>Workflow permissions configured<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"task-list-item"</span><span class="nt">&gt;&lt;input</span> <span class="na">type=</span><span class="s">"checkbox"</span> <span class="na">class=</span><span class="s">"task-list-item-checkbox"</span> <span class="na">disabled=</span><span class="s">"disabled"</span> <span class="nt">/&gt;&lt;code</span> <span class="na">class=</span><span class="s">"language-plaintext highlighter-rouge"</span><span class="nt">&gt;</span>_config.yml<span class="nt">&lt;/code&gt;</span> có đúng <span class="nt">&lt;code</span> <span class="na">class=</span><span class="s">"language-plaintext highlighter-rouge"</span><span class="nt">&gt;</span>url<span class="nt">&lt;/code&gt;</span> và <span class="nt">&lt;code</span> <span class="na">class=</span><span class="s">"language-plaintext highlighter-rouge"</span><span class="nt">&gt;</span>baseurl<span class="nt">&lt;/code&gt;&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"task-list-item"</span><span class="nt">&gt;&lt;input</span> <span class="na">type=</span><span class="s">"checkbox"</span> <span class="na">class=</span><span class="s">"task-list-item-checkbox"</span> <span class="na">disabled=</span><span class="s">"disabled"</span> <span class="nt">/&gt;</span>Action workflow chạy thành công<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"task-list-item"</span><span class="nt">&gt;&lt;input</span> <span class="na">type=</span><span class="s">"checkbox"</span> <span class="na">class=</span><span class="s">"task-list-item-checkbox"</span> <span class="na">disabled=</span><span class="s">"disabled"</span> <span class="nt">/&gt;</span>Website accessible tại GitHub Pages URL<span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+
+<span class="nt">&lt;h2</span> <span class="na">id=</span><span class="s">"-still-having-issues"</span><span class="nt">&gt;</span>🆘 Still Having Issues?<span class="nt">&lt;/h2&gt;</span>
+
+<span class="nt">&lt;ol&gt;</span>
+  <span class="nt">&lt;li&gt;&lt;strong&gt;</span>Check Action Logs<span class="nt">&lt;/strong&gt;</span>: Xem detailed error trong Actions tab<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;&lt;strong&gt;</span>Verify Settings<span class="nt">&lt;/strong&gt;</span>: Double-check Pages và Actions settings<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;&lt;strong&gt;</span>Try Simple Workflow<span class="nt">&lt;/strong&gt;</span>: Sử dụng <span class="nt">&lt;code</span> <span class="na">class=</span><span class="s">"language-plaintext highlighter-rouge"</span><span class="nt">&gt;</span>docs-simple.yml<span class="nt">&lt;/code&gt;</span> approach<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;&lt;strong&gt;</span>Contact Support<span class="nt">&lt;/strong&gt;</span>: Create issue trong repository<span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ol&gt;</span>
+
+<span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;strong&gt;</span>NQDEV Team<span class="nt">&lt;/strong&gt;</span> - Platform Engineering<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+📧 quynh@nhquydev.net<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/article&gt;</span>
+</code></pre></div></div>
+
+<h3 id="components">Components</h3>
+
+<p>Tạo reusable components trong <code class="language-plaintext highlighter-rouge">_includes/</code>. Ví dụ, tạo service card component:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- _includes/service-card.html --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"service-card"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;h3&gt;&lt;/h3&gt;</span>
+  <span class="nt">&lt;p&gt;&lt;/p&gt;</span>
+  
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>Sử dụng trong markdown:</p>
+
+<div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp">{%</span><span class="w"> </span><span class="nt">include</span><span class="w"> </span>service-card.html<span class="w">
+   </span><span class="na">title</span><span class="o">=</span><span class="s2">"NGINX"</span><span class="w">
+   </span><span class="na">description</span><span class="o">=</span><span class="s2">"Web server with custom modules"</span><span class="w">
+   </span><span class="na">link</span><span class="o">=</span><span class="s2">"/nginx-guide"</span><span class="w">
+</span><span class="cp">%}</span>
+
+</code></pre></div></div>
+
+<p>Kết quả:</p>
+
+<!-- Service Card Component -->
+<div class="service-card">
+  <div class="service-header">
+    
+    <h3 class="service-title">NGINX Example</h3>
+  </div>
+
+  <div class="service-content">
+    <p class="service-description">Web server with custom modules and advanced features</p>
+
+    
+
+    
+
+    
+  </div>
+
+  
+  <div class="service-footer">
+    <a href="/containers/nginx-guide" class="service-link">
+      Learn More →
+    </a>
+  </div>
+  
+</div>
+
+<h2 id="-deployment">🚀 Deployment</h2>
+
+<h3 id="github-pages-automatic">GitHub Pages (Automatic)</h3>
+
+<ol>
+  <li>Push changes to <code class="language-plaintext highlighter-rouge">main</code> branch</li>
+  <li>GitHub Actions sẽ tự động build và deploy</li>
+  <li>Website available tại: <code class="language-plaintext highlighter-rouge">https://nqdev-group.github.io/containers</code></li>
+</ol>
+
+<h3 id="manual-build">Manual Build</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Build for production</span>
+bundle <span class="nb">exec </span>jekyll build <span class="nt">--baseurl</span> <span class="s2">"/containers"</span>
+
+<span class="c"># Output trong _site/ folder</span>
+</code></pre></div></div>
+
+<h2 id="-features-included">📊 Features Included</h2>
+
+<h3 id="-responsive-design">✅ Responsive Design</h3>
+
+<ul>
+  <li>Mobile-friendly navigation</li>
+  <li>Grid layouts</li>
+  <li>Responsive tables</li>
+</ul>
+
+<h3 id="-syntax-highlighting">✅ Syntax Highlighting</h3>
+
+<ul>
+  <li>Code blocks với highlighting</li>
+  <li>Copy-to-clipboard functionality</li>
+  <li>Multiple language support</li>
+</ul>
+
+<h3 id="-search--navigation">✅ Search &amp; Navigation</h3>
+
+<ul>
+  <li>Clear page structure</li>
+  <li>Breadcrumb navigation</li>
+  <li>Quick links</li>
+</ul>
+
+<h3 id="-seo-optimized">✅ SEO Optimized</h3>
+
+<ul>
+  <li>Meta tags via jekyll-seo-tag</li>
+  <li>Structured data</li>
+  <li>Social media previews</li>
+</ul>
+
+<h3 id="-performance">✅ Performance</h3>
+
+<ul>
+  <li>Minified CSS/JS</li>
+  <li>Optimized images</li>
+  <li>Fast loading</li>
+</ul>
+
+<h2 id="-troubleshooting">🔍 Troubleshooting</h2>
+
+<h3 id="common-issues">Common Issues</h3>
+
+<ol>
+  <li>
+    <p><strong>Bundle install fails</strong></p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem <span class="nb">install </span>bundler
+bundle update
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>Jekyll serve fails</strong></p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle <span class="nb">exec </span>jekyll clean
+bundle <span class="nb">exec </span>jekyll serve
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>CSS không load</strong></p>
+
+    <ul>
+      <li>Check <code class="language-plaintext highlighter-rouge">_config.yml</code> baseurl</li>
+      <li>Verify <code class="language-plaintext highlighter-rouge">assets/css/style.scss</code></li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>GitHub Pages build fails</strong></p>
+    <ul>
+      <li>Check GitHub Actions logs</li>
+      <li>Verify Gemfile và _config.yml</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="performance-tips">Performance Tips</h3>
+
+<ul>
+  <li>Optimize images trước khi commit</li>
+  <li>Minify CSS trong production</li>
+  <li>Use CDN cho external libraries</li>
+  <li>Enable compression trên server</li>
+</ul>
+
+<h2 id="-resources">📚 Resources</h2>
+
+<ul>
+  <li><a href="https://jekyllrb.com/docs/">Jekyll Documentation</a></li>
+  <li><a href="https://pages.github.com/">GitHub Pages</a></li>
+  <li><a href="https://shopify.github.io/liquid/">Liquid Template Language</a></li>
+  <li><a href="https://kramdown.gettalong.org/syntax.html">Kramdown Syntax</a></li>
+</ul>
+
+<hr />
+
+<p><strong>NQDEV Team</strong> - Platform Engineering<br />
+📧 quynh@nhquydev.net | 🌐 <a href="https://nhquydev.net">nhquydev.net</a></p>
+
+      </div>
+    </main>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/containers/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <h3>NQDEV Containers</h3>
+        <p>Production-ready Docker containers cho Vietnamese developers</p>
+        <ul class="contact-list">
+          <li class="p-name">NQDEV Containers Documentation</li><li><a class="u-email" href="mailto:quynh@nhquydev.net">quynh@nhquydev.net</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <h3>Quick Links</h3>
+        <ul class="quick-links">
+          <li><a href="/containers/nqdev-containers-guide">📋 Tổng quan</a></li>
+          <li><a href="/containers/nginx-guide">🌐 NGINX Guide</a></li>
+          <li><a href="/containers/haproxy-guide">⚖️ HAProxy Guide</a></li>
+          <li><a href="/containers/examples-best-practices">💡 Best Practices</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <h3>Resources</h3>
+        <ul class="resource-links">
+          <li><a href="https://github.com/nqdev-group/containers">📦 GitHub Repository</a></li>
+          <li><a href="https://github.com/nqdev-group/containers/packages">🐳 Container Registry</a></li>
+          <li><a href="https://github.com/nqdev-group/containers/issues">🐛 Report Issues</a></li>
+          <li><a href="https://nhquydev.net">🌐 NQDEV Website</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-info">
+        <p>&copy; 2025 NQDEV Team. Licensed under <a
+            href="https://github.com/nqdev-group/containers/blob/main/LICENSE">MIT License</a>.</p>
+        <p>Built with ❤️ in Vietnam 🇻🇳 | Powered by <a href="https://jekyllrb.com/">Jekyll</a></p>
+      </div>
+
+      <div class="social-links"><a href="https://github.com/nqdev-group">
+          <svg class="svg-icon">
+            <use xlink:href="/containers/assets/minima-social-icons.svg#github"></use>
+          </svg>
+        </a><a href="https://linkedin.com/in/nhquydev">
+          <svg class="svg-icon">
+            <use xlink:href="/containers/assets/minima-social-icons.svg#linkedin"></use>
+          </svg>
+        </a></div>
+    </div>
+
+  </div>
+
+</footer>
+
+  </body>
+
+</html>

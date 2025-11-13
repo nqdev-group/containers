@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>HAProxy Container Guide | NQDEV Containers Documentation</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="HAProxy Container Guide" />
+<meta name="author" content="NQDEV Team" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations." />
+<meta property="og:description" content="Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations." />
+<link rel="canonical" href="https://nqdev-group.github.io/containers/haproxy-guide.html" />
+<meta property="og:url" content="https://nqdev-group.github.io/containers/haproxy-guide.html" />
+<meta property="og:site_name" content="NQDEV Containers Documentation" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="HAProxy Container Guide" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"NQDEV Team","url":"https://nhquydev.net"},"description":"Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations.","headline":"HAProxy Container Guide","url":"https://nqdev-group.github.io/containers/haproxy-guide.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/containers/assets/css/style.css">
+  <link rel="stylesheet" href="/containers/assets/css/custom.css"><link type="application/atom+xml" rel="alternate" href="https://nqdev-group.github.io/containers/feed.xml" title="NQDEV Containers Documentation" /><!-- Custom favicon -->
+  <link rel="icon" type="image/x-icon" href="/containers/assets/images/favicon.ico">
+
+  <!-- Syntax highlighting -->
+  <link rel="stylesheet" href="/containers/assets/css/syntax.css">
+
+  <!-- Mermaid for diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default'
+    });
+  </script>
+</head>
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/containers/">
+      <span class="site-logo">🐳</span> NQDEV Containers Documentation
+    </a><nav class="site-nav">
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+      <label for="nav-trigger">
+        <span class="menu-icon">
+          <svg viewBox="0 0 18 15" width="18px" height="15px">
+            <path
+              d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z" />
+          </svg>
+        </span>
+      </label>
+
+      <div class="trigger">
+        <a class="page-link" href="/containers/">🏠 Trang chủ</a>
+        <a class="page-link" href="/containers/nqdev-containers-guide">📋 Tổng quan</a>
+        <a class="page-link" href="/containers/nginx-guide">🌐 NGINX</a>
+        <a class="page-link" href="/containers/haproxy-guide">⚖️ HAProxy</a>
+        <a class="page-link" href="/containers/examples-best-practices">💡 Examples</a>
+        <a class="page-link" href="https://github.com/nqdev-group/containers">
+          <span class="github-icon">⭐</span> GitHub
+        </a>
+      </div>
+    </nav></div>
+</header>
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h1 id="haproxy-container---hướng-dẫn-sử-dụng-chi-tiết">HAProxy Container - Hướng dẫn sử dụng chi tiết</h1>
+
+<p><img src="https://img.shields.io/badge/haproxy-3.1.5-blue" alt="HAProxy" />
+<img src="https://img.shields.io/badge/lua-5.4-orange" alt="Lua" />
+<img src="https://img.shields.io/badge/redis-integration-red" alt="Redis" /></p>
+
+<h2 id="-thông-tin-cơ-bản">📋 Thông tin cơ bản</h2>
+
+<ul>
+  <li><strong>Image</strong>: <code class="language-plaintext highlighter-rouge">nqdev/haproxy-alpine-custom:3.1.5</code></li>
+  <li><strong>Base</strong>: Alpine Linux</li>
+  <li><strong>HAProxy Version</strong>: 3.1.5</li>
+  <li><strong>Lua Version</strong>: 5.4</li>
+  <li><strong>Redis Integration</strong>: ✅</li>
+</ul>
+
+<h2 id="-khởi-động-nhanh">🚀 Khởi động nhanh</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Di chuyển vào thư mục HAProxy</span>
+<span class="nb">cd </span>nqdev/haproxy/alpine
+
+<span class="c"># Khởi chạy container</span>
+docker-compose up <span class="nt">-d</span> <span class="nt">--build</span> <span class="nt">--force-recreate</span> <span class="nt">--remove-orphans</span>
+
+<span class="c"># Kiểm tra trạng thái</span>
+curl http://localhost:18080
+open http://localhost:17001  <span class="c"># Stats dashboard</span>
+</code></pre></div></div>
+
+<h2 id="-tính-năng-nổi-bật">🧱 Tính năng nổi bật</h2>
+
+<h3 id="core-features">Core Features</h3>
+
+<ul>
+  <li><strong>Lua 5.4 Scripting</strong>: Advanced logic và custom functions</li>
+  <li><strong>Redis Rate Limiting</strong>: Phân tán rate limiting với Redis backend</li>
+  <li><strong>CIDR IP Filtering</strong>: Whitelist/blacklist theo IP ranges</li>
+  <li><strong>SSL/TLS Termination</strong>: Modern cipher suites</li>
+  <li><strong>HTTP/2 Support</strong>: High-performance HTTP/2 protocol</li>
+</ul>
+
+<h3 id="advanced-features">Advanced Features</h3>
+
+<ul>
+  <li><strong>Custom Error Pages</strong>: Professional error handling</li>
+  <li><strong>Real-time Stats</strong>: Dashboard với metrics chi tiết</li>
+  <li><strong>Health Checks</strong>: Automatic failover</li>
+  <li><strong>Compression</strong>: Static asset compression</li>
+  <li><strong>Structured Logging</strong>: JSON format logs</li>
+  <li><strong>Load Balancing</strong>: Multiple algorithms (roundrobin, leastconn, random)</li>
+</ul>
+
+<h2 id="️-cấu-hình">⚙️ Cấu hình</h2>
+
+<h3 id="environment-variables">Environment Variables</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">TZ</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Asia/Ho_Chi_Minh</code></td>
+      <td>Container timezone</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">REDIS_HOST</code></td>
+      <td><code class="language-plaintext highlighter-rouge">127.0.0.1</code></td>
+      <td>Redis server hostname</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">REDIS_PORT</code></td>
+      <td><code class="language-plaintext highlighter-rouge">6379</code></td>
+      <td>Redis server port</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">REDIS_PASSWORD</code></td>
+      <td><em>empty</em></td>
+      <td>Redis authentication password</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="port-mapping">Port Mapping</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Container Port</th>
+      <th>Host Port</th>
+      <th>Service</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>80</td>
+      <td>18080</td>
+      <td>HTTP Load Balancer</td>
+    </tr>
+    <tr>
+      <td>7001</td>
+      <td>17001</td>
+      <td>Stats Dashboard</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="volume-mounts">Volume Mounts</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">volumes</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">./haproxy:/usr/local/etc/haproxy:rw</span>
+</code></pre></div></div>
+
+<h2 id="-cấu-trúc-file">📁 Cấu trúc file</h2>
+
+<h3 id="haproxy-configuration-structure">HAProxy Configuration Structure</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/usr/local/etc/haproxy/
+├── haproxy.cfg              # Main configuration file
+
+/nqdev/haproxy/               # NQDEV custom structure
+├── lua/                      # Lua scripts
+│   ├── redis_connector.lua   # Redis utilities
+│   ├── redis_rate_limit.lua  # Rate limiting logic
+│   └── cidr_check.lua       # IP/CIDR functions
+├── map/                      # Map files
+│   └── ipclient-rates.map   # IP-specific rates
+└── errorfiles/               # Custom error pages
+    ├── 400.http, 403.http
+    ├── 404.http, 408.http
+    ├── 429.http, 500.http
+    ├── 502.http, 503.http
+    └── 504.http
+</code></pre></div></div>
+
+<h3 id="lua-libraries">Lua Libraries</h3>
+
+<ul>
+  <li><strong>LuaSocket 3.1.0</strong>: Network communication</li>
+  <li><strong>Redis-Lua 2.0.4</strong>: Redis client</li>
+  <li><strong>LuaRocks 3.9.2</strong>: Package manager</li>
+</ul>
+
+<h2 id="-cấu-hình-nâng-cao">🔧 Cấu hình nâng cao</h2>
+
+<h3 id="1-rate-limiting-system">1. Rate Limiting System</h3>
+
+<h4 id="map-configuration-nqdevhaproxymapipclient-ratesmap">Map Configuration (<code class="language-plaintext highlighter-rouge">/nqdev/haproxy/map/ipclient-rates.map</code>)</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Format: IP/CIDR    requests_per_minute
+192.168.1.0/24      100    # Local network - 100 req/min
+10.0.0.0/8          50     # VPN users - 50 req/min
+203.113.0.0/16      30     # Specific ISP - 30 req/min
+0.0.0.0/0          10     # Default - 10 req/min
+</code></pre></div></div>
+
+<h4 id="haproxy-configuration">HAProxy Configuration</h4>
+
+<pre><code class="language-haproxy"># Rate limiting section
+frontend http_in
+    bind *:80
+
+    # Rate limiting check
+    http-request lua.action_ratelimit_req_check
+
+    # Deny if rate limit exceeded
+    http-request deny if { var(txn.is_rate_limit_reject_req) -m str true }
+
+    default_backend web_backend
+</code></pre>
+
+<h4 id="lua-rate-limiting-script">Lua Rate Limiting Script</h4>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- /nqdev/haproxy/lua/redis_rate_limit.lua</span>
+<span class="k">function</span> <span class="nf">rate_limit_check</span><span class="p">(</span><span class="n">client_ip</span><span class="p">,</span> <span class="n">txn</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">redis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">"redis"</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">client</span> <span class="o">=</span> <span class="n">redis</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">'127.0.0.1'</span><span class="p">,</span> <span class="mi">6379</span><span class="p">)</span>
+
+    <span class="c1">-- Get rate limit for IP from map</span>
+    <span class="kd">local</span> <span class="n">rate_limit</span> <span class="o">=</span> <span class="n">get_rate_limit_for_ip</span><span class="p">(</span><span class="n">client_ip</span><span class="p">)</span>
+
+    <span class="c1">-- Check current usage</span>
+    <span class="kd">local</span> <span class="n">key</span> <span class="o">=</span> <span class="s2">"rate_limit:"</span> <span class="o">..</span> <span class="n">client_ip</span>
+    <span class="kd">local</span> <span class="n">current</span> <span class="o">=</span> <span class="n">client</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">current</span> <span class="ow">and</span> <span class="nb">tonumber</span><span class="p">(</span><span class="n">current</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">rate_limit</span> <span class="k">then</span>
+        <span class="k">return</span> <span class="kc">false</span>  <span class="c1">-- Rate limit exceeded</span>
+    <span class="k">end</span>
+
+    <span class="c1">-- Increment counter</span>
+    <span class="n">client</span><span class="p">:</span><span class="n">incr</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="n">client</span><span class="p">:</span><span class="n">expire</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>  <span class="c1">-- 1 minute window</span>
+
+    <span class="k">return</span> <span class="kc">true</span>  <span class="c1">-- Allow request</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="2-ssltls-configuration">2. SSL/TLS Configuration</h3>
+
+<pre><code class="language-haproxy"># Frontend with SSL termination
+frontend https_in
+    bind *:443 ssl crt /etc/ssl/certs/server.pem alpn h2,http/1.1
+
+    # Security headers
+    http-after-response set-header Strict-Transport-Security "max-age=31536000"
+    http-response del-header server
+    http-response del-header x-powered-by
+
+    default_backend secure_backend
+
+# SSL redirect
+frontend http_redirect
+    bind *:80
+    redirect scheme https code 301
+</code></pre>
+
+<h3 id="3-load-balancing-algorithms">3. Load Balancing Algorithms</h3>
+
+<pre><code class="language-haproxy"># Round Robin (default)
+backend web_backend_rr
+    balance roundrobin
+    server web1 192.168.1.100:8080 check
+    server web2 192.168.1.101:8080 check
+    server web3 192.168.1.102:8080 check
+
+# Least Connections
+backend web_backend_lc
+    balance leastconn
+    server web1 192.168.1.100:8080 check
+    server web2 192.168.1.101:8080 check
+
+# Source IP hash
+backend web_backend_source
+    balance source
+    hash-type consistent
+    server web1 192.168.1.100:8080 check
+    server web2 192.168.1.101:8080 check
+
+# Random
+backend web_backend_random
+    balance random
+    server web1 192.168.1.100:8080 check
+    server web2 192.168.1.101:8080 check
+</code></pre>
+
+<h3 id="4-health-checks">4. Health Checks</h3>
+
+<pre><code class="language-haproxy">backend web_backend
+    # HTTP health check
+    option httpchk OPTIONS / HTTP/1.0
+    http-check expect rstatus (2|3)[0-9][0-9]
+
+    # Advanced health check
+    http-check send meth GET uri /health ver HTTP/1.1 hdr host api.example.com
+    http-check expect status 200
+    http-check expect string "healthy"
+
+    # Server definitions with health monitoring
+    server web1 192.168.1.100:8080 check inter 2s rise 2 fall 3 maxconn 500
+    server web2 192.168.1.101:8080 check inter 2s rise 2 fall 3 maxconn 500 backup
+</code></pre>
+
+<h3 id="5-advanced-routing">5. Advanced Routing</h3>
+
+<pre><code class="language-haproxy">frontend advanced_routing
+    bind *:80
+
+    # Host-based routing
+    acl is_api hdr(host) -i api.example.com
+    acl is_admin hdr(host) -i admin.example.com
+
+    # Path-based routing
+    acl is_api_v1 path_beg /api/v1
+    acl is_api_v2 path_beg /api/v2
+
+    # Geographic routing (with GeoIP)
+    acl is_vietnam src_cc VN
+    acl is_asia src_cc JP KR TH SG
+
+    # Route to appropriate backends
+    use_backend api_v1_backend if is_api is_api_v1
+    use_backend api_v2_backend if is_api is_api_v2
+    use_backend admin_backend if is_admin
+    use_backend asia_backend if is_asia
+    use_backend vietnam_backend if is_vietnam
+
+    default_backend default_backend
+</code></pre>
+
+<h2 id="-monitoring--stats">📊 Monitoring &amp; Stats</h2>
+
+<h3 id="stats-dashboard">Stats Dashboard</h3>
+
+<p><strong>URL</strong>: http://localhost:17001<br />
+<strong>Credentials</strong>: admin:UaA84JvFZzNW</p>
+
+<h4 id="dashboard-features">Dashboard Features</h4>
+
+<ul>
+  <li>Real-time connection metrics</li>
+  <li>Backend server status</li>
+  <li>Request/response statistics</li>
+  <li>Error rates và response times</li>
+  <li>Server health indicators</li>
+</ul>
+
+<h3 id="rate-limiting-headers">Rate Limiting Headers</h3>
+
+<p>HAProxy tự động thêm headers để client tracking:</p>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">x-ratelimit-limit: 100
+x-ratelimit-usage: 23
+x-ratelimit-remaining: 77
+x-ratelimit-retry-after: 60
+x-ratelimit-timestamp: 1699891200
+</span></code></pre></div></div>
+
+<h3 id="structured-logging">Structured Logging</h3>
+
+<pre><code class="language-haproxy"># JSON format logging
+log-format "{\"type\":\"haproxy\",\"timestamp\":%Ts,\"frontend\":\"%f\",\"client_ip\":\"%ci\",\"status\":%ST,\"response_time\":%Tr,\"backend\":\"%b/%s\"}"
+</code></pre>
+
+<p>Example log output:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"haproxy"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1699891200</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"frontend"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http_in"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"client_ip"</span><span class="p">:</span><span class="w"> </span><span class="s2">"192.168.1.100"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"response_time"</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"backend"</span><span class="p">:</span><span class="w"> </span><span class="s2">"web_backend/server1"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="-lua-scripting">🔧 Lua Scripting</h2>
+
+<h3 id="1-redis-connector">1. Redis Connector</h3>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- /nqdev/haproxy/lua/redis_connector.lua</span>
+<span class="kd">local</span> <span class="n">redis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">"redis"</span><span class="p">)</span>
+
+<span class="k">function</span> <span class="nf">connect_redis</span><span class="p">()</span>
+    <span class="kd">local</span> <span class="n">host</span> <span class="o">=</span> <span class="nb">os.getenv</span><span class="p">(</span><span class="s2">"REDIS_HOST"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"127.0.0.1"</span>
+    <span class="kd">local</span> <span class="n">port</span> <span class="o">=</span> <span class="nb">tonumber</span><span class="p">(</span><span class="nb">os.getenv</span><span class="p">(</span><span class="s2">"REDIS_PORT"</span><span class="p">))</span> <span class="ow">or</span> <span class="mi">6379</span>
+    <span class="kd">local</span> <span class="n">password</span> <span class="o">=</span> <span class="nb">os.getenv</span><span class="p">(</span><span class="s2">"REDIS_PASSWORD"</span><span class="p">)</span>
+
+    <span class="kd">local</span> <span class="n">client</span> <span class="o">=</span> <span class="n">redis</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">password</span> <span class="ow">and</span> <span class="n">password</span> <span class="o">~=</span> <span class="s2">""</span> <span class="k">then</span>
+        <span class="n">client</span><span class="p">:</span><span class="n">auth</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">return</span> <span class="n">client</span>
+<span class="k">end</span>
+
+<span class="k">function</span> <span class="nf">redis_get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">client</span> <span class="o">=</span> <span class="n">connect_redis</span><span class="p">()</span>
+    <span class="kd">local</span> <span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="n">client</span><span class="p">:</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">result</span>
+<span class="k">end</span>
+
+<span class="k">function</span> <span class="nf">redis_set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">ttl</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">client</span> <span class="o">=</span> <span class="n">connect_redis</span><span class="p">()</span>
+    <span class="n">client</span><span class="p">:</span><span class="n">set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ttl</span> <span class="k">then</span>
+        <span class="n">client</span><span class="p">:</span><span class="n">expire</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">ttl</span><span class="p">)</span>
+    <span class="k">end</span>
+    <span class="n">client</span><span class="p">:</span><span class="n">close</span><span class="p">()</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="2-cidr-matching">2. CIDR Matching</h3>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- /nqdev/haproxy/lua/cidr_check.lua</span>
+<span class="k">function</span> <span class="nf">ip_to_int</span><span class="p">(</span><span class="n">ip_str</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">parts</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">part</span> <span class="k">in</span> <span class="n">ip_str</span><span class="p">:</span><span class="n">gmatch</span><span class="p">(</span><span class="s2">"(%d+)"</span><span class="p">)</span> <span class="k">do</span>
+        <span class="nb">table.insert</span><span class="p">(</span><span class="n">parts</span><span class="p">,</span> <span class="nb">tonumber</span><span class="p">(</span><span class="n">part</span><span class="p">))</span>
+    <span class="k">end</span>
+    <span class="k">return</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16777216</span> <span class="o">+</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">65536</span> <span class="o">+</span> <span class="n">parts</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">+</span> <span class="n">parts</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+<span class="k">end</span>
+
+<span class="k">function</span> <span class="nf">cidr_match</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="n">cidr</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">ip_addr</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="n">cidr</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">"([^/]+)/(%d+)"</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ip_addr</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">prefix</span> <span class="k">then</span>
+        <span class="k">return</span> <span class="kc">false</span>
+    <span class="k">end</span>
+
+    <span class="kd">local</span> <span class="n">ip_int</span> <span class="o">=</span> <span class="n">ip_to_int</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">cidr_int</span> <span class="o">=</span> <span class="n">ip_to_int</span><span class="p">(</span><span class="n">ip_addr</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">bit32</span><span class="p">.</span><span class="n">lshift</span><span class="p">(</span><span class="mh">0xFFFFFFFF</span><span class="p">,</span> <span class="mi">32</span> <span class="o">-</span> <span class="nb">tonumber</span><span class="p">(</span><span class="n">prefix</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">bit32</span><span class="p">.</span><span class="n">band</span><span class="p">(</span><span class="n">ip_int</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span> <span class="o">==</span> <span class="n">bit32</span><span class="p">.</span><span class="n">band</span><span class="p">(</span><span class="n">cidr_int</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1">-- Check if IP is in allowed CIDR ranges</span>
+<span class="k">function</span> <span class="nf">is_ip_allowed</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="n">allowed_cidrs</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">cidr</span> <span class="k">in</span> <span class="nb">ipairs</span><span class="p">(</span><span class="n">allowed_cidrs</span><span class="p">)</span> <span class="k">do</span>
+        <span class="k">if</span> <span class="n">cidr_match</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="n">cidr</span><span class="p">)</span> <span class="k">then</span>
+            <span class="k">return</span> <span class="kc">true</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+    <span class="k">return</span> <span class="kc">false</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="3-dynamic-response-generation">3. Dynamic Response Generation</h3>
+
+<div class="language-lua highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Service cho rate limit rejection</span>
+<span class="n">core</span><span class="p">.</span><span class="n">register_service</span><span class="p">(</span><span class="s2">"action_ratelimit_check_deny_429"</span><span class="p">,</span> <span class="s2">"http"</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="n">applet</span><span class="p">)</span>
+    <span class="n">applet</span><span class="p">:</span><span class="n">set_status</span><span class="p">(</span><span class="mi">429</span><span class="p">)</span>
+    <span class="n">applet</span><span class="p">:</span><span class="n">add_header</span><span class="p">(</span><span class="s2">"content-type"</span><span class="p">,</span> <span class="s2">"application/json"</span><span class="p">)</span>
+    <span class="n">applet</span><span class="p">:</span><span class="n">add_header</span><span class="p">(</span><span class="s2">"retry-after"</span><span class="p">,</span> <span class="s2">"60"</span><span class="p">)</span>
+
+    <span class="kd">local</span> <span class="n">client_ip</span> <span class="o">=</span> <span class="n">applet</span><span class="p">.</span><span class="n">sf</span><span class="p">:</span><span class="n">src</span><span class="p">()</span>
+    <span class="kd">local</span> <span class="n">response</span> <span class="o">=</span> <span class="nb">string.format</span><span class="p">(</span><span class="s1">'{"status":429,"message":"Too Many Requests","client_ip":"%s","retry_after":60}'</span><span class="p">,</span> <span class="n">client_ip</span><span class="p">)</span>
+
+    <span class="n">applet</span><span class="p">:</span><span class="n">start_response</span><span class="p">()</span>
+    <span class="n">applet</span><span class="p">:</span><span class="n">send</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="k">end</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="️-management--testing">🛠️ Management &amp; Testing</h2>
+
+<h3 id="configuration-testing">Configuration Testing</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Test HAProxy configuration</span>
+docker-compose <span class="nb">exec </span>haproxy-server-custom haproxy <span class="nt">-c</span> <span class="nt">-f</span> /usr/local/etc/haproxy/haproxy.cfg
+
+<span class="c"># Test Lua scripts syntax</span>
+docker-compose <span class="nb">exec </span>haproxy-server-custom lua /nqdev/haproxy/lua/redis_rate_limit.lua
+
+<span class="c"># Reload configuration without downtime</span>
+docker-compose <span class="nb">exec </span>haproxy-server-custom haproxy <span class="nt">-D</span> <span class="nt">-f</span> /usr/local/etc/haproxy/haproxy.cfg <span class="nt">-p</span> /var/run/haproxy.pid <span class="nt">-sf</span> <span class="si">$(</span><span class="nb">cat</span> /var/run/haproxy.pid<span class="si">)</span>
+</code></pre></div></div>
+
+<h3 id="rate-limiting-test">Rate Limiting Test</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Test rate limiting với curl</span>
+<span class="k">for </span>i <span class="k">in</span> <span class="o">{</span>1..15<span class="o">}</span><span class="p">;</span> <span class="k">do
+  </span>curl <span class="nt">-H</span> <span class="s2">"Host: example.com"</span> http://localhost:18080/ <span class="se">\</span>
+    <span class="nt">-w</span> <span class="s2">"Request </span><span class="nv">$i</span><span class="s2">: HTTP %{http_code}, Time: %{time_total}s</span><span class="se">\n</span><span class="s2">"</span> <span class="se">\</span>
+    <span class="nt">-o</span> /dev/null <span class="nt">-s</span>
+  <span class="nb">sleep </span>0.1
+<span class="k">done</span>
+</code></pre></div></div>
+
+<h3 id="load-testing">Load Testing</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Apache Bench test</span>
+ab <span class="nt">-n</span> 1000 <span class="nt">-c</span> 50 <span class="nt">-H</span> <span class="s2">"Host: api.example.com"</span> http://localhost:18080/
+
+<span class="c"># wrk test</span>
+wrk <span class="nt">-t4</span> <span class="nt">-c50</span> <span class="nt">-d30s</span> <span class="nt">--timeout</span> 2s http://localhost:18080/
+</code></pre></div></div>
+
+<h3 id="redis-connectivity-test">Redis Connectivity Test</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Test Redis connection from HAProxy</span>
+docker-compose <span class="nb">exec </span>haproxy-server-custom lua <span class="nt">-e</span> <span class="s2">"
+local redis = require('redis')
+local client = redis.connect('</span><span class="nv">$REDIS_HOST</span><span class="s2">', </span><span class="nv">$REDIS_PORT</span><span class="s2">)
+print('Redis connection: OK')
+client:close()
+"</span>
+</code></pre></div></div>
+
+<h2 id="-troubleshooting">🔍 Troubleshooting</h2>
+
+<h3 id="common-issues">Common Issues</h3>
+
+<h4 id="1-backend-servers-unavailable">1. Backend servers unavailable</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Check backend status in stats</span>
+curl http://admin:UaA84JvFZzNW@localhost:17001/<span class="p">;</span>csv
+
+<span class="c"># Manual health check</span>
+curl <span class="nt">-I</span> http://192.168.1.100:8080/health
+</code></pre></div></div>
+
+<h4 id="2-rate-limiting-not-working">2. Rate limiting not working</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Check Redis connectivity</span>
+docker-compose <span class="nb">exec </span>haproxy-server-custom redis-cli <span class="nt">-h</span> <span class="nv">$REDIS_HOST</span> ping
+
+<span class="c"># Debug rate limit script</span>
+docker-compose logs haproxy-server-custom | <span class="nb">grep</span> <span class="s2">"rate.*limit"</span>
+</code></pre></div></div>
+
+<h4 id="3-ssl-issues">3. SSL issues</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Test SSL certificate</span>
+openssl s_client <span class="nt">-connect</span> localhost:443 <span class="nt">-servername</span> example.com
+
+<span class="c"># Check certificate expiry</span>
+openssl x509 <span class="nt">-in</span> /path/to/cert.pem <span class="nt">-text</span> <span class="nt">-noout</span> | <span class="nb">grep</span> <span class="s2">"Not After"</span>
+</code></pre></div></div>
+
+<h4 id="4-performance-issues">4. Performance issues</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Monitor connection stats</span>
+watch <span class="nt">-n</span> 1 <span class="s1">'curl -s http://admin:UaA84JvFZzNW@localhost:17001/;csv | head -1'</span>
+
+<span class="c"># Check system resources</span>
+docker stats haproxy-server-custom
+</code></pre></div></div>
+
+<h3 id="debug-commands">Debug Commands</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Container logs với filtering</span>
+docker-compose logs haproxy-server-custom | <span class="nb">grep</span> <span class="nt">-E</span> <span class="s2">"(ERROR|WARN|rate.*limit)"</span>
+
+<span class="c"># HAProxy process info</span>
+docker-compose <span class="nb">exec </span>haproxy-server-custom ps aux | <span class="nb">grep </span>haproxy
+
+<span class="c"># Network connectivity</span>
+docker-compose <span class="nb">exec </span>haproxy-server-custom netstat <span class="nt">-tlnp</span>
+
+<span class="c"># Configuration dump</span>
+docker-compose <span class="nb">exec </span>haproxy-server-custom haproxy <span class="nt">-vv</span>
+</code></pre></div></div>
+
+<h2 id="-production-deployment">🚀 Production Deployment</h2>
+
+<h3 id="high-availability-setup">High Availability Setup</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># docker-compose.prod.yml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.8"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">haproxy-primary</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/haproxy-alpine-custom:3.1.5</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">REDIS_HOST=redis-cluster-primary</span>
+      <span class="pi">-</span> <span class="s">REDIS_PORT=6379</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">frontend</span>
+      <span class="pi">-</span> <span class="s">backend</span>
+    <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">placement</span><span class="pi">:</span>
+        <span class="na">constraints</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">node.role == manager</span><span class="pi">]</span>
+
+  <span class="na">haproxy-backup</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nqdev/haproxy-alpine-custom:3.1.5</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">REDIS_HOST=redis-cluster-backup</span>
+      <span class="pi">-</span> <span class="s">REDIS_PORT=6379</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">frontend</span>
+      <span class="pi">-</span> <span class="s">backend</span>
+    <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">placement</span><span class="pi">:</span>
+        <span class="na">constraints</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">node.role == worker</span><span class="pi">]</span>
+
+<span class="na">networks</span><span class="pi">:</span>
+  <span class="na">frontend</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">overlay</span>
+  <span class="na">backend</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">overlay</span>
+</code></pre></div></div>
+
+<h3 id="performance-tuning">Performance Tuning</h3>
+
+<pre><code class="language-haproxy">global
+    # Process optimization
+    nbproc 4                    # CPU cores
+    nbthread 2                  # Threads per process
+
+    # Connection limits
+    maxconn 50000
+    ulimit-n 100050
+
+    # Memory tuning
+    tune.bufsize 32768
+    tune.maxrewrite 8192
+
+    # SSL optimization
+    ssl-default-bind-ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384
+    tune.ssl.default-dh-param 2048
+
+defaults
+    # Timeouts
+    timeout client 120s
+    timeout server 120s
+    timeout http-keep-alive 10s
+    timeout http-request 10s
+
+    # Connection optimization
+    option http-keep-alive
+    option forwardfor
+</code></pre>
+
+<h3 id="security-configuration">Security Configuration</h3>
+
+<pre><code class="language-haproxy"># DDoS protection
+frontend ddos_protection
+    # Connection rate limiting
+    stick-table type ip size 100k expire 30s store http_req_rate(10s)
+    http-request track-sc0 src
+    http-request deny if { sc_http_req_rate(0) gt 20 }
+
+    # Block suspicious patterns
+    acl abuse_req url_reg -i (\.php|admin|phpmyadmin)
+    http-request deny if abuse_req
+
+    # Geographic restrictions
+    acl blocked_countries src_cc CN RU
+    http-request deny if blocked_countries
+</code></pre>
+
+<h2 id="-examples">📚 Examples</h2>
+
+<h3 id="example-1-api-gateway">Example 1: API Gateway</h3>
+
+<pre><code class="language-haproxy"># API Gateway configuration
+frontend api_gateway
+    bind *:80
+
+    # Authentication check
+    acl has_auth_header req.hdr(Authorization) -m found
+    http-request deny if !has_auth_header
+
+    # Rate limiting per API key
+    http-request lua.extract_api_key
+    stick-table type string len 32 size 10k expire 60s store http_req_rate(60s)
+    http-request track-sc0 var(txn.api_key) table api_rate_limit
+    http-request deny if { sc_http_req_rate(0,api_rate_limit) gt 1000 }
+
+    # Route to services
+    acl is_user_service path_beg /users
+    acl is_order_service path_beg /orders
+
+    use_backend user_service if is_user_service
+    use_backend order_service if is_order_service
+
+backend user_service
+    balance roundrobin
+    option httpchk GET /health
+    server user1 user-service-1:8080 check
+    server user2 user-service-2:8080 check
+
+backend order_service
+    balance leastconn
+    option httpchk GET /health
+    server order1 order-service-1:8080 check
+    server order2 order-service-2:8080 check
+</code></pre>
+
+<h3 id="example-2-blue-green-deployment">Example 2: Blue-Green Deployment</h3>
+
+<pre><code class="language-haproxy"># Blue-Green deployment setup
+frontend blue_green_frontend
+    bind *:80
+
+    # Traffic switching via header/cookie
+    acl is_canary_user hdr(X-Canary-User) -m str true
+    acl has_canary_cookie cook(canary) -m str enabled
+
+    use_backend green_backend if is_canary_user or has_canary_cookie
+    default_backend blue_backend
+
+backend blue_backend
+    # Current production
+    server prod1 prod-v1-1:8080 check
+    server prod2 prod-v1-2:8080 check
+
+backend green_backend
+    # New version
+    server staging1 prod-v2-1:8080 check
+    server staging2 prod-v2-2:8080 check
+</code></pre>
+
+<h3 id="example-3-websocket-load-balancing">Example 3: WebSocket Load Balancing</h3>
+
+<pre><code class="language-haproxy"># WebSocket support with sticky sessions
+frontend websocket_frontend
+    bind *:80
+
+    # WebSocket detection
+    acl is_websocket hdr(Upgrade) -i websocket
+    acl is_websocket path_beg /ws
+
+    use_backend websocket_backend if is_websocket
+
+backend websocket_backend
+    # Sticky sessions for WebSocket
+    balance source
+    hash-type consistent
+
+    # WebSocket timeout
+    timeout tunnel 3600s
+
+    server ws1 websocket-1:8080 check
+    server ws2 websocket-2:8080 check
+</code></pre>
+
+<hr />
+
+<h2 id="-support">📞 Support</h2>
+
+<ul>
+  <li><strong>Documentation</strong>: <a href="https://docs.haproxy.org/3.1/intro.html">HAProxy 3.1 Guide</a></li>
+  <li><strong>Lua API</strong>: <a href="https://www.arpalert.org/src/haproxy-lua-api/3.1/index.html">HAProxy Lua API</a></li>
+  <li><strong>Issues</strong>: <a href="https://github.com/nqdev-group/containers/issues">GitHub Issues</a></li>
+</ul>
+
+<hr />
+
+<p><strong>NQDEV Team</strong> - Platform Engineering<br />
+📧 quynh@nhquydev.net | 🌐 <a href="https://nhquydev.net">nhquydev.net</a></p>
+
+      </div>
+    </main>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/containers/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <h3>NQDEV Containers</h3>
+        <p>Production-ready Docker containers cho Vietnamese developers</p>
+        <ul class="contact-list">
+          <li class="p-name">NQDEV Containers Documentation</li><li><a class="u-email" href="mailto:quynh@nhquydev.net">quynh@nhquydev.net</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <h3>Quick Links</h3>
+        <ul class="quick-links">
+          <li><a href="/containers/nqdev-containers-guide">📋 Tổng quan</a></li>
+          <li><a href="/containers/nginx-guide">🌐 NGINX Guide</a></li>
+          <li><a href="/containers/haproxy-guide">⚖️ HAProxy Guide</a></li>
+          <li><a href="/containers/examples-best-practices">💡 Best Practices</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <h3>Resources</h3>
+        <ul class="resource-links">
+          <li><a href="https://github.com/nqdev-group/containers">📦 GitHub Repository</a></li>
+          <li><a href="https://github.com/nqdev-group/containers/packages">🐳 Container Registry</a></li>
+          <li><a href="https://github.com/nqdev-group/containers/issues">🐛 Report Issues</a></li>
+          <li><a href="https://nhquydev.net">🌐 NQDEV Website</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-info">
+        <p>&copy; 2025 NQDEV Team. Licensed under <a
+            href="https://github.com/nqdev-group/containers/blob/main/LICENSE">MIT License</a>.</p>
+        <p>Built with ❤️ in Vietnam 🇻🇳 | Powered by <a href="https://jekyllrb.com/">Jekyll</a></p>
+      </div>
+
+      <div class="social-links"><a href="https://github.com/nqdev-group">
+          <svg class="svg-icon">
+            <use xlink:href="/containers/assets/minima-social-icons.svg#github"></use>
+          </svg>
+        </a><a href="https://linkedin.com/in/nhquydev">
+          <svg class="svg-icon">
+            <use xlink:href="/containers/assets/minima-social-icons.svg#linkedin"></use>
+          </svg>
+        </a></div>
+    </div>
+
+  </div>
+
+</footer>
+
+  </body>
+
+</html>

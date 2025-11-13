@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Service Guides | NQDEV Containers Documentation</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Service Guides" />
+<meta name="author" content="NQDEV Team" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations." />
+<meta property="og:description" content="Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations." />
+<link rel="canonical" href="https://nqdev-group.github.io/containers/service-guides.html" />
+<meta property="og:url" content="https://nqdev-group.github.io/containers/service-guides.html" />
+<meta property="og:site_name" content="NQDEV Containers Documentation" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Service Guides" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"NQDEV Team","url":"https://nhquydev.net"},"description":"Comprehensive documentation for NQDEV Docker containers including NGINX, HAProxy, PostgreSQL, WordPress, and RabbitMQ with production-ready configurations.","headline":"Service Guides","url":"https://nqdev-group.github.io/containers/service-guides.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/containers/assets/css/style.css">
+  <link rel="stylesheet" href="/containers/assets/css/custom.css"><link type="application/atom+xml" rel="alternate" href="https://nqdev-group.github.io/containers/feed.xml" title="NQDEV Containers Documentation" /><!-- Custom favicon -->
+  <link rel="icon" type="image/x-icon" href="/containers/assets/images/favicon.ico">
+
+  <!-- Syntax highlighting -->
+  <link rel="stylesheet" href="/containers/assets/css/syntax.css">
+
+  <!-- Mermaid for diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default'
+    });
+  </script>
+</head>
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/containers/">
+      <span class="site-logo">🐳</span> NQDEV Containers Documentation
+    </a><nav class="site-nav">
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+      <label for="nav-trigger">
+        <span class="menu-icon">
+          <svg viewBox="0 0 18 15" width="18px" height="15px">
+            <path
+              d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z" />
+          </svg>
+        </span>
+      </label>
+
+      <div class="trigger">
+        <a class="page-link" href="/containers/">🏠 Trang chủ</a>
+        <a class="page-link" href="/containers/nqdev-containers-guide">📋 Tổng quan</a>
+        <a class="page-link" href="/containers/nginx-guide">🌐 NGINX</a>
+        <a class="page-link" href="/containers/haproxy-guide">⚖️ HAProxy</a>
+        <a class="page-link" href="/containers/examples-best-practices">💡 Examples</a>
+        <a class="page-link" href="https://github.com/nqdev-group/containers">
+          <span class="github-icon">⭐</span> GitHub
+        </a>
+      </div>
+    </nav></div>
+</header>
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h1 id="service-guides">Service Guides</h1>
+
+<p>Hướng dẫn chi tiết cho từng container service trong NQDEV ecosystem.</p>
+
+<h2 id="-available-services">📦 Available Services</h2>
+
+<h3 id="-nginx-container">🌐 NGINX Container</h3>
+
+<ul>
+  <li><strong>Image</strong>: <code class="language-plaintext highlighter-rouge">nqdev/nginx:1.27.2-alpine-vhs-custom-1.5.1</code></li>
+  <li><strong>Features</strong>: Custom modules, GeoIP, SSL/TLS, Rate limiting</li>
+  <li><strong>Use cases</strong>: Reverse proxy, Load balancer, Web server</li>
+</ul>
+
+<h3 id="️-haproxy-container">⚖️ HAProxy Container</h3>
+
+<ul>
+  <li><strong>Image</strong>: <code class="language-plaintext highlighter-rouge">nqdev/haproxy-alpine-custom:3.1.5</code></li>
+  <li><strong>Features</strong>: Lua scripting, Redis integration, SSL termination</li>
+  <li><strong>Use cases</strong>: Load balancing, Traffic management, High availability</li>
+</ul>
+
+<h3 id="️-postgresql-container">🗄️ PostgreSQL Container</h3>
+
+<ul>
+  <li><strong>Image</strong>: <code class="language-plaintext highlighter-rouge">postgres:17.5-custom</code></li>
+  <li><strong>Features</strong>: pgAgent scheduler, HTTP extension, Job automation</li>
+  <li><strong>Use cases</strong>: Primary database, Scheduled jobs, HTTP requests</li>
+</ul>
+
+<h3 id="-wordpress-container">📱 WordPress Container</h3>
+
+<ul>
+  <li><strong>Image</strong>: WordPress 6.8.3 on Debian 12</li>
+  <li><strong>Features</strong>: PHP 8.4, Apache, SSL ready, WP-CLI</li>
+  <li><strong>Use cases</strong>: CMS, Blog, E-commerce platform</li>
+</ul>
+
+<h3 id="-rabbitmq-container">🐰 RabbitMQ Container</h3>
+
+<ul>
+  <li><strong>Image</strong>: <code class="language-plaintext highlighter-rouge">bitnamilegacy/rabbitmq:4.1</code></li>
+  <li><strong>Features</strong>: Clustering, Management UI, SSL support</li>
+  <li><strong>Use cases</strong>: Message broker, Task queues, Microservices communication</li>
+</ul>
+
+<h2 id="-quick-navigation">🚀 Quick Navigation</h2>
+
+<p>Choose the service guide you need:</p>
+
+<div class="grid-container">
+  <div class="grid-item">
+    <h3><a href="/containers/nginx-guide">🌐 NGINX Guide</a></h3>
+    <p>Web server với custom modules, rate limiting, và advanced proxy features.</p>
+    <ul>
+      <li>Custom modules integration</li>
+      <li>GeoIP configuration</li>
+      <li>SSL/TLS optimization</li>
+      <li>Performance tuning</li>
+    </ul>
+  </div>
+  
+  <div class="grid-item">
+    <h3><a href="/containers/haproxy-guide">⚖️ HAProxy Guide</a></h3>
+    <p>Load balancer với Lua scripting và Redis rate limiting.</p>
+    <ul>
+      <li>Lua scripting examples</li>
+      <li>Redis integration</li>
+      <li>SSL termination</li>
+      <li>Health checks</li>
+    </ul>
+  </div>
+</div>
+
+<h2 id="-general-service-management">🔧 General Service Management</h2>
+
+<h3 id="start-services">Start Services</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>nqdev/[service-name]/
+docker-compose up <span class="nt">-d</span> <span class="nt">--build</span> <span class="nt">--force-recreate</span> <span class="nt">--remove-orphans</span>
+</code></pre></div></div>
+
+<h3 id="health-monitoring">Health Monitoring</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Check all containers</span>
+docker-compose ps
+
+<span class="c"># View logs</span>
+docker-compose logs <span class="nt">-f</span> <span class="o">[</span>service-name]
+
+<span class="c"># Resource usage</span>
+docker stats <span class="si">$(</span>docker-compose ps <span class="nt">-q</span><span class="si">)</span>
+</code></pre></div></div>
+
+<h3 id="common-troubleshooting">Common Troubleshooting</h3>
+
+<ul>
+  <li><strong>Port conflicts</strong>: Check <code class="language-plaintext highlighter-rouge">netstat -tlnp | grep :[port]</code></li>
+  <li><strong>Permission issues</strong>: <code class="language-plaintext highlighter-rouge">sudo chown -R 1001:1001 ./data-*</code></li>
+  <li><strong>Memory limits</strong>: Adjust in docker-compose.yml</li>
+  <li><strong>Network connectivity</strong>: Verify container networks</li>
+</ul>
+
+      </div>
+    </main>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/containers/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <h3>NQDEV Containers</h3>
+        <p>Production-ready Docker containers cho Vietnamese developers</p>
+        <ul class="contact-list">
+          <li class="p-name">NQDEV Containers Documentation</li><li><a class="u-email" href="mailto:quynh@nhquydev.net">quynh@nhquydev.net</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <h3>Quick Links</h3>
+        <ul class="quick-links">
+          <li><a href="/containers/nqdev-containers-guide">📋 Tổng quan</a></li>
+          <li><a href="/containers/nginx-guide">🌐 NGINX Guide</a></li>
+          <li><a href="/containers/haproxy-guide">⚖️ HAProxy Guide</a></li>
+          <li><a href="/containers/examples-best-practices">💡 Best Practices</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <h3>Resources</h3>
+        <ul class="resource-links">
+          <li><a href="https://github.com/nqdev-group/containers">📦 GitHub Repository</a></li>
+          <li><a href="https://github.com/nqdev-group/containers/packages">🐳 Container Registry</a></li>
+          <li><a href="https://github.com/nqdev-group/containers/issues">🐛 Report Issues</a></li>
+          <li><a href="https://nhquydev.net">🌐 NQDEV Website</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-info">
+        <p>&copy; 2025 NQDEV Team. Licensed under <a
+            href="https://github.com/nqdev-group/containers/blob/main/LICENSE">MIT License</a>.</p>
+        <p>Built with ❤️ in Vietnam 🇻🇳 | Powered by <a href="https://jekyllrb.com/">Jekyll</a></p>
+      </div>
+
+      <div class="social-links"><a href="https://github.com/nqdev-group">
+          <svg class="svg-icon">
+            <use xlink:href="/containers/assets/minima-social-icons.svg#github"></use>
+          </svg>
+        </a><a href="https://linkedin.com/in/nhquydev">
+          <svg class="svg-icon">
+            <use xlink:href="/containers/assets/minima-social-icons.svg#linkedin"></use>
+          </svg>
+        </a></div>
+    </div>
+
+  </div>
+
+</footer>
+
+  </body>
+
+</html>
