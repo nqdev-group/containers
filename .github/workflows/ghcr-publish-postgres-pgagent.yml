@@ -38,7 +38,7 @@ jobs:
     steps:
       # 2. Checkout code từ repository
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       # 4. Đăng nhập vào GitHub Container Registry
       - name: Log in to GitHub Container Registry
