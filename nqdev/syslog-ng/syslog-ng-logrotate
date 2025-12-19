@@ -1,0 +1,8 @@
+/var/log/syslog-ng/*.log {
+    daily                # Quay vòng log mỗi ngày
+    rotate 7             # Giữ lại tối đa 7 file log gần nhất
+    compress             # Nén các file log cũ
+    missingok            # Không báo lỗi nếu không tìm thấy file log
+    notifempty           # Không xoá log nếu file rỗng
+    create 0640 syslog-ng syslog-ng # Quyền tạo file log mới
+}

@@ -1,0 +1,44 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Syslog-NG Docker Compose File
+# -----------------------------------------
+# START: docker-compose up -d --build --force-recreate --remove-orphans
+# STOP: docker-compose down -v
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+services:
+  rsyslog:
+    image: balabit/syslog-ng:latest
+    container_name: rsyslog
+    restart: always
+    user: root
+    # network_mode: "host"
+    ports:
+      - "192.168.1.200:30001:514/udp"
+    environment:
+      - TZ:Asia/Ho_Chi_Minh
+    # env_file:
+    #   - .env
+    # command: >
+    #   sh -c "haproxy -f /usr/local/etc/haproxy/haproxy.cfg"
+    volumes:
+      - ./mnt/logs:/var/log/syslog-ng  # Mount thư mục logs vào container
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Để kết nối đến localhost của host từ container
+      - "localhost:192.168.1.200"
+      - "minipc-quyit:192.168.1.200"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      - 1.1.1.1
+      - 1.0.0.1
+    deploy:
+      resources:
+        limits:
+          cpus: "0.80" # Giới hạn 80% CPU
+          memory: "1G" # Giới hạn 3.2GB RAM (80% của 4GB)
+        reservations:
+          memory: "256M" # Đảm bảo container có ít nhất 256MB RAM
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5g"

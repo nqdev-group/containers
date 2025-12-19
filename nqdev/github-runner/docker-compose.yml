@@ -1,0 +1,21 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Docker Compose file for GitHub Actions Runner deployment
+# Create self-hosted runner
+#   https://github.com/organizations/nqdev-group/settings/actions/runners/new?arch=x64&os=linux
+# Using self-hosted runners in a workflow
+#   https://docs.github.com/en/actions/hosting-your-own-runners/using-self-hosted-runners-in-a-workflow
+# -----------------------------------------
+# START: docker-compose up -d --build --force-recreate --remove-orphans
+# STOP: docker-compose down -v
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+services:
+  github-runner:
+    build: .
+    container_name: github-runner
+    environment:
+      - GITHUB_URL=${GITHUB_URL:-https://github.com/your-repository}
+      - RUNNER_TOKEN=${RUNNER_TOKEN:-your-generated-token}
+    volumes:
+      - ./actions-runner:/actions-runner
+    restart: always

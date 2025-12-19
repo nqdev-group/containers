@@ -1,0 +1,3 @@
+[submodule "minideb"]
+	path = minideb
+	url = https://nguyenquy0710@github.com/nqdev-group/minideb.git
