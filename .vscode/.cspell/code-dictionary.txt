@@ -47,7 +47,9 @@ rootfs
 sapo
 spreadsheetml
 swal
+tini
 totp
+trixie
 tzdata
 uuidv
 vietqr

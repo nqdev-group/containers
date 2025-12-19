@@ -1,12 +1,12 @@
 :: =============================================================================
 :: Script: git-cleaner.bat
-:: Description: Clean up and optimize the local Git repository.
+:: Description: Clean up the local Git repository by performing garbage collection.
 :: Author: Nguyen Quy
-:: Date: 2025-11-13
-:: Version: 1.1
-:: Last Updated: 2025-11-13
+:: Date: 2025-11-27
+:: Version: 1.0
+:: Last Updated: 2025-11-27
 :: Dependencies: Git
-:: Usage: Double-click this script or run it from the command line.
+:: Usage: Just double-click this script or run it from the command line.
 :: =============================================================================
 
 @echo off
@@ -14,41 +14,16 @@ setlocal EnableDelayedExpansion
 chcp 65001 > nul
 cls
 
-echo ===============================================
-echo   🧹 Git Repository Cleaner & Optimizer
-echo ===============================================
+:: Show current directory
+echo === Current Directory: %cd%
+echo .
 
-:: Check if Git is installed
-git --version >nul 2>&1
-if errorlevel 1 (
-    echo [❌] Git is not installed or not in PATH.
-    echo Please install Git before running this script.
-    pause
-    exit /b 1
-)
+@REM Garbage Collection
+@REM Dọn Dẹp Thư Mục .git
+@REM git-gc - Cleanup unnecessary files and optimize the local repository
+@REM git gc [--aggressive] [--auto] [--quiet] [--prune=<date> | --no-prune] [--force] [--keep-largest-pack]
 
-:: Check if we are inside a Git repository
-git rev-parse --is-inside-work-tree >nul 2>&1
-if errorlevel 1 (
-    echo [⚠️] This folder is not a Git repository.
-    echo Please navigate to a valid Git repository folder.
-    pause
-    exit /b 1
-)
+@REM thu dọn rác, nén dữ liệu và loại bỏ các đối tượng không còn tham chiếu từ bất kỳ nhánh nào
+git gc --prune=now --force --aggressive
 
-echo [🔍] Cleaning and optimizing Git repository...
-echo.
-
-:: Perform garbage collection and cleanup
-git gc --prune=now --aggressive --force
-
-if %errorlevel%==0 (
-    echo.
-    echo [✅] Git cleanup and optimization completed successfully!
-) else (
-    echo.
-    echo [❌] Something went wrong during cleanup.
-)
-
-echo.
 pause
