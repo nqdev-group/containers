@@ -21,11 +21,11 @@ RUN apt-get update && \
 
 RUN git clone https://github.com/pramsey/pgsql-http.git /pgsql-http && cd /pgsql-http && make && make install
 
-FROM postgres:${VERSION}-alpine3.21
+FROM postgres:${VERSION}
 
 # Thêm metadata labels
 LABEL org.opencontainers.image.title="PostgreSQL with Extensions" \
-  org.opencontainers.image.version="17.5-alpine3.21" \
+  org.opencontainers.image.version="17.5" \
   org.opencontainers.image.description="PostgreSQL with pgagent, http extension, and dev tools" \
   org.opencontainers.image.authors="QuyIT Platform <quynh@nhquydev.net>" \
   org.opencontainers.image.licenses="MIT"
