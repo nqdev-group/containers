@@ -45,7 +45,7 @@ jobs:
       # Try to setup pages, but continue if it fails
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
         continue-on-error: true
 
       - name: Build with Jekyll
