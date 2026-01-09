@@ -3,7 +3,7 @@
 # Phiên bản PostgreSQL mặc định là 17.5 (17) tính đến tháng 6 năm 2024
 # Có thể thay đổi phiên bản PostgreSQL bằng cách thiết lập biến môi trường VERSION khi build image
 
-ARG VERSION=17.5
+ARG VERSION=17.5-alpine3.21 # version mới nhất bị lỗi với docker
 
 FROM postgres:${VERSION} AS builder
 

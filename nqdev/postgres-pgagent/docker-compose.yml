@@ -8,12 +8,12 @@
 services:
   postgres-pgagent:
     container_name: postgres-pgagent-custom
-    # image: postgres:latest
-    image: postgres:17.5-custom
+    # image: postgres:17.5-alpine3.21
+    image: nqdev/postgres-pgagent:17.5-alpine3.21
     build:
       context: ./ # Path to your application's Dockerfile
       dockerfile: ./Dockerfile
-    # restart: always
+    restart: unless-stopped
     # user: root
     # network_mode: "host"
     ports:

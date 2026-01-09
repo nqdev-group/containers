@@ -28,6 +28,10 @@
 *.ovpn
 *.env
 
+# environment variables file
+.env
+.env.*.local
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 /*/data
