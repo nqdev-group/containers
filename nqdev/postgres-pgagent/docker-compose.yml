@@ -1,7 +1,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # PostgreSQL + pgAgent, pgsql-http extension
 # -----------------------------------------
-# START: docker-compose up -d --build --force-recreate --remove-orphans
+# START: docker-compose up -d --build --no-cache --force-recreate --remove-orphans
 # STOP: docker-compose down -v
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 

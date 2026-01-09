@@ -3,7 +3,7 @@
 # Phiên bản PostgreSQL mặc định là 17.5 (17) tính đến tháng 6 năm 2024
 # Có thể thay đổi phiên bản PostgreSQL bằng cách thiết lập biến môi trường VERSION khi build image
 
-ARG VERSION=17.5-alpine3.21 # version mới nhất bị lỗi với docker
+ARG VERSION=17.5 # version mới nhất bị lỗi với docker
 
 FROM postgres:${VERSION} AS builder
 
@@ -25,7 +25,7 @@ FROM postgres:${VERSION}
 
 # Thêm metadata labels
 LABEL org.opencontainers.image.title="PostgreSQL with Extensions" \
-  org.opencontainers.image.version="1.0" \
+  org.opencontainers.image.version="17.5" \
   org.opencontainers.image.description="PostgreSQL with pgagent, http extension, and dev tools" \
   org.opencontainers.image.authors="QuyIT Platform <quynh@nhquydev.net>" \
   org.opencontainers.image.licenses="MIT"
