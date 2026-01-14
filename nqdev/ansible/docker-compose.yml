@@ -1,0 +1,54 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Dockerfile for Ansible Development Environment
+# Created by: Nguyen Quy <quy.nh@nhquydev.net>
+# Version: 1.0
+# Date: 2024-06-15
+# Description: This Dockerfile sets up an Ansible development environment
+# using Ubuntu as the base image. It installs Ansible and other necessary
+# packages for development.
+# github: https://github.com/ansible/ansible
+# -----------------------------------------
+# START: docker-compose up -d --build --force-recreate --remove-orphans
+# STOP: docker-compose down -v
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# docker-compose up -d --build --force-recreate
+services:
+  ansible:
+    container_name: ansible
+    # image: ansible/ansible
+    image: nqdev/ansible:latest # Specify your desired image name and tag
+    build:
+      context: ./ # Path to your application's Dockerfile
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    # user: root
+    # network_mode: "host"
+    ports:
+      - "2222:22" # Map port 2222 on the host to port 22 in the container for SSH access
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-password123}
+    env_file:
+      - .env
+    volumes:
+      - ./playbooks:/opt/ansible/playbooks
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Để kết nối đến localhost của host từ container
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+      - 8.8.8.8
+      - 8.8.4.4
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m" # Giới hạn mỗi file log 100MB (hoặc giữ 1g nếu bạn muốn)
+        max-file: "5" # Tối đa giữ 5 file log (500MB tổng cộng nếu mỗi file 100MB)
+    deploy:
+      resources:
+        limits:
+          cpus: "0.80" # Giới hạn 80% CPU
+          memory: "3.2G" # Giới hạn 3.2GB RAM (80% của 4GB)
+        reservations:
+          memory: "256M" # Đảm bảo container có ít nhất 256MB RAM
