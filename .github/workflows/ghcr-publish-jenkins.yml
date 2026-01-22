@@ -78,11 +78,12 @@ jobs:
             -t docker.io/${{ secrets.DOCKER_USERNAME }}/jenkins:${{ env.VERSION }} \
             -t docker.io/${{ secrets.DOCKER_USERNAME }}/jenkins:latest \
             -f ./nqdev/jenkins/debian/Dockerfile ./nqdev/jenkins/debian
+
       # 7. Đẩy Docker Image lên GitHub Container Registry
-      - name: Push Docker Image to GHCR
-        run: |
-          docker push ghcr.io/${{ github.repository_owner }}/jenkins:${{ env.VERSION }}
-          docker push ghcr.io/${{ github.repository_owner }}/jenkins:latest
+      # - name: Push Docker Image to GHCR
+      #   run: |
+      #     docker push ghcr.io/${{ github.repository_owner }}/jenkins:${{ env.VERSION }}
+      #     docker push ghcr.io/${{ github.repository_owner }}/jenkins:latest
 
       # 8. Đẩy Docker Image lên Docker Hub
       - name: Push Docker Image to Docker Hub

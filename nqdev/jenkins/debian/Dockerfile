@@ -150,13 +150,15 @@ ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 COPY --from=jre-build /javaruntime $JAVA_HOME
 
-USER ${user}
+# USER ${user}
 
 COPY jenkins-support /usr/local/bin/jenkins-support
 COPY jenkins.sh /usr/local/bin/jenkins.sh
 COPY jenkins-plugin-cli.sh /bin/jenkins-plugin-cli
 
 RUN chmod +x /usr/local/bin/jenkins-support /usr/local/bin/jenkins.sh /bin/jenkins-plugin-cli
+
+USER ${user}
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 
