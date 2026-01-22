@@ -1,0 +1,40 @@
+services:
+
+  jenkins:
+    container_name: jenkins-custom
+    image: nqdev/jenkins:latest
+    build:
+      context: ./debian/ # Path to your application's Dockerfile
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    # user: root
+    # network_mode: "host"
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+      - JENKINS_VERSION=2.547
+    env_file:
+      - .env
+    volumes:
+      - ./jenkins_home:/var/jenkins_home:rw
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+      - 8.8.8.8
+      - 8.8.4.4
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m" # Giới hạn mỗi file log 100MB (hoặc giữ 1g nếu bạn muốn)
+        max-file: "5" # Tối đa giữ 5 file log (500MB tổng cộng nếu mỗi file 100MB)
+    deploy:
+      resources:
+        limits:
+          cpus: "0.80" # Giới hạn 80% CPU
+          memory: "3.2G" # Giới hạn 3.2GB RAM (80% của 4GB)
+        reservations:
+          memory: "256M" # Đảm bảo container có ít nhất 256MB RAM
