@@ -1,15 +1,23 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# PostgreSQL + pgAgent, pgsql-http extension
+# Dockerfile for Ansible Development Environment
+# Created by: Nguyen Quy <quy.nh@nhquydev.net>
+# Version: 1.0
+# Date: 2024-06-15
+# Description: This Dockerfile sets up an Ansible development environment
+# using Ubuntu as the base image. It installs Ansible and other necessary
+# packages for development.
+# github: https://github.com/ansible/ansible
 # -----------------------------------------
 # START: docker-compose up -d --build --force-recreate --remove-orphans
 # STOP: docker-compose down -v
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+# docker-compose up -d --build --force-recreate
 services:
-  postgres-pgagent:
-    container_name: postgres-pgagent-custom
-    # image: postgres:17.5-alpine3.21
-    image: nqdev/postgres-pgagent:17.5-alpine3.21
+  ansible:
+    container_name: ansible
+    # image: ansible/ansible
+    image: nqdev/ansible:latest # Specify your desired image name and tag
     build:
       context: ./ # Path to your application's Dockerfile
       dockerfile: ./Dockerfile
@@ -17,19 +25,14 @@ services:
     # user: root
     # network_mode: "host"
     ports:
-      - "5432:5432"
+      - "2222:22" # Map port 2222 on the host to port 22 in the container for SSH access
     environment:
-      TZ: Asia/Ho_Chi_Minh
-      POSTGRES_USER: ${POSTGRES_USER:-superuser} # superuser
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-superuser} # pass for superuser
-      POSTGRES_DB: ${POSTGRES_DB:-postgresdb} # postgresdb
-      POSTGRES_HOST_AUTH_METHOD: trust # trust | scram-sha-256 | md5
-      POSTGRES_PORT: ${POSTGRES_PORT:-5432} # Cổng PostgreSQL, mặc định là 5432
-      POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS:-"--data-checksums"} # Thêm --data-checksums để kiểm tra dữ liệu
+      - TZ=Asia/Ho_Chi_Minh
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-password123}
     env_file:
       - .env
     volumes:
-      - ./data:/var/lib/postgresql/data:rw
+      - ./playbooks:/opt/ansible/playbooks
     extra_hosts:
       - "host.docker.internal:host-gateway" # Để kết nối đến localhost của host từ container
     dns:

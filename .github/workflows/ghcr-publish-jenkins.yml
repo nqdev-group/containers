@@ -4,8 +4,8 @@
 # https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-name: "GHCR Package PostgreSQL pgAgent"
-run-name: Build and Push PostgreSQL with pgAgent, pgsql-http Docker Image on ${{ github.event_name }} by @${{ github.actor }}
+name: "GHCR Package Jenkins"
+run-name: Build and Push Jenkins Docker Image on ${{ github.event_name }} by @${{ github.actor }}
 
 on:
   workflow_dispatch: # Cho phép chạy thủ công
@@ -22,13 +22,14 @@ env:
   SERVER: production
   BRANCH: ${{ github.ref_name }}
   REPOSITORY: ${{ github.repository }}
+  JENKINS_VERSION: 2.547
   VERSION: >-
     ${{
       github.ref_type == 'branch' && github.ref_name == 'main'
-        && format('17.5.{0}-main', github.run_number)
+        && format('17.0.{0}-main', github.run_number)
         || github.ref_type == 'tag'
-        && format('17.5.{0}', github.run_number)
-        || format('17.5.{0}-dev', github.run_number)
+        && format('17.0.{0}', github.run_number)
+        || format('17.0.{0}-dev', github.run_number)
     }}
 
 jobs:
@@ -36,6 +37,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Đặt biến VERSION dựa trên ref_type và ref_name
+      - name: Set VERSION
+        run: |
+          if [[ "${{ github.ref_type }}" == "branch" && "${{ github.ref_name }}" == "main" ]]; then
+            echo "VERSION=17.${{ env.JENKINS_VERSION }}.${{ github.run_number }}-main" >> $GITHUB_ENV
+          elif [[ "${{ github.ref_type }}" == "tag" ]]; then
+            echo "VERSION=17.${{ env.JENKINS_VERSION }}.${{ github.run_number }}" >> $GITHUB_ENV
+          else
+            echo "VERSION=17.${{ env.JENKINS_VERSION }}.${{ github.run_number }}-dev" >> $GITHUB_ENV
+          fi
+
       # 2. Checkout code từ repository
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -60,36 +72,36 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build --no-cache \
-            -t ghcr.io/${{ github.repository_owner }}/postgres-pgagent:${{ env.VERSION }} \
-            -t ghcr.io/${{ github.repository_owner }}/postgres-pgagent:latest \
-            -t docker.io/${{ secrets.DOCKER_USERNAME }}/postgres-pgagent:${{ env.VERSION }} \
-            -t docker.io/${{ secrets.DOCKER_USERNAME }}/postgres-pgagent:latest \
-            -f ./nqdev/postgres-pgagent/Dockerfile ./nqdev/postgres-pgagent
-
+            --build-arg JENKINS_VERSION=${{ env.JENKINS_VERSION }} \
+            -t ghcr.io/${{ github.repository_owner }}/jenkins:${{ env.VERSION }} \
+            -t ghcr.io/${{ github.repository_owner }}/jenkins:latest \
+            -t docker.io/${{ secrets.DOCKER_USERNAME }}/jenkins:${{ env.VERSION }} \
+            -t docker.io/${{ secrets.DOCKER_USERNAME }}/jenkins:latest \
+            -f ./nqdev/jenkins/debian/Dockerfile ./nqdev/jenkins/debian
       # 7. Đẩy Docker Image lên GitHub Container Registry
       - name: Push Docker Image to GHCR
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/postgres-pgagent:${{ env.VERSION }}
-          docker push ghcr.io/${{ github.repository_owner }}/postgres-pgagent:latest
+          docker push ghcr.io/${{ github.repository_owner }}/jenkins:${{ env.VERSION }}
+          docker push ghcr.io/${{ github.repository_owner }}/jenkins:latest
 
       # 8. Đẩy Docker Image lên Docker Hub
       - name: Push Docker Image to Docker Hub
         run: |
-          docker push docker.io/${{ secrets.DOCKER_USERNAME }}/postgres-pgagent:${{ env.VERSION }}
-          docker push docker.io/${{ secrets.DOCKER_USERNAME }}/postgres-pgagent:latest
+          docker push docker.io/${{ secrets.DOCKER_USERNAME }}/jenkins:${{ env.VERSION }}
+          docker push docker.io/${{ secrets.DOCKER_USERNAME }}/jenkins:latest
 
       # 🟢 Annotation khi thành công
       - name: Show success annotation
         if: success()
         run: |
           echo "::notice::✅ Docker image pushed successfully!"
-          echo "::notice file=nqdev/postgres-pgagent/Dockerfile,line=1::📦 Image version: ${{ env.VERSION }}"
-          echo "::notice::🔗 GHCR: ghcr.io/${{ github.repository_owner }}/postgres-pgagent:${{ env.VERSION }}"
-          echo "::notice::🔗 Docker Hub: docker.io/${{ secrets.DOCKER_USERNAME }}/postgres-pgagent:${{ env.VERSION }}"
+          echo "::notice file=nqdev/jenkins/debian/Dockerfile,line=1::📦 Image version: ${{ env.VERSION }}"
+          echo "::notice::🔗 GHCR: ghcr.io/${{ github.repository_owner }}/jenkins:${{ env.VERSION }}"
+          echo "::notice::🔗 Docker Hub: docker.io/${{ secrets.DOCKER_USERNAME }}/jenkins:${{ env.VERSION }}"
 
       # 🔴 Annotation khi thất bại
       - name: Show error annotation
         if: failure()
         run: |
           echo "::error::❌ Build or push failed for version ${{ env.VERSION }}"
-          echo "::error file=nqdev/postgres-pgagent/Dockerfile,line=1::Check build logs for details."
+          echo "::error file=nqdev/jenkins/debian/Dockerfile,line=1::Check build logs for details."
