@@ -12,6 +12,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 COPY jdk-download-url.sh /usr/bin/jdk-download-url.sh
 COPY jdk-download.sh /usr/bin/jdk-download.sh
 
+RUN chmod +x /usr/bin/jdk-download-url.sh /usr/bin/jdk-download.sh
+
 RUN apt-get update \
   && apt-get install --no-install-recommends -y \
   ca-certificates \
@@ -153,6 +155,8 @@ USER ${user}
 COPY jenkins-support /usr/local/bin/jenkins-support
 COPY jenkins.sh /usr/local/bin/jenkins.sh
 COPY jenkins-plugin-cli.sh /bin/jenkins-plugin-cli
+
+RUN chmod +x /usr/local/bin/jenkins-support /usr/local/bin/jenkins.sh /bin/jenkins-plugin-cli
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 
