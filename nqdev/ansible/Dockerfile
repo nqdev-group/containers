@@ -5,7 +5,9 @@
 # # Password: password123
 
 # Sử dụng image ubuntu:latest làm base image
-FROM ubuntu:25.10
+# FROM ubuntu:25.10
+FROM ubuntu/python:3.10-22.04
+# FROM ansible/ansible:ubuntu1604py3
 
 # Thêm metadata labels
 LABEL org.opencontainers.image.title="Ansible Development Environment" \
@@ -27,6 +29,8 @@ RUN apt-get update && \
   sudo \
   passwd \
   fail2ban \
+  python3 \
+  python3-pip \
   software-properties-common && \
   ln -snf /usr/share/zoneinfo/$TIMEZONE /etc/localtime && echo $TIMEZONE > /etc/timezone && \
   apt-add-repository --yes --update ppa:ansible/ansible && \

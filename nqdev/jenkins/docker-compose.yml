@@ -1,7 +1,14 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Docker-Compose file for Jenkins Development Environment
+# -----------------------------------------
+# START: docker-compose up -d --build --force-recreate --remove-orphans
+# STOP: docker-compose down -v
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
 services:
 
   jenkins:
-    container_name: jenkins-custom
+    container_name: jenkins
     image: nqdev/jenkins:latest
     build:
       context: ./debian/ # Path to your application's Dockerfile
