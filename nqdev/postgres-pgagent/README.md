@@ -30,6 +30,7 @@ docker-compose up -d --build --force-recreate --remove-orphans
 - ✅ **Custom initialization scripts** với logging chi tiết
 - ✅ **Wait-for-it utility** để đảm bảo database sẵn sàng
 - ✅ **Data checksums** mặc định cho integrity checking
+- ✅ **Auto-fix volume ownership** tự động sửa quyền sở hữu PGDATA khi mount volume từ host
 - ✅ **Resource limits** (CPU: 80%, RAM: 3.2G)
 
 ## 📦 Build & Deployment
@@ -121,6 +122,7 @@ docker run -d \
 ├── data/                              # Database data (volume mount)
 ├── logs/                              # Application logs (volume mount)
 └── scripts/                           # Shell utilities
+    ├── docker-entrypoint-init.sh      # Entrypoint wrapper: fix PGDATA ownership
     ├── 00-init-custom.sh              # Custom SQL initialization
     ├── 01-docker-entrypoint.sh        # Main entrypoint script
     ├── 02-docker-ensure-initdb.sh     # Init verification
@@ -257,6 +259,35 @@ docker exec postgres-pgagent-custom pg_dump -U superuser postgresdb > backup.sql
 docker-compose down
 tar -czf postgres-backup-$(date +%Y%m%d).tar.gz ./data
 docker-compose up -d
+```
+
+## 🛠️ Troubleshooting
+
+### Lỗi: `data directory has wrong ownership`
+
+```
+FATAL:  data directory "/var/lib/postgresql/data" has wrong ownership
+HINT:  The server must be started by the user that owns the data directory.
+```
+
+**Nguyên nhân**: Khi mount volume từ host (`./data:/var/lib/postgresql/data`), thư mục `./data` trên host thường được tạo bởi `root`, trong khi PostgreSQL yêu cầu thư mục này phải thuộc sở hữu của user `postgres` (UID 999).
+
+**Giải pháp** (đã được tích hợp sẵn):
+
+Container sử dụng entrypoint wrapper `/nqdev/postgres/scripts/docker-entrypoint-init.sh` tự động sửa ownership trước khi khởi động PostgreSQL. Docker Compose được cấu hình với `user: root` để entrypoint có thể thực hiện `chown`:
+
+```yaml
+services:
+  postgres-pgagent:
+    user: root  # cho phép entrypoint chown PGDATA về postgres:postgres
+```
+
+Nếu vẫn gặp lỗi, có thể sửa thủ công trên host:
+
+```bash
+# Tạo thư mục data với ownership đúng (UID/GID 999 = postgres)
+mkdir -p ./data
+sudo chown -R 999:999 ./data
 ```
 
 ## 🔒 Security Notes
