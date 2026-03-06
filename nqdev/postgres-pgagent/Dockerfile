@@ -67,6 +67,8 @@ RUN chmod +x /nqdev/postgres/scripts/*.sh && \
 # Xác định tín hiệu dừng container
 STOPSIGNAL SIGQUIT
 
-# ENTRYPOINT ["/nqdev/postgres/scripts/00-init-custom.sh"]
+# Sử dụng wrapper entrypoint để xử lý ownership của data directory
+# khi mount volume từ host (fix lỗi "wrong ownership")
+ENTRYPOINT ["/nqdev/postgres/scripts/docker-entrypoint-init.sh"]
 
-# CMD ["postgres"]
+CMD ["postgres"]
