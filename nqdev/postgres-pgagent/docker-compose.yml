@@ -14,7 +14,7 @@ services:
       context: ./ # Path to your application's Dockerfile
       dockerfile: ./Dockerfile
     restart: unless-stopped
-    user: root # cần để entrypoint có thể chown PGDATA về postgres:postgres
+    user: root # cần để entrypoint phát hiện UID sở hữu PGDATA và xử lý ownership
     # network_mode: "host"
     ports:
       - "5432:5432"
