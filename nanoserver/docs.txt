@@ -1,0 +1,8 @@
+https://mcr.microsoft.com/en-us/artifact/mar/windows/nanoserver/tags
+https://mcr.microsoft.com/en-us/artifact/mar/windows/nanoserver/insider/tags
+https://mcr.microsoft.com/en-us/artifact/mar/playwright/mcp/tags
+
+
+ví dụ:
+
+https://github.com/amitie10g/node-nanoserver-docker
