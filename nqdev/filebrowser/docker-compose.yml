@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  filebrowser:
+    # Sử dụng image stable mới nhất (hoặc bạn có thể ghi rõ tag như 1.2.2-stable-slim)
+    image: ghcr.io/gtsteffaniak/filebrowser:latest
+    container_name: filebrowser
+    restart: unless-stopped
+    ports:
+      # Map cổng 8080 của máy host sang cổng 80 trong container
+      - "20021:80"
+    volumes:
+      # Thư mục chứa dữ liệu (file bạn muốn quản lý)
+      - ./data:/data
+      # Thư mục chứa cấu hình và database
+      - ./config:/config
+      # (Tùy chọn) Nếu muốn mount thêm nhiều nguồn khác
+      # - /mnt/storage:/storage
+    environment:
+      # Biến môi trường để chỉ định đường dẫn cấu hình
+      - FB_DATABASE=/config/filebrowser.db
+      - FB_CONFIG=/config/settings.json
+      # (Tùy chọn) Đặt mật khẩu admin nếu muốn tự động tạo user đầu tiên
+      # - FB_USERNAME=admin
+      # - FB_PASSWORD=admin
+    # Nếu bạn cần sử dụng playwright-base để hỗ trợ preview đầy đủ hơn (ví dụ: render office, video), 
+    # hãy tham khảo image ghcr.io/gtsteffaniak/playwright-base:chromium và dùng nó làm base image cho service riêng.
+    # Tuy nhiên, image filebrowser chính đã tích hợp sẵn các tính năng preview cơ bản.
